@@ -1,0 +1,223 @@
+{
+  "version": 1,
+  "canonicalDir": ".agents/skills",
+  "naming": "lowercase-kebab-case",
+  "sources": [
+    {
+      "source": "emilkowalski/skill",
+      "status": "installed",
+      "category": "design",
+      "notes": "Installed as emil-design-eng."
+    },
+    {
+      "source": "juliusbrussee/caveman",
+      "status": "installed",
+      "category": "agent-productivity",
+      "notes": "Installed as cavecrew, caveman, caveman-commit, caveman-compress, caveman-help, caveman-review, caveman-stats."
+    },
+    {
+      "source": "impeccable/skill",
+      "status": "planned",
+      "category": "design",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "shadcn-ui/skill",
+      "status": "planned",
+      "category": "frontend",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "framer-motion-pro/skill",
+      "status": "planned",
+      "category": "frontend",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "design-skill-os/skill",
+      "status": "planned",
+      "category": "design",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "nextjs-enterprise/skill",
+      "status": "planned",
+      "category": "architecture",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "spring-enterprise/skill",
+      "status": "planned",
+      "category": "architecture",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "react-native-architecture/skill",
+      "status": "planned",
+      "category": "architecture",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "clean-architecture/skill",
+      "status": "planned",
+      "category": "architecture",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "monorepo-manager/skill",
+      "status": "planned",
+      "category": "architecture",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "api-design/skill",
+      "status": "planned",
+      "category": "backend",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "auth-system/skill",
+      "status": "planned",
+      "category": "backend",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "database-optimizer/skill",
+      "status": "planned",
+      "category": "backend",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "playwright-e2e/skill",
+      "status": "planned",
+      "category": "quality",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "qa-reviewer/skill",
+      "status": "planned",
+      "category": "quality",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "vitest-jest/skill",
+      "status": "planned",
+      "category": "quality",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "security-review/skill",
+      "status": "planned",
+      "category": "quality",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "performance-audit/skill",
+      "status": "planned",
+      "category": "quality",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "accessibility-checker/skill",
+      "status": "planned",
+      "category": "quality",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "concise-engineer/skill",
+      "status": "planned",
+      "category": "agent-productivity",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "context-compressor/skill",
+      "status": "planned",
+      "category": "agent-productivity",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "repo-cleaner/skill",
+      "status": "planned",
+      "category": "agent-productivity",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "code-refactorer/skill",
+      "status": "planned",
+      "category": "agent-productivity",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "dev-productivity/skill",
+      "status": "planned",
+      "category": "agent-productivity",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "humanizer/skill",
+      "status": "planned",
+      "category": "content",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "premium-copywriter/skill",
+      "status": "planned",
+      "category": "content",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "seo-content/skill",
+      "status": "planned",
+      "category": "content",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "launch-marketing/skill",
+      "status": "planned",
+      "category": "content",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "social-content-engine/skill",
+      "status": "planned",
+      "category": "content",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "docs-writer/skill",
+      "status": "planned",
+      "category": "content",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "devops-bootstrap/skill",
+      "status": "planned",
+      "category": "devops",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "github-actions-pro/skill",
+      "status": "planned",
+      "category": "devops",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "kubernetes-helper/skill",
+      "status": "planned",
+      "category": "devops",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "cloud-architecture/skill",
+      "status": "planned",
+      "category": "devops",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    },
+    {
+      "source": "observability-stack/skill",
+      "status": "planned",
+      "category": "devops",
+      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
+    }
+  ]
+}
