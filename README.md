@@ -73,16 +73,11 @@ docs/                    # Architecture, naming, and generated inventory
 
 See `docs/SKILLS.md` for the generated list of installed skills and what each one does.
 
-Currently installed from the provided base list:
+Currently installed:
 
-- `emil-design-eng`
-- `cavecrew`
-- `caveman`
-- `caveman-commit`
-- `caveman-compress`
-- `caveman-help`
-- `caveman-review`
-- `caveman-stats`
+- 51 total skills
+- Base design/productivity skills from `emilkowalski/skill` and `juliusbrussee/caveman`
+- Marketing skills from `coreyhaines31/marketingskills`
 
 The remaining requested sources are preserved in `registry/skills.json` as `planned` because they did not resolve as public GitHub skill repositories during bootstrap.
 

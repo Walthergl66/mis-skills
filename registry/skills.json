@@ -16,6 +16,12 @@
       "notes": "Installed as cavecrew, caveman, caveman-commit, caveman-compress, caveman-help, caveman-review, caveman-stats."
     },
     {
+      "source": "coreyhaines31/marketingskills",
+      "status": "installed",
+      "category": "marketing",
+      "notes": "Installed 43 marketing skills including ads, SEO, copywriting, lifecycle, conversion, pricing, social, video, and growth workflows."
+    },
+    {
       "source": "impeccable/skill",
       "status": "planned",
       "category": "design",
