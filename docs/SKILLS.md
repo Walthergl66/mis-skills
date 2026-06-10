@@ -300,6 +300,12 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/site-architecture/SKILL.md`
 - Purpose: When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL structure, or internal linking. Also use when the user mentions "sitemap," "site map," "visual sitemap," "site structure," "page hierarchy," "information architecture," "IA," "navigation design," "URL structure," "breadcrumbs," "internal linking strategy," "website planning," "what pages do I need," "how should I organize my site," or "site navigation." Use this whenever someone is planning what pages a website should have and how they connect. NOT for XML sitemaps (that's technical SEO - see seo-audit). For SEO audits, see seo-audit. For structured data, see schema.
 
+### Skill Router
+
+- Folder: `skill-router`
+- Path: `.agents/skills/skill-router/SKILL.md`
+- Purpose: Use when the user wants help choosing which skills to use, starts a broad or ambiguous task, begins a new professional project, or asks an agent to decide the right workflow. Routes user intent to the best skills in this repository and explains the recommended sequence briefly.
+
 ### Sms
 
 - Folder: `sms`

@@ -75,9 +75,10 @@ See `docs/SKILLS.md` for the generated list of installed skills and what each on
 
 Currently installed:
 
-- 52 total skills
+- 53 total skills
 - Base design/productivity skills from `emilkowalski/skill` and `juliusbrussee/caveman`
 - Marketing skills from `coreyhaines31/marketingskills`
+- `skill-router` as the recommended entry point when you do not know which skill to use
 
 The remaining requested sources are preserved in `registry/skills.json` as `planned` because they did not resolve as public GitHub skill repositories during bootstrap.
 
@@ -109,6 +110,12 @@ npx skills add Walthergl66/mis-skills --list
 ```
 
 Avoid `--all` unless you intentionally want the CLI to create many agent-specific folders such as `.aider-desk`, `.claude`, `.windsurf`, and others. This repository's recommended pattern is one shared `.agents/skills` tree.
+
+If you are unsure which skill applies, ask the agent to start with:
+
+```txt
+Use skill-router to choose the best workflow for this task.
+```
 
 The root `skills/` folder is generated from `.agents/skills` with:
 
