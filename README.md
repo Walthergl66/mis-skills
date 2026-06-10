@@ -75,7 +75,7 @@ See `docs/SKILLS.md` for the generated list of installed skills and what each on
 
 Currently installed:
 
-- 51 total skills
+- 52 total skills
 - Base design/productivity skills from `emilkowalski/skill` and `juliusbrussee/caveman`
 - Marketing skills from `coreyhaines31/marketingskills`
 
@@ -94,17 +94,21 @@ npm run bootstrap       # Install, sync, inventory, validate
 
 ## Install Directly With npx
 
-From any target project:
+From any target project, use the clean universal install:
 
 ```sh
 npx skills add Walthergl66/mis-skills -a codex --copy -y
 ```
+
+This writes skills into `.agents/skills`, which is the portable location this repo standardizes on.
 
 To inspect what the package exposes before installing:
 
 ```sh
 npx skills add Walthergl66/mis-skills --list
 ```
+
+Avoid `--all` unless you intentionally want the CLI to create many agent-specific folders such as `.aider-desk`, `.claude`, `.windsurf`, and others. This repository's recommended pattern is one shared `.agents/skills` tree.
 
 The root `skills/` folder is generated from `.agents/skills` with:
 
