@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { listSkillDirs, rootDir, skillsDir } from "./lib/skills.mjs";
 
 const adapterMap = {
+  package: ["skills"],
   codex: [],
   cursor: ["adapters/cursor/skills"],
   gemini: ["adapters/gemini/skills"],

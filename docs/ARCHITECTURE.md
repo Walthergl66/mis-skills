@@ -11,6 +11,9 @@ This repository uses `.agents/skills` as the universal source of truth.
         ├── examples/
         └── scripts/
 
+skills/
+└── <skill-name>/         # Public npx skills add mirror
+
 adapters/
 ├── codex/
 ├── cursor/
@@ -32,6 +35,7 @@ scripts/
 ## Decisions
 
 - `.agents/skills` is canonical because it is portable across compatible agents and keeps `SKILL.md` discoverable.
+- `skills/` is a generated publication mirror for `npx skills add owner/repo` compatibility.
 - `adapters/*` are generated or agent-specific compatibility layers, not the primary source.
 - `registry/skills.json` records external sources and planned skills without requiring every source to be publicly resolvable today.
 - `docs/SKILLS.md` is generated from installed `SKILL.md` frontmatter so agents and humans can quickly inspect available capabilities.

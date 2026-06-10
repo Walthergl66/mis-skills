@@ -8,11 +8,18 @@ The canonical standard in this repo is:
 .agents/skills/<skill-name>/SKILL.md
 ```
 
+For public installation with `npx skills add`, this repo also publishes a root `skills/` mirror:
+
+```txt
+skills/<skill-name>/SKILL.md
+```
+
 Each skill is a self-contained folder with a required `SKILL.md` and optional `resources/`, `examples/`, or `scripts/`.
 
 ## What Is Included
 
 - Universal skill source: `.agents/skills`
+- Public `npx skills add` mirror: `skills`
 - Agent adapters: `adapters/<agent>`
 - External source registry: `registry/skills.json`
 - Cross-platform scripts for install, sync, inventory, and validation
@@ -88,6 +95,26 @@ npm run sync            # Copy universal skills into adapters
 npm run inventory       # Regenerate docs/SKILLS.md from SKILL.md metadata
 npm run validate        # Validate naming, frontmatter, and duplicate metadata
 npm run bootstrap       # Install, sync, inventory, validate
+```
+
+## Install Directly With npx
+
+From any target project:
+
+```sh
+npx skills add Walthergl66/mis-skills -a codex --copy -y
+```
+
+To inspect what the package exposes before installing:
+
+```sh
+npx skills add Walthergl66/mis-skills --list
+```
+
+The root `skills/` folder is generated from `.agents/skills` with:
+
+```sh
+npm run sync -- package
 ```
 
 ## Install Into Any Project

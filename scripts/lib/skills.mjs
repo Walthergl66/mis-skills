@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 export const rootDir = fileURLToPath(new URL("../../", import.meta.url));
 export const skillsDir = join(rootDir, ".agents", "skills");
+export const packageSkillsDir = join(rootDir, "skills");
 export const registryPath = join(rootDir, "registry", "skills.json");
 
 export function readRegistry() {
