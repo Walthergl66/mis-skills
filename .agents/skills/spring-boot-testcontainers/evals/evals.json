@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-testcontainers",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "image-tag-drift",
+      "prompt": "Our repository tests declare new PostgreSQLContainer(\"postgres\") and the suite started failing after an image refresh, not a code change.",
+      "expectations": [
+        "Identifies the unpinned image as the cause and refuses latest or a bare postgres tag",
+        "Pins the production major version with an explicit distribution such as postgres:16-alpine",
+        "Explains that alpine and the default distribution share SQL semantics but differ in libc dependent tooling and extension availability",
+        "Records the resolved image digest and moves tag bumps into their own change"
+      ]
+    },
+    {
+      "id": "service-connection-vs-dynamic",
+      "prompt": "Should our Redis test use @ServiceConnection or @DynamicPropertySource?",
+      "expectations": [
+        "States that Spring Boot has no built in Redis ConnectionDetails contributor",
+        "Chooses @DynamicPropertySource with a static void method and explicit host and mapped port registration",
+        "Warns that a half registered connection silently falls back to a default host",
+        "Considers a community Redis module that implements a contributor as the alternative"
+      ]
+    },
+    {
+      "id": "container-per-class-cost",
+      "prompt": "Our 12 repository test classes each start their own PostgreSQL container and the merge build takes 22 minutes.",
+      "expectations": [
+        "Quantifies the cost as container start count rather than test count",
+        "Moves to one container per JVM with a fresh schema or database per class",
+        "Adds ResourceLock plus junit.jupiter.execution.parallel.resources and a bounded parallelism factor",
+        "Keeps withReuse for local iteration only and states that CI must not rely on it"
+      ]
+    },
+    {
+      "id": "init-script-not-rerun",
+      "prompt": "Our reference data script stopped being applied on the second local run after we enabled withReuse(true).",
+      "expectations": [
+        "Explains that withInitScript runs only when the data directory is empty and reuse keeps the volume",
+        "Makes the seed idempotent with an upsert or conflict clause",
+        "Separates seeding from migration execution and hands migration content to the flyway skill",
+        "Confirms CI still starts a fresh container per class or run"
+      ]
+    },
+    {
+      "id": "parallel-duplicate-key",
+      "prompt": "With parallel classes enabled we get an intermittent duplicate key failure in two repository test classes.",
+      "expectations": [
+        "Identifies two classes sharing one container and one schema as the cause",
+        "Adds a unique database or schema per class and the matching ResourceLock declaration",
+        "Verifies with a serial run that the failure disappears, proving a harness race not a defect",
+        "Keeps methods within a class sequential so the shared container state stays predictable"
+      ]
+    },
+    {
+      "id": "no-docker-laptop",
+      "prompt": "A developer without Docker cannot run the container suite. Can we just skip those tests?",
+      "expectations": [
+        "Uses disabledWithoutDocker on the shared base so the class skips instead of erroring",
+        "Verifies the untagged unit suite still runs locally with mvn test",
+        "Warns that the flag can hide a broken remote Docker host in CI and requires checking the log for skips",
+        "Refuses to disable the Ryuk resource reaper as a shortcut"
+      ]
+    }
+  ]
+}
