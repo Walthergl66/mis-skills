@@ -24,6 +24,7 @@ Each skill is a self-contained folder with a required `SKILL.md` and optional `r
 - External source registry: `registry/skills.json`
 - Cross-platform scripts for install, sync, inventory, and validation
 - Generated skill catalog: `docs/SKILLS.md`
+- Capability tree for the Spring Boot family: `docs/SPRING_BOOT.md`
 - Conventions for adding and naming skills
 
 ## Quick Start
@@ -75,10 +76,13 @@ See `docs/SKILLS.md` for the generated list of installed skills and what each on
 
 Currently installed:
 
-- 53 total skills
+- 100 total skills
 - Base design/productivity skills from `emilkowalski/skill` and `juliusbrussee/caveman`
 - Marketing skills from `coreyhaines31/marketingskills`
-- `skill-router` as the recommended entry point when you do not know which skill to use
+- Backend families for Spring Boot (26 skills) and NestJS (7 skills), plus frontend, mobile, and testing families
+- `skill-router` as the orchestrator entry point: it activates first on any ambiguous request and resolves it to one primary skill plus at most two supporting skills
+
+The Spring Boot family is organized as one skill per node of a capability tree (Architecture, Spring, Database, API, Testing, Production). See `docs/SPRING_BOOT.md`.
 
 The remaining requested sources are preserved in `registry/skills.json` as `planned` because they did not resolve as public GitHub skill repositories during bootstrap.
 
@@ -111,7 +115,7 @@ npx skills add Walthergl66/mis-skills --list
 
 Avoid `--all` unless you intentionally want the CLI to create many agent-specific folders such as `.aider-desk`, `.claude`, `.windsurf`, and others. This repository's recommended pattern is one shared `.agents/skills` tree.
 
-If you are unsure which skill applies, ask the agent to start with:
+If you are unsure which skill applies, do nothing special: `skill-router` declares broad triggers and is expected to activate first on an ambiguous request, resolve it, and then do the work. To force it, say:
 
 ```txt
 Use skill-router to choose the best workflow for this task.
