@@ -1,0 +1,72 @@
+{
+  "skill": "spring-boot-ddd",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "aggregate-boundary-choice",
+      "prompt": "We have an Order table with 40 columns and order_lines. OrderService loads the order with all lines eagerly, then updates the order and inserts a line. Should Order and OrderLine be separate aggregates?",
+      "expectations": [
+        "States that OrderLine has no identity outside its parent, so it belongs inside the Order aggregate boundary",
+        "Explains that the boundary follows the rules that must hold in one commit, not the table count",
+        "Says the eager load plus line insert in one transaction is consistent with a single aggregate",
+        "Warns that a second aggregate in the same commit is a deliberate exception that must be documented",
+        "Recommends moving the line rules into the aggregate and keeping the service to a single load and save"
+      ]
+    },
+    {
+      "id": "anemic-service-review",
+      "prompt": "All our entities are @Entity classes with getters and setters. All logic is in OrderService which has 900 lines of if statements. Where do we start?",
+      "expectations": [
+        "Names the model as anemic and explains the cause is that every rule was placed in the service",
+        "Gives the placement rule: a rule goes where the data it needs lives, so status rules move into the aggregate",
+        "Recommends removing setters and replacing them with intent-named methods that enforce the invariant",
+        "Says a domain service is only justified when a rule needs two aggregates or shared policy",
+        "Warns against moving every method at once, proposing one aggregate and one rule as the first slice"
+      ]
+    },
+    {
+      "id": "entity-or-value-object",
+      "prompt": "Should Money, Email and OrderLine be @Entity classes in Hibernate, or something else? We store them in columns.",
+      "expectations": [
+        "States Money, Email and OrderLine are value objects because they have no identity independent of their fields",
+        "Recommends records or plain final classes with value equality, not @Entity",
+        "Says the persistence mapping belongs in an adapter row or an @Embeddable, not in the value object itself",
+        "Explains the practical payoff: two logically identical values compare equal and can live in a Set",
+        "Warns against adding a surrogate id to a value object, which would silently change it into an entity"
+      ]
+    },
+    {
+      "id": "domain-event-vs-broker",
+      "prompt": "We need Billing to know when an order is placed. Currently OrderService calls billingClient directly inside @Transactional. Should we use ApplicationEventPublisher?",
+      "expectations": [
+        "Defines a domain event record such as OrderPlaced with past tense and only values the publisher controls",
+        "Publishes from the application layer, not from the domain, and notes the domain must not depend on Spring",
+        "Warns that an in-process event is not durable and that a listener failure inside the transaction rolls back the write",
+        "Recommends an outbox table when the publish must be atomic with the write, with consumers keyed for idempotency",
+        "Assigns retry and dead letter mechanics to the platform skill while keeping the modelling decision here"
+      ]
+    },
+    {
+      "id": "two-contexts-one-word",
+      "prompt": "Sales and Billing both have an Order class and they disagree about what status means. Support wants one shared Order entity. What do you recommend?",
+      "expectations": [
+        "Identifies Sales and Billing as separate bounded contexts with different ubiquitous language",
+        "Rejects the shared entity, since one model cannot hold two sets of invariants",
+        "Recommends two models with a translation at the boundary, exposing a named interface or event contract",
+        "Notes a shared kernel is the most coupling-heavy option and only justified by a genuinely identical model",
+        "Explains each context keeps its own status enum and its own invariants, tested independently"
+      ]
+    },
+    {
+      "id": "is-ddd-worth-it",
+      "prompt": "Internal admin tool, 6 tables, one writer per table, no rules beyond required columns and a status field we flip in two places. Should we build aggregates?",
+      "expectations": [
+        "Recommends against full aggregate modelling for this case and gives the reason that there is no invariant to protect",
+        "Says a service plus a repository and a status enum transition is enough",
+        "Points out that the one rule worth protecting, legal status transitions, can live in the enum",
+        "Names the trigger that would change the answer, such as a cross-field rule or several writers of the same row",
+        "Warns against modelling a domain for use cases that do not exist yet"
+      ]
+    }
+  ]
+}

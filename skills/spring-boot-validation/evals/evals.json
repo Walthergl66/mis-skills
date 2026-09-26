@@ -1,0 +1,60 @@
+{
+  "skill": "spring-boot-validation",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "validation-silently-ignored",
+      "prompt": "We added @NotBlank to our request record and the empty value still reaches the service. Nothing throws.",
+      "expectations": [
+        "Checks that the spring-boot-starter-validation dependency is present",
+        "Checks that @Valid is on the body parameter so validation runs during argument resolution",
+        "Adds a test that fails on an empty value instead of trusting that the annotation is enough"
+      ]
+    },
+    {
+      "id": "group-trap",
+      "prompt": "Our update endpoint accepts a null reference. The field has groups set to the create group.",
+      "expectations": [
+        "Explains that a constraint with an explicit group never runs for another group or for Default",
+        "Adds the missing group or restructures the type so the constraint runs in both flows",
+        "Adds one test per group proving the constraint runs in that group and not in the others"
+      ]
+    },
+    {
+      "id": "custom-validator",
+      "prompt": "We need to reject values that are not a valid IBAN on a request record field.",
+      "expectations": [
+        "Writes a constraint annotation with runtime retention, groups, payload, and a message-bundle key",
+        "Includes FIELD, PARAMETER, RECORD_COMPONENT, and TYPE_USE in the target so it works on records and containers",
+        "Returns true for null and blank so presence stays with NotNull or NotBlank, and compiles the pattern once"
+      ]
+    },
+    {
+      "id": "cross-field-rule",
+      "prompt": "endDate must be after startDate and clients need a field level error for it.",
+      "expectations": [
+        "Uses a class-level constraint with a validator and addPropertyNode to target the field",
+        "Rejects the AssertTrue shortcut because its synthetic property name would become part of the published contract",
+        "Puts the message key in the user messages bundle and tests the exact error path"
+      ]
+    },
+    {
+      "id": "error-body-contract",
+      "prompt": "Our validation errors come back in three different shapes depending on whether the violation came from a body, a query parameter, or a service method. Normalize them.",
+      "expectations": [
+        "Maps MethodArgumentNotValidException, HandlerMethodValidationException, and ConstraintViolationException into one ProblemDetail body",
+        "Includes field, code, and message per entry with deterministic ordering and deduplication",
+        "Excludes the rejected value, the entity class, and the raw exception message, and pins the shape with a contract test"
+      ]
+    },
+    {
+      "id": "properties-validation",
+      "prompt": "Our service starts with a relay host of an empty string and only fails when the first email is sent.",
+      "expectations": [
+        "Adds @Validated to the ConfigurationProperties record with NotBlank and a nested @Valid record",
+        "States that the failure is a BindValidationException that aborts the context refresh",
+        "Adds a context test asserting startup fails for a bad value"
+      ]
+    }
+  ]
+}

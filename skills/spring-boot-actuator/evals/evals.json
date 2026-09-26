@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-actuator",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "wildcard-exposure",
+      "prompt": "Set management.endpoints.web.exposure.include to * in our production application.yaml so we can debug anything. Also add a shutdown endpoint.",
+      "expectations": [
+        "Rejects the wildcard as a production defect and replaces it with an explicit endpoint list",
+        "Rejects the shutdown endpoint as an unauthenticated remote denial of service",
+        "Moves env, configprops, loggers, and conditions off the exposed set into a non-production profile",
+        "Moves the health check group and build metadata to the health and info endpoints and restricts them"
+      ]
+    },
+    {
+      "id": "liveness-depends-on-db",
+      "prompt": "Our liveness probe includes the db health indicator, and last night a slow database restarted all 40 replicas at once.",
+      "expectations": [
+        "Identifies the downstream dependency in liveness as the cause of the fleet-wide restart storm",
+        "Restricts liveness to livenessState and a self-only check such as disk space",
+        "Moves db to the readiness group so instances leave the load balancer without restarting",
+        "Recommends a test asserting liveness stays UP while readiness is DOWN when a dependency fails"
+      ]
+    },
+    {
+      "id": "custom-health-indicator",
+      "prompt": "Add a health check for our journal replication lag that the readiness probe can use.",
+      "expectations": [
+        "Writes an indicator extending AbstractHealthIndicator with an explicit timeout and a class-name-only error detail",
+        "Uses a named DEGRADED status for slow replication rather than DOWN, and explains that a custom status affects only groups that include it",
+        "Requires a readiness group include entry for the new indicator and forbids putting it in liveness",
+        "Forbids a database call per probe by reusing a gauge that is already updated on a timer"
+      ]
+    },
+    {
+      "id": "env-info-leak",
+      "prompt": "We want /actuator/info to show the release version and the git commit so support can identify the running build.",
+      "expectations": [
+        "Enables management.info.env with an explicit keys list rather than reflecting every property",
+        "Adds an InfoContributor fed by BuildProperties for the version, build time, and commit",
+        "Requires the git commit id to be passed as a pipeline build argument instead of read from a possibly shallow clone",
+        "Warns that env and configprops still mask only by key-name matching and must not be exposed in production"
+      ]
+    },
+    {
+      "id": "graceful-shutdown-not-working",
+      "prompt": "We set server.shutdown=graceful but pods still get SIGKILLed and users see 502 during every deploy.",
+      "expectations": [
+        "Identifies that timeout-per-shutdown-phase is missing so the drain is unbounded and the platform deadline wins",
+        "Requires terminationGracePeriodSeconds to exceed the measured drain time plus the shutdown phase timeout",
+        "Adds scheduler and executor wait-for-completion settings so background work finishes",
+        "Notes that readiness must flip before the listener closes, via a pre-stop hook or a draining indicator, and that the platform still routes new traffic until it does"
+      ]
+    },
+    {
+      "id": "management-port-auth",
+      "prompt": "We moved Actuator to port 9090 with a separate SecurityFilterChain, and now the health probe gets a 401.",
+      "expectations": [
+        "Identifies filter chain ordering, requiring the management chain to be evaluated before the application chain",
+        "Adds an explicit securityMatcher for the probe paths with permitAll while keeping the rest authenticated",
+        "States that a separate port is not security on its own and requires network policy and TLS as well",
+        "Presents the deny-by-default model: omit the health matcher from permitAll and only then add the specific paths"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-logging",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "json-logging-switch",
+      "prompt": "We ship logs to Datadog and the collector cannot parse our pattern. Switch us to structured JSON, but keep local runs readable.",
+      "expectations": [
+        "Uses logback-spring.xml rather than logback.xml because only the spring variant resolves springProfile and springProperty",
+        "Defines a pattern appender under a local or test profile and a LogstashEncoder appender under the negated profile",
+        "Escapes the ampersand in the negated profile name as &amp; and explains the XML requirement",
+        "Sets a UTC time zone and custom service and environment fields derived from springProperty"
+      ]
+    },
+    {
+      "id": "mdc-leak-between-requests",
+      "prompt": "Sometimes our logs show the wrong tenant id, and only for requests that follow a specific one. Suspect the pooled thread.",
+      "expectations": [
+        "Diagnoses MDC not being cleared on a reused request thread and requires MDC.clear in a finally block",
+        "States that MDC.clear is not MDC.remove of a single key, because every key set during the request must go",
+        "Warns that MDC does not propagate to an async executor without a ContextPropagatingTaskDecorator",
+        "Recommends an integration test that issues two requests with different tenants and asserts no cross-contamination"
+      ]
+    },
+    {
+      "id": "competing-correlation-id",
+      "prompt": "Add a request id header we can grep for, because some log lines have no trace id.",
+      "expectations": [
+        "Rejects generating a second correlation id while a trace exists and states the trace id is the join key",
+        "Requires the id to come from the Micrometer Tracing Span rather than a fresh random value",
+        "Allows a namespaced requestId only for work outside an observed request and requires it not to be labelled a trace id",
+        "Points out that lines without a trace id usually come from async, scheduled, or message work with lost context"
+      ]
+    },
+    {
+      "id": "log-flood-in-loop",
+      "prompt": "Our import job logs one line per row and the collector drops most of them. It also slowed the job down.",
+      "expectations": [
+        "Replaces the per-row statement with one aggregate line carrying total, rejected, duration, and a bounded sample of ids",
+        "Points out the synchronous appender cost on the hot path and moves the appender behind a bounded AsyncAppender",
+        "Sets discardingThreshold and neverBlock explicitly and states which failure mode each choice accepts",
+        "Warns that low-level events are dropped silently at the default threshold and that the queue must be bounded to avoid an OOM"
+      ]
+    },
+    {
+      "id": "sensitive-data-in-logs",
+      "prompt": "Review this log statement: log.info(\"login for {} with token {} and body {}\", email, request.getHeader(\"Authorization\"), body);",
+      "expectations": [
+        "Rejects logging the authorization header, the full request body, and the raw email",
+        "Requires the encoder-level redaction pattern as enforcement rather than reviewer discipline",
+        "Proposes a hashed or masked email and a token length or prefix, and a body size and hash instead of the body",
+        "Adds a test that scans captured output for known secret fixtures so a new key name is caught"
+      ]
+    },
+    {
+      "id": "debug-flag-for-one-request",
+      "prompt": "Turn on DEBUG for the repository package so we can see the SQL while we investigate a slow order.",
+      "expectations": [
+        "Scopes the change to a single logger through the environment-variable relaxed binding name rather than the whole root level",
+        "Sets a bounded window and requires reverting in the same session, stating that a left-on DEBUG is an incident",
+        "Notes that org.hibernate.SQL is often better served by a statement inspector or a slow-query log than by application DEBUG",
+        "Keeps the production root at INFO and treats a level change as a capacity decision, not a debugging convenience"
+      ]
+    }
+  ]
+}

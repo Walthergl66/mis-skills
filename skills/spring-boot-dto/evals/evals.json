@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-dto",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "entity-returned-from-controller",
+      "prompt": "Our OrderController returns the JPA Order entity directly and clients now see a LazyInitializationException on the lines collection plus a payload with createdAt and version in it. Fix it.",
+      "expectations": [
+        "Names entity return from a controller as a boundary defect rather than a serialization bug",
+        "Lists lazy loading, N+1 queries, over-posting, schema leak, and unbounded payload as the failures",
+        "Introduces an OrderView record and explicit mapping instead of @JsonIgnore on the entity",
+        "Requires a fetch plan or a projection for the relation rather than relying on lazy loading during serialization"
+      ]
+    },
+    {
+      "id": "over-posting-matrix",
+      "prompt": "Clients can set status, totalMinor, and ownerId on POST /orders by adding those keys to the JSON. Only clientReference, deliverAt, and lines are meant to be writable.",
+      "expectations": [
+        "Recommends separate CreateOrderRequest, UpdateOrderRequest, and read model types",
+        "Builds a writable-field matrix that shows status, totalMinor, ownerId, version, and createdAt as server-owned on every operation",
+        "Explains that a deny-list breaks on the next schema change while an allow-listed record makes the field unbinding impossible",
+        "Warns against binding the request body onto a JPA entity or compensating with entity-level validation"
+      ]
+    },
+    {
+      "id": "mapper-strategy-choice",
+      "prompt": "We now have 30 DTOs and hand-written mappers are missing fields. Should we add MapStruct, write static factories, or create a mapper component?",
+      "expectations": [
+        "Recommends a generated mapper for many repetitive field-by-field copies and requires unmappedTargetPolicy set to ERROR",
+        "Lists server-owned target fields as explicit ignore mappings so the allow-list is visible in code",
+        "Suggests an explicit mapper component when lookups, conditionals, or multi-source composition are needed",
+        "Notes that a read model built by a projection query needs no mapper at all"
+      ]
+    },
+    {
+      "id": "byte-array-defect",
+      "prompt": "Our attachment endpoint returns a DTO with a byte[] content field. A test mutates the array after construction and the DTO changes too.",
+      "expectations": [
+        "Identifies the missing defensive copy in the record as the defect",
+        "Clones the array in the compact constructor and overrides the accessor to return a clone",
+        "Applies the same rule to List, Set, and Map components with copyOf",
+        "Notes that immutability is per type, so nested records must copy their own structures"
+      ]
+    },
+    {
+      "id": "new-optional-field",
+      "prompt": "We want to add an optional priority field to the order request DTO. Is that a breaking change for our clients?",
+      "expectations": [
+        "Classifies a new optional field with a null default as additive for clients that ignore unknown fields",
+        "Notes it is breaking for clients that reject unknown fields or for strict deserializers",
+        "Requires the default to reproduce the previous server behavior and be pinned by a test",
+        "Hands the version decision for genuinely breaking changes to the API versioning skill"
+      ]
+    },
+    {
+      "id": "enum-value-addition",
+      "prompt": "We added SHIPPED to the orderStatus enum that clients receive. Existing generated clients will now fail to parse the new value. What should we have done?",
+      "expectations": [
+        "Classifies adding an enum value as a breaking change for strict client deserializers",
+        "Explains the tolerant-client options such as an UNKNOWN value or an open string field",
+        "States that the type strictness decision sits in the DTO while the version decision belongs to the API versioning skill",
+        "Warns that a record component set to an enum also fails when Jackson encounters an unknown constant"
+      ]
+    }
+  ]
+}

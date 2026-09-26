@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-hibernate",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "lazy-initialization-exception",
+      "prompt": "We get LazyInitializationException when Jackson serializes Order.getCustomer() in a controller. Fix it.",
+      "expectations": [
+        "Keeps open-in-view false and moves the mapping into a DTO assembled inside the transaction",
+        "Offers an entity graph as the alternative when the entity itself is returned",
+        "Rejects enabling open-in-view as the fix and explains the connection cost",
+        "Requires the response type to stop being the entity"
+      ]
+    },
+    {
+      "id": "batch-insert-not-working",
+      "prompt": "hibernate.jdbc.batch_size is 100 but our bulk insert still sends one INSERT per row. Why?",
+      "expectations": [
+        "Identifies GenerationType.IDENTITY as the blocker because the generated key must be returned per row",
+        "Proposes a sequence-based generator with an explicit allocationSize",
+        "Verifies batch flushing actually occurs and checks ordered inserts",
+        "Warns that allocationSize introduces gaps on failed transactions"
+      ]
+    },
+    {
+      "id": "second-level-cache-request",
+      "prompt": "Should I turn on the Hibernate second-level cache for our Order entity to speed up reads?",
+      "expectations": [
+        "Asks about write rate and staleness tolerance before answering",
+        "Defaults to no for a write-heavy transactional entity",
+        "Explains that invalidation becomes application work on every write path",
+        "Says to fix the query shape or index first and to prove the query is slow before caching"
+      ]
+    },
+    {
+      "id": "multiple-bag-fetch",
+      "prompt": "We get MultipleBagFetchException when joining orders with both lines and payments.",
+      "expectations": [
+        "Explains that two eager List collections cannot be fetched together",
+        "Offers Set for one collection or two separate queries as alternatives",
+        "Warns that a join fetch with pagination loads the whole collection and pages in memory",
+        "Suggests verifying generated SQL contains the database level limit"
+      ]
+    },
+    {
+      "id": "n-plus-one-proof",
+      "prompt": "A page of 50 customers takes 400 ms. Suspect N+1 but we have no profiler.",
+      "expectations": [
+        "Enables hibernate.generate_statistics and names the counters to read",
+        "Uses getQueryExecutionCount and getCollectionFetchCount as the proof",
+        "Offers SQL log grouping as a second, local-only proof",
+        "Forbids enabling either in production because of overhead and data exposure"
+      ]
+    },
+    {
+      "id": "ddl-auto-in-production",
+      "prompt": "ddl-auto=update is convenient, can we keep it in the production profile to avoid migration files?",
+      "expectations": [
+        "Rejects ddl-auto in any non-disposable environment",
+        "States that update mutates a live schema with no review, history, or rollback",
+        "Hands schema ownership to the Flyway skill and asks for expand-and-contract",
+        "Allows update or create-drop only against an ephemeral test container"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-integration-testing",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "slice-missing-bean",
+      "prompt": "Our @WebMvcTest for the checkout controller fails with NoSuchBeanDefinitionException for CheckoutService after we renamed the package.",
+      "expectations": [
+        "Explains that WebMvcTest does not scan services or repositories",
+        "Declares the port with @MockitoBean or imports the configuration and states which is honest",
+        "Keeps the test asserting the rendered response rather than the mock interaction",
+        "Confirms the real wiring is covered by an integration test rather than assumed"
+      ]
+    },
+    {
+      "id": "transactional-hides-missing-annotation",
+      "prompt": "Our service method has no @Transactional, but the repository test passes because the test class is @Transactional.",
+      "expectations": [
+        "States that the test transaction masks the missing production transaction boundary",
+        "Adds a test without @Transactional that asserts the committed state is visible to a later read",
+        "Moves the production transaction decision to the data access skill and keeps the test as evidence",
+        "Rejects an assumption or a lenient rollback as a substitute for the real commit proof"
+      ]
+    },
+    {
+      "id": "async-rollback-trap",
+      "prompt": "We call an @Async method in a @Transactional test and rows from the previous run are still there.",
+      "expectations": [
+        "Explains that async work runs on its own connection and is not rolled back",
+        "Adds explicit cleanup for anything the async path writes and awaits a terminal state with a bound",
+        "Does not add a longer sleep or assume a container to fix the leftover data",
+        "Moves the container isolation question to the testcontainers skill"
+      ]
+    },
+    {
+      "id": "mockmvc-vs-real-server",
+      "prompt": "Should our new checkout endpoint test use MockMvc or a WebTestClient against a random port?",
+      "expectations": [
+        "Splits the need: MockMvc for the controller contract in a slice, random port for wire behavior",
+        "Explains that MockMvc exercises no socket, so content negotiation and error bodies stay unproven",
+        "States that WebTestClient only reaches a real server with RANDOM_PORT plus @AutoConfigureWebTestClient",
+        "Recommends keeping the number of real server tests small and tagged for the merge stage"
+      ]
+    },
+    {
+      "id": "security-test-disabled-filters",
+      "prompt": "Our web slice tests pass with 200 for an endpoint that should return 403 for anonymous users.",
+      "expectations": [
+        "Identifies the missing or disabled security filter chain as the cause",
+        "Imports the security configuration and keeps MockMvc filters enabled for authorization claims",
+        "Uses @WithMockUser or a security post processor including csrf rather than hand written headers",
+        "Restricts addFilters = false to controller only tests and says so in the class name"
+      ]
+    },
+    {
+      "id": "datajpa-embedded-replacement",
+      "prompt": "Our @DataJpaTest passes on H2 but fails on PostgreSQL in production with a partial index and jsonb column.",
+      "expectations": [
+        "Explains that the default test database replacement changes the engine and hides dialect behavior",
+        "Sets @AutoConfigureTestDatabase(replace = Replace.NONE) with a container and the production major version",
+        "Moves migration authoring to the flyway skill and keeps this test as the execution point",
+        "Adds the PostgreSQL specific behavior to the claim list rather than trusting the embedded pass"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-mockito",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "mockbean-deprecation",
+      "prompt": "We are on Spring Boot 3.5 and get a deprecation warning for @MockBean in our slice tests. What do we change?",
+      "expectations": [
+        "Explains that @MockBean and @SpyBean are deprecated since Boot 3.4 and removed in Boot 4",
+        "Replaces them with @MockitoBean and @MockitoSpyBean from the bean override package",
+        "Checks that each replacement field type or classes attribute resolves a single candidate bean",
+        "Verifies reset and enforceOverride semantics still match the previous test intent"
+      ]
+    },
+    {
+      "id": "mocked-repository",
+      "prompt": "This test mocks OrderRepository and asserts findByCustomerAndStatus returns two orders. It is the only test covering that query.",
+      "expectations": [
+        "States that mocking the repository leaves the derived query, fetch plan, and constraints unproven",
+        "Moves the query coverage to a real database test using a container",
+        "Keeps a fake repository only where the query is incidental to the scenario",
+        "Replaces the mock argument matching with seeded rows and a readable assertion"
+      ]
+    },
+    {
+      "id": "spy-when-trap",
+      "prompt": "Our spy test calls when(spy.calculate(input)).thenReturn(42) and the real calculation runs, sometimes throwing.",
+      "expectations": [
+        "Explains that when on a spy invokes the real method while building the stub",
+        "Switches to doReturn(42).when(spy).calculate(input) and doThrow for void methods",
+        "Questions whether the calculation needs a double at all and suggests a fake or real object",
+        "Verifies the spy assertion proves the boundary call and not internal steps"
+      ]
+    },
+    {
+      "id": "unnecessary-stubbing",
+      "prompt": "Our suite started failing with UnnecessaryStubbingException after we changed a service, and someone wants to add lenient() everywhere.",
+      "expectations": [
+        "Treats the exception as a real signal that a call path changed or a stub is dead",
+        "Deletes the unused stub or restores the missing interaction instead of loosening strictness globally",
+        "Limits any leniency to a single stub that legitimately varies or moves the fixture into a real fake",
+        "Warns that class wide LENIENT hides production regressions in the next change"
+      ]
+    },
+    {
+      "id": "static-clock-mock",
+      "prompt": "The service calls UUID.randomUUID() and the expiry test needs a fixed clock. Should we mockStatic?",
+      "expectations": [
+        "Prefers injecting a Clock and an id generator so the test uses fixed values and no static state",
+        "Documents that a static mock is thread scoped and breaks concurrent test execution",
+        "Confirms the inline mock maker in Mockito 5 makes this work without mockito-inline",
+        "Adds a test that fails when the production code stops using the injected clock"
+      ]
+    },
+    {
+      "id": "over-mocked-slice",
+      "prompt": "A @WebMvcTest declares six @MockitoBean fields and asserts that the service mock was called with the right order id.",
+      "expectations": [
+        "Explains that the test proves the controller but asserts on the mock rather than the response",
+        "Reduces the doubles to the application port and asserts the rendered response body",
+        "Sends the wiring question to the integration testing skill for layer choice",
+        "Names the behavior still unproven after the change"
+      ]
+    }
+  ]
+}

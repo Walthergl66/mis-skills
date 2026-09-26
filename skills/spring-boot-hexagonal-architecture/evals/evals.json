@@ -1,0 +1,61 @@
+{
+  "skill": "spring-boot-hexagonal-architecture",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "two-payment-implementations",
+      "prompt": "We need to charge cards in prod but in local dev we do not want to call Stripe. Both implement the same interface and Spring fails at startup with NoUniqueBeanDefinitionException. What is the right way to wire this?",
+      "expectations": [
+        "Proposes two @Bean methods returning the same port interface type in a single @Configuration class in the config package",
+        "Uses @Profile on the fake and @Profile(\"!local\") on the real adapter so exactly one bean exists per environment",
+        "States the qualifier string must match the @Bean method name exactly and never be built at runtime",
+        "Explains that the startup failure is the desired outcome of two live beans and that a missing bean must also fail at boot",
+        "Rejects @Primary as a default-fallback mechanism that would hide a forgotten qualifier"
+      ]
+    },
+    {
+      "id": "vendor-sdk-spreading",
+      "prompt": "Our OrderService has StripeClient injected and returns ChargeResult straight to the controller. The vendor keeps changing their SDK. How do we contain this?",
+      "expectations": [
+        "Defines a PaymentGateway port in application terms with charge, refund and an application enum for the outcome",
+        "Moves all StripeClient and ChargeRequest usage into a StripePaymentGateway adapter class",
+        "States that no vendor type such as ChargeResult or StripeException may escape the adapter",
+        "Translates vendor exceptions to an application exception and maps the transient versus permanent failure modes",
+        "Keeps the use case depending on the port so the vendor can be replaced by a fake without touching application code"
+      ]
+    },
+    {
+      "id": "too-many-interfaces",
+      "prompt": "A colleague made PlaceOrderService, CancelOrderService and ShipOrderService all interfaces with one implementation each. He says it is good practice. Agree?",
+      "expectations": [
+        "Disagrees and explains interface-per-use-case adds files without adding a seam",
+        "States a port is justified by a second implementation, a volatile dependency, or an expensive test to avoid",
+        "Recommends making the use cases plain classes with a Spring stereotype",
+        "Says the seam that matters is at the edge, for example a PaymentGateway port, not at the entry point",
+        "Notes the only acceptable reason for a use case interface is a deliberate runtime substitution such as multi-tenant variants"
+      ]
+    },
+    {
+      "id": "usecase-test-needs-database",
+      "prompt": "Our SettleOrderServiceTest needs @SpringBootTest, a Testcontainers PostgreSQL and a WireMock stub of the payment provider. It takes 40 seconds. How do ports help?",
+      "expectations": [
+        "Proposes constructing the use case with plain new and injecting an in-memory PaymentGateway fake",
+        "Writes the fake as a real implementation of the port holding recorded state, not as a generated mock",
+        "Explains that adding a method to the port breaks the fake at compile time, which prevents contract drift",
+        "Warns that an in-memory repository must still respect version conflicts and unique constraints to stay honest",
+        "Separates the fast use case test from a slower adapter test that runs against the real client"
+      ]
+    },
+    {
+      "id": "objectprovider-misuse",
+      "prompt": "A developer replaced @Qualifier injection with ObjectProvider<PaymentGateway> and calls getIfAvailable(\"strpie\") at runtime to avoid a typo. Review this.",
+      "expectations": [
+        "Flags that a runtime-built bean name turns a startup error into a silent null in a payment path",
+        "Explains ObjectProvider is for genuinely optional capabilities, not to avoid choosing",
+        "Requires the router to throw a named exception when the requested name is absent, plus a test per declared name",
+        "Recommends a List<PaymentGateway> injection with @Order once the number of implementations grows past two",
+        "Notes that the typo is still wrong and should be fixed with a constant or an enum mapped to bean names"
+      ]
+    }
+  ]
+}

@@ -418,7 +418,7 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 
 - Folder: `skill-router`
 - Path: `.agents/skills/skill-router/SKILL.md`
-- Purpose: Use when the user wants help choosing which skills to use, starts a broad or ambiguous task, begins a new professional project, or asks an agent to decide the right workflow. Routes user intent to the best skills in this repository and explains the recommended sequence briefly.
+- Purpose: Primary entry point and orchestrator for this skill repository. Use FIRST, before any other skill, whenever a request is broad, ambiguous, or does not name a skill: decide which skill fits, in what order, and who owns what. Triggers include "which skill", "not sure which skill to use", "how should I start", "help me decide", a new project or feature request, a bug report, a slow system, a review or audit request, a release or launch request, and any mention of Spring Boot, NestJS, React, React Native, backend architecture, databases, APIs, testing, DevOps, marketing, SEO, or design. Resolves the catalog into one primary skill plus at most two supporting skills, assigns ownership when several apply, and then proceeds with the work instead of only advising. Do not use when the user already named a specific skill or when the task is a single trivial edit. When other skills also apply, reconcile ownership before mutation.
 
 ### Sms
 
@@ -431,6 +431,162 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Folder: `social`
 - Path: `.agents/skills/social/SKILL.md`
 - Purpose: When the user wants help creating, scheduling, or optimizing social media content for LinkedIn, Twitter/X, Instagram, TikTok, Facebook, or other platforms. Also use when the user mentions 'LinkedIn post,' 'Twitter thread,' 'social media,' 'content calendar,' 'social scheduling,' 'engagement,' 'viral content,' 'what should I post,' 'repurpose this content,' 'tweet ideas,' 'LinkedIn carousel,' 'social media strategy,' 'grow my following,' 'TikTok video,' 'Reels,' 'Shorts,' 'video script,' 'video hook,' 'short-form video,' or 'create a reel.' Use this for social media content creation, repurposing, scheduling, and short-form video scripting. For broader content strategy, see content-strategy. For paid video ads, see ad-creative.
+
+### Spring Boot Actuator
+
+- Folder: `spring-boot-actuator`
+- Path: `.agents/skills/spring-boot-actuator/SKILL.md`
+- Purpose: Use when exposing, securing, or debugging Spring Boot 3.5 Actuator endpoints. Triggers include management.endpoints.web.exposure.include, management.server.port, management.endpoint.health.probes.enabled, livenessState, readinessState, HealthIndicator, AbstractHealthIndicator, management.endpoint.health.group, show-details, management.info.env, info contributors, conditions endpoint, /actuator/metrics, server.shutdown=graceful, spring.lifecycle.timeout-per-shutdown-phase, and probe configuration. Do not use for metric or trace design, nor for container build choices and pipeline rollout strategy. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Api Versioning
+
+- Folder: `spring-boot-api-versioning`
+- Path: `.agents/skills/spring-boot-api-versioning/SKILL.md`
+- Purpose: Use when choosing or implementing an API versioning strategy in Spring Boot, classifying a change as additive or breaking, signaling deprecation and sunset, routing several versions at once, or planning client migration and removal. Triggers include URI path /v1, media type versioning, an Accept-Version header, WebMvcConfigurer configureApiVersioning, ApiVersionConfigurer, usePathSegment, useRequestHeader, @RequestMapping version, ApiVersionStrategy, Deprecation and Sunset headers, RFC 9745, and Link rel deprecation. Do not use for endpoint and error contract design, DTO field evolution mechanics, generated spec review, or request mapping and filter mechanics. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Ci Cd
+
+- Folder: `spring-boot-ci-cd`
+- Path: `.agents/skills/spring-boot-ci-cd/SKILL.md`
+- Purpose: Use when designing, repairing, or reviewing the delivery pipeline for a Spring Boot 3.5 service. Triggers include GitHub Actions workflow, Maven wrapper, ~/.m2 cache key, surefire and failsafe split, testcontainers stage, docker build-push-action, image scan, SBOM, cosign, secrets handling, OIDC, environment promotion, rolling or blue-green or canary deploy, smoke test, health gate, and rollback. Do not use for Dockerfile and image internals, nor for runtime property configuration. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Clean Architecture
+
+- Folder: `spring-boot-clean-architecture`
+- Path: `.agents/skills/spring-boot-clean-architecture/SKILL.md`
+- Purpose: Use when enforcing the dependency rule in a Spring Boot service, choosing which layer a class belongs in, or reviewing whether JPA, Spring, or HTTP types leak into business rules. Triggers include layering, dependency rule, domain application adapter, service depends on repository, business logic in controller, keep JPA out of the domain, is Clean Architecture worth it, layered vs annotated Spring service, entity is also a database row, where does this class go, or unit test without a Spring context. Do not use for aggregate and invariant design, port interface definition, module boundary verification, DTO shape, or repository and mapping mechanics. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Core
+
+- Folder: `spring-boot-core`
+- Path: `.agents/skills/spring-boot-core/SKILL.md`
+- Purpose: Use when picking Spring Boot starters, writing or repairing auto-configuration, binding and validating ConfigurationProperties records, activating profiles, diagnosing why a property is not applied, or choosing between a starter, an auto-configuration, and hand-wired beans. Triggers include @SpringBootApplication, @AutoConfiguration, @ConditionalOnClass, @ConditionalOnMissingBean, @EnableConfigurationProperties, spring.config.import, application-prod.yaml, property precedence, actuator env and configprops, DevTools, and virtual threads. Do not use for request handling, persistence wiring, or security wiring. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Data Jpa
+
+- Folder: `spring-boot-data-jpa`
+- Path: `.agents/skills/spring-boot-data-jpa/SKILL.md`
+- Purpose: Use when designing Spring Data JPA repository interfaces, mapping entities and associations, placing @Transactional boundaries, eliminating N+1 selects, adding interface or DTO projections, applying @EntityGraph or join fetch, paginating with Pageable or keyset cursors, locking rows with @Lock or @Version, auditing created and modified fields, or choosing JPA versus JdbcClient versus jOOQ for a read or write. Triggers include JpaRepository, CrudRepository, EntityManager, LazyInitializationException, MultipleBagFetchException, OptimisticLockingFailureException, @Modifying, PageRequest, Slice, open-in-view, and N plus 1. Do not use for SQL dialect tuning, migration files, or slow query diagnosis. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Ddd
+
+- Folder: `spring-boot-ddd`
+- Path: `.agents/skills/spring-boot-ddd/SKILL.md`
+- Purpose: Use when modelling bounded contexts, aggregates, entity identity, value objects, invariants, domain services, domain events, and repository semantics in a Spring Boot service. Triggers include bounded context, aggregate, aggregate root, invariant, value object, anemic domain model, domain service, domain event, repository returns rows, two writes one transaction, Specification, set based authorization, ApplicationEventPublisher for domain events, and modelling a messy legacy domain. Do not use for JPA mapping, query tuning, module boundary verification, layer placement, or broker delivery guarantees. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Docker
+
+- Folder: `spring-boot-docker`
+- Path: `.agents/skills/spring-boot-docker/SKILL.md`
+- Purpose: Use when building or reviewing a container image for a Spring Boot service, including Dockerfile design, layered jars, multi-stage builds, jlink runtimes, GraalVM native images, Cloud Native Buildpacks, .dockerignore, non-root execution, JVM container flags, MaxRAMPercentage, signal handling, image size, and build reproducibility. Triggers include Dockerfile, ENTRYPOINT java -jar, spring-boot-layertools, jarmode tools extract, eclipse-temurin, bpj, buildpacks, native-maven-plugin, OOMKilled, image layer caching, and CI image parity. Do not use for pipeline stages, registry publishing, or deployment strategy, nor for runtime property configuration. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Dto
+
+- Folder: `spring-boot-dto`
+- Path: `.agents/skills/spring-boot-dto/SKILL.md`
+- Purpose: Use when designing or changing the request and response model of a Spring Boot service, covering Java records for DTOs, immutability and defensive copying, mapping between DTO and domain or persistence models, separate create and update DTOs, over-posting prevention, read models versus command payloads, and DTO field evolution. Triggers include @RequestBody record, CreateOrderRequest, OrderView, MapStruct @Mapper, List.copyOf, clone for byte arrays, @JsonIgnoreProperties, and a DTO leaking an @Entity from a controller. Do not use for status code and error contract design, Bean Validation engine configuration, ORM entity mapping, generated spec review, or version routing. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Flyway
+
+- Folder: `spring-boot-flyway`
+- Path: `.agents/skills/spring-boot-flyway/SKILL.md`
+- Purpose: Use when authoring, ordering, baselining, repairing, or validating Flyway 11 migrations for a Spring Boot 3.5 application on PostgreSQL 16. Triggers include V-prefixed versioned migrations, R repeatable migrations, U undo migrations, checksum mismatch, validate failed, detected applied migration not resolved locally, baseline on an existing database, out of order, schema history table, expand and contract column renames, seed data, and running migrations as a pipeline step. Do not use for choosing column types or indexes, for entity mapping changes, for pipeline stage ordering, or for provisioning test databases. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Hexagonal Architecture
+
+- Folder: `spring-boot-hexagonal-architecture`
+- Path: `.agents/skills/spring-boot-hexagonal-architecture/SKILL.md`
+- Purpose: Use when defining or reviewing port interfaces, driven adapters, composition roots, and the anti-corruption boundary around vendor SDKs in a Spring Boot service. Triggers include hexagonal, ports and adapters, primary port, secondary port, driven adapter, two implementations of one port, @Qualifier wiring, @Primary, ObjectProvider, in-memory fake for a test, wrap the Stripe client, ERP adapter, port per use case, who constructs the dependency, and swapping the vendor. Do not use for layer placement, aggregate design, module boundary verification, security filter chains, or JPA mapping. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Hibernate
+
+- Folder: `spring-boot-hibernate`
+- Path: `.agents/skills/spring-boot-hibernate/SKILL.md`
+- Purpose: Use when mapping, tuning, or debugging Hibernate ORM 6.6 engine behavior in a Spring Boot 3.5 application, covering entity mappings, associations, FetchType, entity graphs, batch inserts, identifier generation, dirty checking, the query plan cache, second level cache, Criteria API, native query integration, statistics, and hbm2ddl configuration. Triggers include N+1, LazyInitializationException, MultipleBagFetchException, StaleObjectStateException, NonUniqueResultException, hibernate.jdbc.batch_size, StatelessSession, generate_statistics, open-in-view, and unexpected cascades. Do not use for SQL dialect or index design, for repository and pagination API design, for authoring migration files, or for end to end latency remediation. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Integration Testing
+
+- Folder: `spring-boot-integration-testing`
+- Path: `.agents/skills/spring-boot-integration-testing/SKILL.md`
+- Purpose: Use when choosing which Spring Boot 3.5 test layer proves a behavior, covering @SpringBootTest with webEnvironment options, @WebMvcTest, @DataJpaTest, @JsonTest, @RestClientTest, MockMvc against WebTestClient against a random port end to end test, test data builders, @Transactional test rollback and its traps, security test support with spring-security-test, and endpoint contract tests. Triggers include @AutoConfigureMockMvc, @AutoConfigureWebTestClient, @AutoConfigureTestDatabase, TestRestTemplate, @WithMockUser, SecurityMockMvcRequestPostProcessors, @Sql, @SqlBundle, slice failures caused by a missing bean, and webEnvironment RANDOM_PORT. Do not use for JUnit mechanics, mock design, or container provisioning. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Junit
+
+- Folder: `spring-boot-junit`
+- Path: `.agents/skills/spring-boot-junit/SKILL.md`
+- Purpose: Use when writing, restructuring, naming, or running JUnit 5 tests in a Spring Boot 3.5 project, covering test class and method layout, Given When Then scenarios, one behavior per test, @ParameterizedTest with @CsvSource, @MethodSource and @EnumSource, @Nested grouping, @TestInstance PER_CLASS, @BeforeEach and @BeforeAll lifecycle, custom JUnit extensions, AssertJ and SoftAssertions, Assumptions for environment gated tests, @Tag suites, Clock and seeded Random injection, bounded waiting, and surefire or failsafe execution. Triggers include @Test, @DisplayName, @Disabled, @Timeout, @RegisterExtension, assertThat, assertThatThrownBy, assertAll, junit-platform.properties, mvn test, and mvn verify. Do not use for test double design, container backed dependencies, or application context and slice test selection. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Logging
+
+- Folder: `spring-boot-logging`
+- Path: `.agents/skills/spring-boot-logging/SKILL.md`
+- Purpose: Use when configuring or reviewing logging in a Spring Boot 3.5 service, including Logback setup, logback-spring.xml, springProfile, springProperty, JSON output, logstash-logback-encoder, MDC and correlation ids, level strategy, appender selection, AsyncAppender queue tuning, sensitive data redaction, and log volume control. Triggers include logging.level, logger name, log pattern, console appender, file appender, rolling policy, stdout, MDC.put, traceId, DEBUG logs in production, log flooding, and log-driven debugging of one request. Do not use for metric or trace emission, nor for actuator endpoint exposure. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Mockito
+
+- Folder: `spring-boot-mockito`
+- Path: `.agents/skills/spring-boot-mockito/SKILL.md`
+- Purpose: Use when designing or reviewing test doubles in a Spring Boot 3.5 project, covering migration of the deprecated @MockBean and @SpyBean to @MockitoBean and @MockitoSpyBean, choosing between a mock, a fake, a stub, and a real object, stubbing with when versus doReturn, argument matchers and captors, verification scope, strict stubs and the UnnecessaryStubbingException, lenient stubs, static mocking of Clock or UUID, and final class support. Triggers include Mockito.mock, MockitoExtension, @InjectMocks, @MockitoSettings, MockReset, ArgumentCaptor, doThrow, verifyNoMoreInteractions, PotentialStubbingProblem, and mockito-inline removal. Do not use for JUnit class structure, container backed dependencies, or test layer selection. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Modular Monolith
+
+- Folder: `spring-boot-modular-monolith`
+- Path: `.agents/skills/spring-boot-modular-monolith/SKILL.md`
+- Purpose: Use when defining Spring Modulith application modules, named interfaces, module events, package visibility, and the rules for extracting a module into its own service. Triggers include Spring Modulith, @ApplicationModule, @NamedInterface, ApplicationModules.of and verify, cyclic module dependency, shared kernel, common module dumping ground, module event publication versus a direct call, @ModulithTest, package private visibility, and when to split a microservice. Do not use for inner layer design, aggregate design, port definition, container packaging, or CI pipeline wiring. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Mvc
+
+- Folder: `spring-boot-mvc`
+- Path: `.agents/skills/spring-boot-mvc/SKILL.md`
+- Purpose: Use when tracing a Spring MVC request from DispatcherServlet to a controller, adding a filter or HandlerInterceptor, writing a RestController, mapping exceptions with ControllerAdvice, configuring content negotiation or message converters, serving static resources, or returning Callable, DeferredResult, SseEmitter, and ResponseBodyEmitter results. Triggers include DispatcherServlet, WebMvcConfigurer, addInterceptors, extendMessageConverters, produces, consumes, HttpMessageNotReadableException, MethodArgumentNotValidException, 415 and 406, CORS preflight, WebAsyncManager, and spring.mvc.async.request-timeout. Do not use for HTTP status and error contract design or security enforcement. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Observability
+
+- Folder: `spring-boot-observability`
+- Path: `.agents/skills/spring-boot-observability/SKILL.md`
+- Purpose: Use when adding or reviewing metrics, traces, and instrumentation in a Spring Boot 3.5 service. Triggers include MeterRegistry, Counter, Timer, Gauge, Observation, ObservationRegistry, ObservedAspect, @Observed, Micrometer Tracing, OpenTelemetry export, management.tracing.sampling.probability, micrometer-registry-prometheus, actuator prometheus, hikaricp, jdbc.connections, jvm.memory, MeterFilter, cardinality, SLO, error budget, and burn rate. Do not use for log format, MDC, or appender configuration, nor for endpoint exposure rules and the management port. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Openapi
+
+- Folder: `spring-boot-openapi`
+- Path: `.agents/skills/spring-boot-openapi/SKILL.md`
+- Purpose: Use when generating, reviewing, gating, or publishing the OpenAPI 3.1 contract of a Spring Boot service with springdoc-openapi, including starter wiring, groups, Swagger UI exposure, @Schema and @Operation quality, @ApiResponse coverage, security scheme documentation, and spec drift detection in CI. Triggers include springdoc-openapi-starter-webmvc-ui, springdoc.api-docs.version, springdoc.group-configs, /v3/api-docs, GroupedOpenApi, OpenApiCustomizer, GlobalOpenApiCustomizer, @SecurityScheme, @ApiResponses, @ParameterObject, and openapi.json diffing. Do not use for endpoint design, DTO field shape, auth implementation, version routing, or contract test authoring. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Postgresql
+
+- Folder: `spring-boot-postgresql`
+- Path: `.agents/skills/spring-boot-postgresql/SKILL.md`
+- Purpose: Use when designing, tuning, or debugging PostgreSQL 16 in a Spring Boot 3.5 application, covering column types, native SQL, index selection, EXPLAIN ANALYZE plan reading, MVCC and isolation levels, row locking, jsonb, arrays, CTEs, window functions, partitioning, sequences and identity columns, extensions, and HikariCP plus pgjdbc pool configuration. Triggers include Seq Scan, index not used, GIN index, jsonb_path_ops, BRIN index, Rows Removed by Filter, deadlock, lock wait, SKIP LOCKED, READ COMMITTED, autovacuum, bloat, maximumPoolSize, connection leak, and slow SQL. Do not use for ORM entity mapping or fetch strategies, for repository and pagination API design, for authoring migration files, or for end to end latency remediation. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Query Optimization
+
+- Folder: `spring-boot-query-optimization`
+- Path: `.agents/skills/spring-boot-query-optimization/SKILL.md`
+- Purpose: Use when diagnosing or remediating slow queries, latency percentile regressions, or low throughput in a Spring Boot 3.5 application with PostgreSQL 16. Triggers include p99 latency, slow endpoint, slow SQL log, N+1 detection, connection pool wait time, keyset versus offset pagination, projection read paths, batch size tuning, SELECT count cost, cache layers, and proving a fix with before and after measurements. Do not use for SQL dialect or index theory, for entity mapping and fetch mechanics, for repository and pagination API design, or for metrics and tracing infrastructure. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Rest Api
+
+- Folder: `spring-boot-rest-api`
+- Path: `.agents/skills/spring-boot-rest-api/SKILL.md`
+- Purpose: Use when designing or changing the HTTP contract of a Spring Boot service, including resource and action endpoints, status code selection, ProblemDetail error bodies, pagination envelopes, Idempotency-Key retries, If-Match concurrency, and long-running operation resources. Triggers include @RestController, @RequestMapping, ResponseEntity, @ResponseStatus, @RestControllerAdvice, ProblemDetail, RFC 9457, 201 with Location, 202 Accepted, 204, 409 versus 422, 412 Precondition Failed, 415, 429, ETag, and cursor pagination. Do not use for filter and interceptor mechanics, field validation, DTO shape design, version routing, spec generation, or auth enforcement. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Security
+
+- Folder: `spring-boot-security`
+- Path: `.agents/skills/spring-boot-security/SKILL.md`
+- Purpose: Use when configuring SecurityFilterChain beans and their order, choosing between filter-level and method-level authorization, wiring an OAuth2 resource server with JWT validation and claim to authority mapping, deciding between stateless bearer and cookie sessions, setting CSRF and CORS posture, declaring a PasswordEncoder, guarding methods with @PreAuthorize, or testing with spring-security-test. Triggers include SecurityFilterChain, securityMatcher, @EnableMethodSecurity, AuthenticationManager, AuthenticationProvider, JwtDecoder, jwk-set-uri, issuer-uri, SecurityContextHolder, DelegatingSecurityContextExecutor, hasRole, hasAuthority, 401, 403, and BCrypt strength. Do not use for MVC hook placement or authorization data storage. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Testcontainers
+
+- Folder: `spring-boot-testcontainers`
+- Path: `.agents/skills/spring-boot-testcontainers/SKILL.md`
+- Purpose: Use when a Spring Boot 3.5 test must run against a real PostgreSQL, MySQL, MariaDB, Redis, Kafka, or LocalStack dependency, covering declaration of @Testcontainers with @Container, wiring @ServiceConnection, falling back to @DynamicPropertySource, writing a reusable singleton container, pinning an image tag and distribution, seeding and running migrations on start, teardown, parallel execution with JUnit resource locks, and controlling container cost and flakiness in CI. Triggers include postgres:16-alpine, withReuse, withInitScript, PostgreSQLContainer, GenericContainer, org.testcontainers.kafka.KafkaContainer, DynamicPropertyRegistry, TestcontainersLifecycleApplicationContextInitializer, and TESTCONTAINERS_REUSE_ENABLE. Do not use for pure JUnit mechanics, mock design, or endpoint and slice test selection. When other skills also apply, reconcile ownership before mutation.
+
+### Spring Boot Validation
+
+- Folder: `spring-boot-validation`
+- Path: `.agents/skills/spring-boot-validation/SKILL.md`
+- Purpose: Use when applying Jakarta Bean Validation in a Spring Boot service, designing constraint groups for create and update flows, writing ConstraintValidator implementations, validating cross-field rules, nested objects, collections, and map keys, validating @ConfigurationProperties at startup, or normalizing violations into one stable API error contract. Triggers include @Valid, @Validated, ValidationGroups, @GroupSequence, ConstraintValidator, jakarta.validation.constraints, MethodArgumentNotValidException, HandlerMethodValidationException, BindValidationException, and messages.properties. Do not use for DTO field design or persistence constraint enforcement. When other skills also apply, reconcile ownership before mutation.
 
 ### Vercel React Best Practices
 

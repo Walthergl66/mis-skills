@@ -1,0 +1,60 @@
+{
+  "skill": "spring-boot-security",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "two-filter-chains",
+      "prompt": "We need /actuator/health open, /api/** stateless with JWT, and everything else requiring a logged-in browser user. How do we configure it?",
+      "expectations": [
+        "Declares three SecurityFilterChain beans with explicit securityMatcher values and @Order, catch-all last",
+        "Sets SessionCreationPolicy.STATELESS only on the API chain and keeps form login on the browser chain",
+        "Disables CSRF on the bearer chain only and leaves it enabled where cookies carry the session"
+      ]
+    },
+    {
+      "id": "preauthorize-not-enforced",
+      "prompt": "Our @PreAuthorize expressions do nothing and every authenticated user can archive any invoice.",
+      "expectations": [
+        "Checks for @EnableMethodSecurity and for the annotation sitting on a public method of a proxied bean",
+        "Explains self-invocation and manual instantiation bypass the proxy",
+        "Adds a deny-path test per rule and checks the authority naming convention against hasRole versus hasAuthority"
+      ]
+    },
+    {
+      "id": "jwt-hardening",
+      "prompt": "Review our resource server setup: we decode with the issuer metadata, validate the issuer, and read the scope claim. What is missing?",
+      "expectations": [
+        "Requires audience validation when the token is not minted for this service alone",
+        "Requires rejection of unexpected algorithms and mentions key rotation with a refetch on an unknown kid",
+        "Keeps clock skew at zero unless justified and requires a test for expired, wrong issuer, and wrong audience"
+      ]
+    },
+    {
+      "id": "csrf-decision",
+      "prompt": "We disabled CSRF because our API returns 403 on POST from the browser. Is that right?",
+      "expectations": [
+        "Distinguishes bearer header authentication from cookie sessions",
+        "Keeps CSRF enabled for cookie-based flows and configures a token repository plus the request handler",
+        "Requires a csrf() post processor in tests instead of a global disable"
+      ]
+    },
+    {
+      "id": "security-context-in-async",
+      "prompt": "Our async job runs with no authentication and throws when it reads SecurityContextHolder. The controller works fine.",
+      "expectations": [
+        "Explains the request-scoped context is not present on another thread or in a scheduled task",
+        "Uses DelegatingSecurityContextExecutor or passes the identity explicitly and clears the context afterwards",
+        "Keeps the default thread-local strategy and rejects inheritable thread locals with virtual threads"
+      ]
+    },
+    {
+      "id": "password-and-secrets",
+      "prompt": "Set up password storage and secrets for a Spring Boot service that authenticates users from the database.",
+      "expectations": [
+        "Declares a PasswordEncoder bean with the delegating encoder so algorithm prefixes are stored",
+        "Sets a deliberate BCrypt strength and requires rehash on successful login during a strength increase",
+        "Moves secrets to the environment, forbids secrets in application.yaml, and limits actuator exposure"
+      ]
+    }
+  ]
+}

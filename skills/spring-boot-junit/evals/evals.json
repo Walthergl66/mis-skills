@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-junit",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "flaky-sleep",
+      "prompt": "This test is green on my machine and red in CI about one run in five. It waits 200 ms and then asserts the invoice was generated.",
+      "expectations": [
+        "Names the fixed Thread.sleep as the defect rather than raising the wait",
+        "Replaces the sleep with a bounded await or latch that fails with a diagnostic on timeout",
+        "Explains the CI failure as scheduling variance on a loaded machine",
+        "Tags the test or the class slow if the wait is inherent, without making the assertion optional"
+      ]
+    },
+    {
+      "id": "clock-dependence",
+      "prompt": "Our discount tests only fail on the last day of the month. The service calls Instant.now() directly.",
+      "expectations": [
+        "Identifies the wall-clock read inside the subject as the root cause",
+        "Injects java.time.Clock into the constructor and pins Clock.fixed in the test",
+        "Adds boundary cases at the exact window edge rather than only the interior",
+        "Does not silence the failure with an assumption or a tolerance"
+      ]
+    },
+    {
+      "id": "parameterize-vs-nest",
+      "prompt": "Should I add a @ParameterizedTest with 12 rows of a CsvSource for the pricing tiers, or write 12 separate test methods?",
+      "expectations": [
+        "Recommends @EnumSource or a small @CsvSource because the tiers form an enumerable domain set",
+        "Keeps one expectation per parameterized method and moves the differing setup into a builder",
+        "Warns against parameterizing over mocks and suggests @Nested for differing preconditions",
+        "Sets a readable parameterized name and asserts the rounding edge explicitly"
+      ]
+    },
+    {
+      "id": "order-dependence",
+      "prompt": "Add @TestMethodOrder so the tests that create the customer run before the tests that read it.",
+      "expectations": [
+        "Rejects test ordering as a mechanism and explains it hides shared state",
+        "Moves creation into a per-test builder or fixture so each test is self-sufficient",
+        "Confirms each test passes when run in isolation via surefire single-method selection",
+        "Escalates shared mutable state to the layering decision owned by the integration testing skill"
+      ]
+    },
+    {
+      "id": "assertion-style",
+      "prompt": "Review this JUnit 5 test: four separate assertEquals calls in a row, one try/catch for the exception case, and a getStatus() intermediate variable.",
+      "expectations": [
+        "Replaces bare assertions with AssertJ assertThat and extracting for the projection",
+        "Converts the try/catch to assertThatThrownBy with isInstanceOf and hasMessageContaining",
+        "Groups the independent facts with SoftAssertions.assertSoftly or assertAll for a single report",
+        "Confirms the method name still reads as one present-tense assertion sentence"
+      ]
+    },
+    {
+      "id": "custom-extension-justification",
+      "prompt": "Write an extension that resets a metrics registry before every test in our whole suite.",
+      "expectations": [
+        "Flags that a global reset is better expressed as a @BeforeEach or a shared base class",
+        "Settles on the narrowest mechanism and justifies it against a custom extension",
+        "Keeps any extension free of assertions and free of production behavior checks",
+        "Verifies the change does not silently reorder or skip tests"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-ci-cd",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "pipeline-stage-order",
+      "prompt": "Our workflow runs mvn package, builds the image, and deploys. Review it: unit tests and Testcontainers tests are both in the package step.",
+      "expectations": [
+        "Explains that mvn package does not run the failsafe integration-test goal so the split does not exist yet",
+        "Proposes separate verify, verify-integration, build, scan, sign, publish, and deploy stages with a gate at each",
+        "Requires the fast unit stage to reject a broken commit before any container is started",
+        "Keeps build once and promote the same digest so the tested artifact is the shipped artifact"
+      ]
+    },
+    {
+      "id": "maven-cache-key",
+      "prompt": "Our GitHub Actions cache for ~/.m2/repository is keyed on the branch name, so we keep getting dependency resolution failures after a pom change.",
+      "expectations": [
+        "Rejects a branch-only key because it restores a stale repository and pairs it with new pom.xml",
+        "Requires the key to include hashFiles of every pom.xml so any dependency change invalidates it",
+        "Adds restore-keys with a prefix for a warm start that re-downloads only what is missing",
+        "Requires the committed Maven wrapper and the batch non-interactive flags, and forbids caching target"
+      ]
+    },
+    {
+      "id": "secret-in-build-arg",
+      "prompt": "We pass the database password to the Docker build as --build-arg DB_PASSWORD so the app can read it. How do we fix it?",
+      "expectations": [
+        "States that build args and Dockerfile ARG values are recorded in image history and are not secret",
+        "Moves application secrets to runtime injection with a NotBlank configuration property that fails at startup",
+        "Uses GitHub OIDC for registry and cluster access instead of long-lived cloud keys",
+        "Requires rotating the credential that already reached a build layer"
+      ]
+    },
+    {
+      "id": "migration-ordering",
+      "prompt": "We want to rename the column orders.customer_id to customer_ref in this release. How do we sequence it?",
+      "expectations": [
+        "Rejects a rename in the same release that stops using the old column because rollback would then be impossible",
+        "Applies expand-and-contract across three releases with the new column added first and dropped last",
+        "Requires migrations to run as an explicit pipeline or Kubernetes Job step that completes before the new version receives traffic",
+        "Forbids every replica running migrations at startup during a rolling deploy"
+      ]
+    },
+    {
+      "id": "deploy-verified-only-by-helm",
+      "prompt": "Our deploy job runs helm upgrade --wait and returns. Can we call that a successful deploy?",
+      "expectations": [
+        "Rejects a successful command as proof of a successful deploy",
+        "Requires a smoke test of a real write and read path plus a revision check against the info endpoint",
+        "Requires a health gate that compares error ratio and p95 latency against the previous revision after a burn-in window",
+        "Warns that a passing health check with maxUnavailable zero still needs a readiness threshold below one and a minReadySeconds period"
+      ]
+    },
+    {
+      "id": "rollback-after-destructive-migration",
+      "prompt": "The deploy dropped a column. We need to roll back to last week's build but the old code selects that column.",
+      "expectations": [
+        "States rollback is impossible and that forward-fix is the only remaining path",
+        "Requires the irreversible-release rule that a forward-fix plan exists before any one-way step runs",
+        "Reorders the release so the destructive step is last and the previous version stays runnable until the burn-in window closes",
+        "Defines retention so the previous digest remains reachable for the error-budget window, not just the deploy"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "skill": "skill-router",
+  "version": "2.0.0",
+  "cases": [
+    {
+      "id": "ambiguous-backend-request",
+      "prompt": "We need to add a caching layer to our orders feature. Which skill should we use?",
+      "expectations": [
+        "Names one primary skill and at most two supporting skills instead of listing options",
+        "Separates the structure decision from the mechanism decision when a cache crosses a layer",
+        "States the route and its reason, then proceeds with the work"
+      ]
+    },
+    {
+      "id": "architecture-before-framework",
+      "prompt": "Where should this class go in a Spring Boot app and should I add a second-level cache?",
+      "expectations": [
+        "Routes the placement question to spring-boot-clean-architecture as primary",
+        "Treats the cache question as secondary and delegates to spring-boot-hibernate",
+        "Does not route to both as equals or ask the user to choose"
+      ]
+    },
+    {
+      "id": "explicit-skill-bypass",
+      "prompt": "Use spring-boot-flyway for this, I already know which skill I want.",
+      "expectations": [
+        "Skips routing and uses the named skill",
+        "Does not re-route to a different skill or run the full catalog"
+      ]
+    },
+    {
+      "id": "spring-symptom-routing",
+      "prompt": "Our /orders endpoint takes 4 seconds and p99 is 9 seconds in production. What now?",
+      "expectations": [
+        "Starts with measurement using spring-boot-observability",
+        "Continues to spring-boot-query-optimization once the constrained resource is known",
+        "Defers the SQL or ORM mechanism to postgresql or hibernate rather than guessing first"
+      ]
+    },
+    {
+      "id": "new-endpoint-sequence",
+      "prompt": "Add a POST /refunds endpoint to the Spring service.",
+      "expectations": [
+        "Routes to spring-boot-rest-api as primary with dto and validation as supporting",
+        "Orders the work as contract, payload, constraints",
+        "Includes integration-testing for the proof without inflating the route"
+      ]
+    },
+    {
+      "id": "cross-domain-request",
+      "prompt": "Signups are slow, conversion is low, and deploys keep breaking. Where do we start?",
+      "expectations": [
+        "Routes to the domain owning the first irreversible decision, normally the code and its contract",
+        "States the assumption instead of dumping a list of skills",
+        "Sequences the remaining domains after the first"
+      ]
+    },
+    {
+      "id": "framework-fence",
+      "prompt": "Write me an onboarding email sequence for our new pricing tiers.",
+      "expectations": [
+        "Recognizes the marketing domain despite technical vocabulary and does not route to a backend skill",
+        "Routes to emails and states when product-marketing or pricing context is missing",
+        "Does not load a Spring Boot or React skill for a copywriting request"
+      ]
+    },
+    {
+      "id": "audit-not-rewrite",
+      "prompt": "Audit the module design in this Spring Boot repository and fix everything you find.",
+      "expectations": [
+        "Separates the read-only audit from the fix, naming modular-monolith and clean-architecture as owners",
+        "Does not let the request turn into an unrequested rewrite",
+        "Bounds the work by the evidence found"
+      ]
+    },
+    {
+      "id": "menu-dumping-avoidance",
+      "prompt": "What skills do I have for testing?",
+      "expectations": [
+        "Groups the testing skills by the decision they own instead of listing every file",
+        "Explains how to pick between junit, mockito, testcontainers, and integration-testing",
+        "Offers a route rather than only an inventory"
+      ]
+    },
+    {
+      "id": "no-skill-needed",
+      "prompt": "What is the extension for PostgreSQL log files in my docker container?",
+      "expectations": [
+        "Answers directly without invoking the router or a skill",
+        "Does not produce a route block for a trivial factual question"
+      ]
+    }
+  ]
+}
