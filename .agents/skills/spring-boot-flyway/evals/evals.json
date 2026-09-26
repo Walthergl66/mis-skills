@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-flyway",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "checksum-mismatch",
+      "prompt": "Our deploy failed with a Flyway checksum mismatch on V20260101120000__add_orders_note. Someone fixed the file last week.",
+      "expectations": [
+        "Explains that editing an already applied migration changes its checksum and blocks every later deploy",
+        "Instructs restoring the original file from Git rather than running repair",
+        "Requires the intended change to be delivered as a new migration",
+        "Uses repair only for a removed repeatable migration or a missing confirmed applied file"
+      ]
+    },
+    {
+      "id": "adopt-existing-database",
+      "prompt": "We have a 3 year old Postgres database with 40 tables and no Flyway history. How do we start?",
+      "expectations": [
+        "Compares the current schema against a known commit before baselining",
+        "Recommends baselineVersion 0 with baseline-on-migrate so real migrations still run",
+        "Requires validation against a restored copy of production",
+        "Warns that a wrong baseline silently skips migrations that would fix a difference"
+      ]
+    },
+    {
+      "id": "zero-downtime-rename",
+      "prompt": "We need to rename invoice.due_date to due_at and change it from date to timestamptz. No downtime allowed.",
+      "expectations": [
+        "Proposes expand, deploy dual-write, batched backfill, verify, constrain, contract",
+        "States the old values have no zone so the backfill must pick a documented zone",
+        "Requires a verification query returning zero before the not-null step",
+        "Notes the drop is irreversible and must be gated on the confirmed new code version"
+      ]
+    },
+    {
+      "id": "index-concurrently-fails",
+      "prompt": "Our CREATE INDEX CONCURRENTLY migration failed with CREATE INDEX CONCURRENTLY cannot run inside a transaction block.",
+      "expectations": [
+        "Adds the executeInTransaction=false directive to the migration file",
+        "Explains that the index may be left invalid and must be dropped and rebuilt",
+        "Suggests SET lock_timeout at the top so the rebuild fails fast instead of blocking writes",
+        "Moves the index build into its own migration so it is not coupled to a data change"
+      ]
+    },
+    {
+      "id": "migrations-at-startup",
+      "prompt": "It is simpler to let Spring Boot run migrations on startup instead of adding a pipeline step. Is that fine?",
+      "expectations": [
+        "Recommends a separate pipeline step as the default for production",
+        "Explains the replica race, the crash loop, and the missing ordering gate",
+        "Allows startup migration only for local development or a single-instance internal tool",
+        "Requires a dedicated migrator role that the runtime role cannot impersonate"
+      ]
+    },
+    {
+      "id": "seed-data-in-migrations",
+      "prompt": "Can we put a demo admin user and a fake API key in a V migration so QA has data?",
+      "expectations": [
+        "Rejects credentials in a committed migration file",
+        "Moves demo data to a dev-profile-only Flyway location",
+        "Keeps required reference data in a V migration with ON CONFLICT DO NOTHING",
+        "Keeps test fixtures in the test source set, never in db/migration"
+      ]
+    }
+  ]
+}
