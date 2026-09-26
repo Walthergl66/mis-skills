@@ -390,6 +390,12 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/schema/SKILL.md`
 - Purpose: When the user wants to add, fix, or optimize schema markup and structured data on their site. Also use when the user mentions "schema markup," "structured data," "JSON-LD," "rich snippets," "schema.org," "FAQ schema," "product schema," "review schema," "breadcrumb schema," "Google rich results," "knowledge panel," "star ratings in search," or "add structured data." Use this whenever someone wants their pages to show enhanced results in Google. For broader SEO issues, see seo-audit. For AI search optimization, see ai-seo.
 
+### Security Requirement Extraction
+
+- Folder: `security-requirement-extraction`
+- Path: `.agents/skills/security-requirement-extraction/SKILL.md`
+- Purpose: Derive security requirements from threat models and business context. Use when translating threats into actionable requirements, creating security user stories, or building security test cases.
+
 ### Seo Audit
 
 - Folder: `seo-audit`
