@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-docker",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "layered-jar-dockerfile",
+      "prompt": "Write a production Dockerfile for our Spring Boot 3.5 service on Java 21. Our current one does COPY target/app.jar into eclipse-temurin:21-jre and every release rebuilds all 200 MB.",
+      "expectations": [
+        "Returns a multi-stage Dockerfile with a JDK build stage and an eclipse-temurin:21-jre runtime stage",
+        "Extracts layers with the tools jar mode java -Djarmode=tools -jar target/*.jar extract --layers and copies dependencies, spring-boot-loader, snapshot-dependencies, and application in that order",
+        "Keeps dependency resolution in a layer built only from .mvn, mvnw, and pom.xml so a source change reuses cached layers",
+        "Uses exec-form ENTRYPOINT and states that shell form stops SIGTERM from reaching the JVM"
+      ]
+    },
+    {
+      "id": "oomkilled-hardcoded-xmx",
+      "prompt": "Our pods keep getting OOMKilled. The Dockerfile has ENV JAVA_OPTS=-Xmx512m and the memory limit is 1 GB.",
+      "expectations": [
+        "Flags the hardcoded -Xmx as the defect and explains the JVM already reads the cgroup limit at startup",
+        "Replaces it with -XX:MaxRAMPercentage and an InitialRAMPercentage value, keeping native memory headroom",
+        "Adds -XX:+ExitOnOutOfMemoryError and requires a restart policy, and warns against heap dumps on an ephemeral filesystem",
+        "Notes that JAVA_OPTS is not read by the JVM and that JAVA_TOOL_OPTIONS is printed at startup"
+      ]
+    },
+    {
+      "id": "buildpacks-versus-dockerfile",
+      "prompt": "We want a smaller, more secure image and less maintenance. Should we switch from our hand-written Dockerfile to Cloud Native Buildpacks?",
+      "expectations": [
+        "Gives a tradeoff table across image size, CVE surface, build time, customisation, and local plus CI parity",
+        "Shows spring-boot:build-image with imageName, builder, and runImage properties and publish set to false for local builds",
+        "States buildpacks own layered jar and jlink extraction, and keeps a Dockerfile when a stage the pack does not model is required",
+        "Notes the BPF_JLINK_VERSION coupling and that a floating builder tag is a supply-chain risk"
+      ]
+    },
+    {
+      "id": "native-image-decision",
+      "prompt": "Our serverless handler takes 8 seconds to respond. Can we make it a GraalVM native image to fix that?",
+      "expectations": [
+        "Confirms native image fits the serverless and scale-from-zero case and names the tradeoffs it does not solve",
+        "Requires --no-fallback so a silent JVM fallback cannot hide a build failure",
+        "Lists reflection, dynamic proxy, and resource-loading sites that need reachability metadata and audits them as tests",
+        "Warns that build time dominates short CI cycles and requires a benchmark before and after"
+      ]
+    },
+    {
+      "id": "build-context-leak",
+      "prompt": "A secret from a local .env file appeared in our production image. We added RUN rm .env in a later stage to fix it. Did that work?",
+      "expectations": [
+        "States that deleting a file in a later stage does not remove it from the earlier layer and the secret is still recoverable",
+        "Requires rotating the credential because it was ever in a build layer",
+        "Adds .env, .env.*, .git, target, and IDE state to .dockerignore while not ignoring mvnw or .mvn since the builder stage copies them",
+        "Insists on runtime secret injection with no secret in build args or committed files"
+      ]
+    },
+    {
+      "id": "sigterm-and-pid-one",
+      "prompt": "Our pods take 30 seconds to terminate and get SIGKILLed, and we see no shutdown log. The Dockerfile ends with CMD java -jar /app/app.jar.",
+      "expectations": [
+        "Identifies CMD shell form as the cause, since java runs as a child of the shell and never receives SIGTERM",
+        "Converts to exec form ENTRYPOINT [\"java\",\"-jar\",\"/app/app.jar\"] and sets a non-root USER before it",
+        "Points the drain timing and in-flight request completion to server.shutdown=graceful and spring.lifecycle.timeout-per-shutdown-phase as the actuator concern",
+        "Proposes a verification that sends docker stop and asserts a non-zero exit and a shutdown log line"
+      ]
+    }
+  ]
+}
