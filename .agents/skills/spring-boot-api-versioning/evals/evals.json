@@ -1,0 +1,67 @@
+{
+  "skill": "spring-boot-api-versioning",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "internal-api-no-version",
+      "prompt": "We are adding our first REST controller to an internal Spring Boot service used only by two other services in the same company. Do we need /v1?",
+      "expectations": [
+        "Recommends no versioning for an internal API whose consumers deploy with the provider",
+        "Explains that every version doubles controllers, DTOs, documents, and the test matrix",
+        "Requires additive change discipline and deprecation notices in the changelog instead",
+        "Names the conditions that would change the answer, such as consumers that cannot be redeployed or an external partner"
+      ]
+    },
+    {
+      "id": "strategy-comparison",
+      "prompt": "We have a public API behind a CDN and a B2B partner who signed a contract that fixes the request URL. Should we move to header versioning?",
+      "expectations": [
+        "Compares URI path, media type, and header versioning on cache behaviour, proxy and CDN friendliness, and client ergonomics",
+        "Notes the CDN keys caches on the path so header versioning is unsafe without explicit Vary configuration",
+        "Accepts header versioning only when the partner contract fixes the URL, and recommends the same strategy for all consumers",
+        "Warns against mixing path and header versions for the same API"
+      ]
+    },
+    {
+      "id": "spring-api-versioning-config",
+      "prompt": "We already publish /api/v1/orders and /api/v2/orders and want Spring to route by version and send sunset headers. Show the configuration.",
+      "expectations": [
+        "Uses WebMvcConfigurer configureApiVersioning with ApiVersionConfigurer and usePathSegment with the index matching the /api/{version} prefix",
+        "Declares mappings with the version attribute, including a baseline version for forward compatibility",
+        "Sets the version requirement or the default version explicitly",
+        "Installs an ApiVersionDeprecationHandler so Deprecation, Sunset, and Link headers are emitted centrally",
+        "States that unsupported or missing versions surface as 400 responses owned by the REST API error contract"
+      ]
+    },
+    {
+      "id": "breaking-change-classification",
+      "prompt": "We want to change totalMinor from an integer to an object with amount and currency, and rename clientReference to clientRef. Is that additive?",
+      "expectations": [
+        "Classifies the type change and the rename as breaking for existing clients",
+        "Explains that a correct client built against the previous contract can start failing or lose a field",
+        "Enumerates the additive options first, such as adding a new field, a new endpoint, or accepting both shapes",
+        "Hands the resulting version decision to the strategy and routing plan rather than shipping under the same version"
+      ]
+    },
+    {
+      "id": "removal-without-telemetry",
+      "prompt": "v1 has been marked deprecated for a year and the team wants to delete it next sprint. How do we decide?",
+      "expectations": [
+        "Requires per-version request metrics and distinct consumer counts before any removal",
+        "Defines the evidence as zero traffic for an agreed window rather than elapsed time",
+        "Outlines the sequence of announcing the date, contacting remaining consumers, deleting only the transport layer, and adding a 410 or API_VERSION_REMOVED tombstone",
+        "Says to extend the window and publish a new date if traffic is non-zero instead of breaking consumers"
+      ]
+    },
+    {
+      "id": "enum-value-versioning",
+      "prompt": "Adding a new order status value broke three generated clients. How should the compatibility question have been decided?",
+      "expectations": [
+        "Classifies adding an enum value as a breaking change for strict client deserialization",
+        "Offers the tolerant options such as an UNKNOWN value, an open string field, or a documented optional value",
+        "States that the new version must exist before the value is published and that both old and new versions must be served during the rollout",
+        "Assigns the DTO field mechanics to the DTO skill and the version and sunset plan to this skill"
+      ]
+    }
+  ]
+}
