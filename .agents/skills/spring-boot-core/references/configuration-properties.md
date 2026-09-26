@@ -24,6 +24,8 @@ package com.acme.billing.config;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.validation.annotation.Validated;
@@ -34,14 +36,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 
 @Validated
 @ConfigurationProperties(prefix = "acme.ledger", ignoreUnknownFields = false)
 public record LedgerProperties(
         @NotBlank String url,
-        @NotNull @Positive Duration connectTimeout,
-        @NotNull @Positive Duration readTimeout,
+        @NotNull @DurationMin(millis = 100) Duration connectTimeout,
+        @NotNull @DurationMax(seconds = 30) Duration readTimeout,
         @DefaultValue("16") @Min(1) @Max(64) int poolSize,
         @NotEmpty @Pattern(regexp = "[A-Z]{3}") List<String> allowedCurrencies,
         @Valid @NotNull Retry retry,
@@ -49,7 +50,7 @@ public record LedgerProperties(
 
     public record Retry(
             @Min(0) @Max(5) int maxAttempts,
-            @NotNull @Positive Duration backoff) {}
+            @NotNull @DurationMin(millis = 10) Duration backoff) {}
 }
 ```
 
@@ -71,7 +72,7 @@ acme:
 Enable it explicitly when it is not reached by a starter:
 
 ```java
-@ApplicationBootConfiguration
+@SpringBootApplication
 @EnableConfigurationProperties(LedgerProperties.class)
 public class BillingApplication {
 
