@@ -12,7 +12,7 @@ Load this when tracing where a request is handled, choosing between the servlet 
 | 4 | `FrameworkServlet.processRequest` | Binds a context, applies locale and theme resolvers | `LocaleContextHolder` failures |
 | 5 | `getHandler` | `HandlerMapping` returns a `HandlerExecutionChain` | `NoHandlerFoundException` to 404 |
 | 6 | `applyPreHandle` | Interceptors in declared order | Short-circuit, or `afterCompletion` for the earlier ones |
-| 7 | `ha.handle` | Argument resolution and validation, then the method | 400 for resolution and validation failures |
+| 7 | `HandlerAdapter.handle` | Argument resolution and validation, then the method | 400 for resolution and validation failures |
 | 8 | Return value handling | Converter writes the body | 406 when nothing can write |
 | 9 | `applyPostHandle` | Interceptors in reverse order | Never runs when the handler threw |
 | 10 | `processDispatchResult` | `ExceptionHandlerExceptionResolver`, then `DefaultHandlerExceptionResolver`, then the error dispatch | 4xx and 5xx bodies |
@@ -49,7 +49,7 @@ class FilterConfig {
 | Must run on the error dispatch | `FilterRegistrationBean#setDispatcherTypes(REQUEST, ERROR, ASYNC)`. |
 | Wraps the request for a library | `OncePerRequestFilter`, never a plain `Filter`, or the body is read twice on nested dispatches. |
 
-The Spring Security chain is registered with order `SecurityProperties.DEFAULT_FILTER_ORDER`, which is `-100`. Any custom filter that must see the authenticated context needs a lower order value than that; any filter that must run unauthenticated, such as CORS preflight handling, needs a higher value.
+The Spring Security chain is registered with order `SecurityProperties.DEFAULT_FILTER_ORDER`, which is `-100`. A lower value runs earlier, so a filter that must run before authentication, such as correlation ids or CORS preflight handling, needs a value below `-100`, while a filter that needs the authenticated context needs a value above it.
 
 ## Interceptors
 

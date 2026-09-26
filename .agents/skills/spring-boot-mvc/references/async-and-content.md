@@ -60,7 +60,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.zip.GZIPOutputStream;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,7 +72,7 @@ class ExportController {
     ResponseBodyEmitter export() {
         // A zero timeout means no container-imposed limit; the emitter is completed explicitly.
         ResponseBodyEmitter emitter = new ResponseBodyEmitter(0L);
-        exporter.writeTo(emitter, "ledger");
+        new Exporter().writeTo(emitter, "ledger");
         return emitter;
     }
 
@@ -81,8 +80,7 @@ class ExportController {
 
         void writeTo(ResponseBodyEmitter emitter, String report) {
             Thread.ofVirtual().name("export-" + report).start(() -> {
-                try (Writer writer = new OutputStreamWriter(
-                        GZIPOutputStream.wrap(emitter.getOutputStream()), StandardCharsets.UTF_8)) {
+                try (Writer writer = new OutputStreamWriter(emitter.getOutputStream(), StandardCharsets.UTF_8)) {
                     writer.write("id,amount\n");
                     writer.flush();
                 }
@@ -172,7 +170,7 @@ class ConverterConfig implements WebMvcConfigurer {
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         for (HttpMessageConverter<?> converter : converters) {
             if (converter instanceof MappingJackson2HttpMessageConverter jackson) {
-                // Order in this list is selection order, so a narrower media type must come first.
+                // Mutate the existing converter; convert it to insert one ahead of Jackson in the list.
                 jackson.setObjectMapper(jackson.getObjectMapper()
                         .copy()
                         .findAndRegisterModules()
