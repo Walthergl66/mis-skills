@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-postgresql",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "seq-scan-on-large-table",
+      "prompt": "Our orders query does a Seq Scan on a 40 million row table and takes 900 ms. Should we add an index?",
+      "expectations": [
+        "Demands EXPLAIN (ANALYZE, BUFFERS) output and real row counts before recommending anything",
+        "Checks Rows Removed by Filter and the actual versus estimated rows ratio",
+        "Names the exact composite index shape from the equality, range, and sort columns",
+        "States the write and vacuum cost of the proposed index"
+      ]
+    },
+    {
+      "id": "jsonb-modeling",
+      "prompt": "Store the whole webhook payload as jsonb and query by payload->'event' = 'order.created'. Is that fine?",
+      "expectations": [
+        "Rejects jsonb for a value that is queried by key and requires a btree or a GIN jsonb_path_ops index",
+        "Rejects unindexed jsonb extraction as a sequential scan generator",
+        "Warns against building a json path from untrusted input and proposes a fixed CASE map",
+        "States that jsonb must not replace a relationship that needs a foreign key"
+      ]
+    },
+    {
+      "id": "work-queue-contention",
+      "prompt": "Five workers poll the job table every 200 ms and block each other. How do I fix it?",
+      "expectations": [
+        "Proposes SELECT FOR UPDATE SKIP LOCKED with a partial index on the claim predicate",
+        "Requires a visibility timeout to recover claims from a crashed worker",
+        "Warns that the claim must commit immediately and not sit in a long transaction",
+        "Notes that the poll interval is a symptom to remove in favor of notification"
+      ]
+    },
+    {
+      "id": "hikari-pool-sizing",
+      "prompt": "Postgres has max_connections 100 and we run 6 app instances. What should maximumPoolSize be?",
+      "expectations": [
+        "Subtracts superuser_reserved_connections and operational headroom before dividing by replica count",
+        "Gives a number per instance and shows the arithmetic",
+        "Orders connection-timeout below the caller timeout and max-lifetime below proxy idle timeouts",
+        "Warns that a pool above the budget converts into connection failures, not throughput"
+      ]
+    },
+    {
+      "id": "timestamp-utc-migration",
+      "prompt": "Our created_at column is timestamp without time zone and reports from the EU team are wrong. What should the type be?",
+      "expectations": [
+        "Recommends timestamptz mapped to Instant and names the zone-less timestamp as the cause",
+        "Identifies the existing column as a data conversion that needs a migration, not an annotation change",
+        "States that the current values are ambiguous and may already be corrupt",
+        "Hands the migration file itself to the Flyway skill"
+      ]
+    },
+    {
+      "id": "serialization-failure",
+      "prompt": "Under load we see SQLSTATE 40001 and our retry loop only catches deadlocks. What is happening?",
+      "expectations": [
+        "Identifies 40001 as a serialization failure distinct from deadlock 40P01",
+        "Requires the retry to cover both codes and to sit outside the transaction boundary",
+        "Requires the retried write to be idempotent",
+        "Questions whether the isolation level needs to be SERIALIZABLE or whether locking plus a constraint is cheaper"
+      ]
+    }
+  ]
+}
