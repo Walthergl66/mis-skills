@@ -42,6 +42,12 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/aso/SKILL.md`
 - Purpose: When the user wants to audit or optimize an App Store or Google Play listing. Also use when the user mentions 'ASO audit,' 'app store optimization,' 'optimize my app listing,' 'improve app visibility,' 'app store ranking,' 'audit my listing,' 'why aren't people downloading my app,' 'improve my app conversion,' 'keyword optimization for app,' or 'compare my app to competitors.' Use when the user shares an App Store or Google Play URL and wants to improve it.
 
+### Auth Implementation Patterns
+
+- Folder: `auth-implementation-patterns`
+- Path: `.agents/skills/auth-implementation-patterns/SKILL.md`
+- Purpose: Master authentication and authorization patterns including JWT, OAuth2, session management, and RBAC to build secure, scalable access control systems. Use when implementing auth systems, securing APIs, or debugging security issues.
+
 ### Cavecrew
 
 - Folder: `cavecrew`
