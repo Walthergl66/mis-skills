@@ -1,0 +1,76 @@
+{
+  "skill": "spring-boot-modular-monolith",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "circular-reference-flag-rejected",
+      "prompt": "Our Spring Boot app has orders and inventory packages and ApplicationModules.verify() throws a cycle. A forum suggested fixing it with spring.main.allow-circular-references=true. What should we do?",
+      "expectations": [
+        "Treats the cycle as a boundary defect and states that allow-circular-references only hides it and moves the failure to runtime",
+        "Lists the three real fixes: extract the shared concept, keep the one genuine direction and use a module event for the other, or merge the modules when both directions are real",
+        "Warns that @Lazy or ObjectProvider injection to break a cycle hides the coupling rather than removing it"
+      ],
+      "fail_modes": [
+        "Suggests allow-circular-references, @Lazy, or ObjectProvider to break the cycle",
+        "Explains the cycle without naming any concrete restructuring step",
+        "Treats the cycle as a test or configuration problem"
+      ]
+    },
+    {
+      "id": "cross-module-read-through-named-interface",
+      "prompt": "Orders needs the customer's total order count on the checkout page. Where should that value come from?",
+      "expectations": [
+        "Routes the read through an exposed named interface on the owning module and declares it in @ApplicationModule(allowedDependencies = \"customers::api\")",
+        "Rejects injecting the other module's repository, querying it with EntityManager, and a JPA relationship across the boundary",
+        "Offers a module event or a projection only for reads the caller does not need immediately"
+      ],
+      "fail_modes": [
+        "Suggests injecting the other module's repository into the orders service",
+        "Suggests making the other module's package public to silence the violation",
+        "Suggests a JPA join or entity association across module boundaries"
+      ]
+    },
+    {
+      "id": "shared-kernel-refused",
+      "prompt": "The common package has 80 classes and a Utils class with 40 static methods that three modules depend on. Should we extract it into a shared library?",
+      "expectations": [
+        "Names the shared kernel anti-pattern and states that a shared library converts a package problem into a dependency every module now carries",
+        "Keeps only dependency-free, business-neutral types in shared and moves domain types back to the module that owns them",
+        "Recommends duplicating small value objects rather than sharing them, and replacing the utility class with behaviour on the type that owns the data"
+      ],
+      "fail_modes": [
+        "Recommends extracting common into a separate Maven module or library",
+        "Accepts the utility class as a reasonable shared dependency",
+        "Proposes another shared package such as util2 or shared-kernel"
+      ]
+    },
+    {
+      "id": "call-versus-event-by-result-need",
+      "prompt": "Payments must notify orders when a payment settles, and orders must confirm a reservation before payment starts. Which direction should be a direct call and which an event?",
+      "expectations": [
+        "Makes the reservation confirmation a synchronous call through a named interface because orders cannot proceed without it, so a failure must roll back the caller",
+        "Makes the settlement notification a module event published after commit because orders does not need the result to continue",
+        "States the failure semantics of each direction and requires the listener to be idempotent"
+      ],
+      "fail_modes": [
+        "Makes both directions asynchronous events",
+        "Makes the synchronous direction fire-and-forget",
+        "Omits the transaction consequence of either direction"
+      ]
+    },
+    {
+      "id": "reporting-module-not-ready-to-split",
+      "prompt": "A reporting module queries 12 tables owned by other modules directly, and the team wants to split it into its own service next quarter. Is it ready?",
+      "expectations": [
+        "Answers no and states that direct cross-module table access means the module owns no data, which fails the data-ownership gate",
+        "Requires reporting to own a schema or a projection fed by module events before the split is credible",
+        "Requires cross-module reads to go through named interfaces and ApplicationModules.verify() to pass before the extraction"
+      ],
+      "fail_modes": [
+        "Agrees the module is ready because the team wants it split",
+        "Treats the cross-module table reads as a reporting detail to keep",
+        "Recommends splitting first and cleaning the queries afterwards"
+      ]
+    }
+  ]
+}
