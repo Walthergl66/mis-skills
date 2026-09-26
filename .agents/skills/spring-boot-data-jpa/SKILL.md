@@ -13,44 +13,32 @@ Design the repository around the aggregate the application mutates, not around t
 
 ## When to use
 
-- Deciding repository interfaces, method names, and what belongs in `JpaRepository` inheritance.
-- A `LazyInitializationException`, an N+1 query log, or a page whose count explodes on deep offsets.
-- Choosing join fetch, `@EntityGraph`, a JPA fetch graph, or a projection.
-- Placing `@Transactional`, choosing propagation, or debugging a rollback that did not happen.
-- Updating rows in bulk with `@Modifying`, or a lost update under concurrency.
-- Auditing creation and modification metadata.
-- Deciding whether a read or write belongs in JPA, `JdbcClient`, or jOOQ.
+- Repository interfaces, method names, `JpaRepository` inheritance, and a `LazyInitializationException` or N+1 log.
+- The choice between join fetch, `@EntityGraph`, a fetch graph, and a projection, or a page count that explodes on deep offsets.
+- Placing `@Transactional`, choosing propagation, auditing metadata, or picking JPA versus `JdbcClient` versus jOOQ per read and write.
 
 ## When not to use
 
 - Index design, dialect features, JSON columns, and server tuning belong to `spring-boot-postgresql`.
 - Second-level cache, batch fetching, and statement inspection belong to `spring-boot-hibernate`.
 - Reading `pg_stat_statements` and fixing a measured slow query belongs to `spring-boot-query-optimization`.
-- Migration files and schema history belong to `spring-boot-flyway`.
-- Aggregate boundaries and invariant placement belong to `spring-boot-ddd`.
-- Repository placement inside the layer tree belongs to `spring-boot-clean-architecture`.
+- Migration files belong to `spring-boot-flyway`; aggregate boundaries and repository placement belong to `spring-boot-ddd` and `spring-boot-clean-architecture`.
 
 ## Ownership and sibling boundaries
 
-This skill owns repository design, transaction demarcation, fetch plans, projections, pagination, and locking at the repository level.
+This skill owns repository design, transaction demarcation, fetch plans, pagination, and locking.
 
 - `spring-boot-postgresql` owns SQL dialect and schema capabilities. Hand it DDL types, indexes, and vendor features.
-- `spring-boot-hibernate` owns engine internals. Hand it batch size, fetch modes, and second-level cache.
-- `spring-boot-query-optimization` owns diagnosis of slow statements. Hand it the plan, the timings, and the parameters.
-- `spring-boot-flyway` owns migration authoring and execution. Hand it every schema change you need.
-- `spring-boot-ddd` owns the model. Hand it entity identity, aggregate rules, and lifecycle meaning.
-- `spring-boot-clean-architecture` owns layering. Hand it where the repository interface and the JPA implementation live.
+- `spring-boot-hibernate` owns engine internals and `spring-boot-query-optimization` owns slow-statement diagnosis. Hand them batch size, fetch modes, second-level cache, the plan, and the timings.
+- `spring-boot-flyway`, `spring-boot-ddd`, and `spring-boot-clean-architecture` own migrations, the model, and layering. Hand them every schema change, entity identity, and interface placement.
 
 ## Hard rules
 
-1. **One repository per aggregate root, not per entity or table.** A child entity is loaded through its root.
-2. **Never expose `JpaRepository` to the application layer.** Application code depends on a narrow interface that lists the operations it needs.
-3. **`open-in-view` is off.** Set `spring.jpa.open-in-view: false` so a lazy load cannot fire during serialization.
-4. **One transaction boundary per use case**, on the public entry point an outside caller invokes. Not on every method.
-5. **Self-invocation bypasses the proxy.** An internal call never passes through the transactional or `@Validated` proxy, so the annotation is silently inert.
-6. **No lazy loading in a read-only query that will be mapped to a response.** Choose the fetch plan or a projection.
-7. **Never return an entity to the transport layer.** Map to a record inside the transaction.
-8. **Bound every query result.** `Pageable` with a hard maximum, or a keyset cursor for large sequential scans.
+1. **One repository per aggregate root, not per entity or table,** and never expose `JpaRepository` to the application layer: it depends on a narrow interface that lists the operations it needs.
+2. **`open-in-view` is off.** Set `spring.jpa.open-in-view: false` so a lazy load cannot fire during serialization.
+3. **One transaction boundary per use case**, on the public entry point an outside caller invokes. Not on every method.
+4. **Self-invocation bypasses the proxy,** so the annotation is silently inert. **No lazy loading in a query mapped to a response, and never return an entity to the transport layer:** choose the fetch plan, then map to a record inside the transaction.
+5. **Bound every query result.** `Pageable` with a hard maximum, or a keyset cursor for large sequential scans.
 
 ```yaml
 spring:
@@ -61,24 +49,14 @@ spring:
         default_batch_fetch_size: 32
 ```
 
+
+
 ## Repository shape per aggregate
 
 ```java
-package com.acme.billing.order;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
 public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     Optional<Order> findByReference(String reference);
-
     List<Order> findByCustomerIdAndStatusOrderByPlacedAtDesc(UUID customerId, OrderStatus status);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
@@ -89,161 +67,83 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
 | Rule | Reason |
 | --- | --- |
-| Derive method names from business vocabulary | A repository that leaks column names becomes a schema mirror |
-| Custom JPQL only when derivation cannot express the query | A JPQL string loses compile-time checking and entity-graph control |
-| Return `Optional` for one, `List` for many, `Page` or `Slice` for bounded lists | The return type documents the cardinality contract |
-| Never `findAll()` without a bound in a request path | An unbounded read is an outage waiting for enough data |
+| Derive method names from business vocabulary, and use custom JPQL only when derivation cannot express the query | Column names leak the schema, and a JPQL string loses compile-time checking and entity-graph control |
+| Return `Optional` for one, `List` for many, `Page` or `Slice` for bounded lists, never an unbounded `findAll()` | The return type documents the cardinality contract, and an unbounded read is an outage waiting for enough data |
 | Never a `Map` or `List<Object[]>` across a layer boundary | Map it to a record inside the persistence adapter |
 
 ## Where the transaction boundary belongs
 
 ```java
-package com.acme.billing.order;
-
-import java.util.UUID;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 @Service
 public class OrderApplicationService {
 
     private final OrderRepository orders;
 
-    OrderApplicationService(OrderRepository orders) {
-        this.orders = orders;
-    }
-
     @Transactional
     public OrderPlaced place(PlaceOrderCommand command) {
-        return placeInTransaction(command);
-    }
-
-    private OrderPlaced placeInTransaction(PlaceOrderCommand command) {
-        // A private call is still the same transaction because the public entry point owns it.
         return orders.save(Order.from(command)).place();
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    // REQUIRES_NEW is a deliberate independent commit, for a different durability requirement only.
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void recordAuditAsync(UUID orderId) {
-        // A deliberate independent commit; use sparingly and only for a different durability requirement.
-        orders.findById(orderId).ifPresent(order -> order.markAudited());
+        orders.findById(orderId).ifPresent(Order::markAudited);
     }
 }
 ```
 
 | Propagation | Effect | Use when |
 | --- | --- | --- |
-| `REQUIRED` (default) | Join the current transaction, or start one | The normal case |
-| `REQUIRES_NEW` | Suspend the current one and commit independently | The write must survive a rollback of the caller |
-| `SUPPORTS` | Join if present, otherwise run non-transactionally | Read-only helpers |
-| `MANDATORY` | Fail unless a transaction exists | Code that must never run alone |
-| `NESTED` | Savepoint inside the current transaction | Partial rollback on a shared connection, driver dependent |
-| `NOT_SUPPORTED` | Suspend the current transaction | Long non-transactional work |
+| `REQUIRED` (default) and `REQUIRES_NEW` | Join the current transaction or start one; suspend the current one and commit independently | The normal case, or a write that must survive a rollback of the caller |
+| `MANDATORY`, `NESTED`, `NOT_SUPPORTED` | Fail without a transaction, savepoint, or suspend it | Code that must never run alone, partial rollback, long non-transactional work |
 
 | Rule | Reason |
 | --- | --- |
-| Put `@Transactional(readOnly = true)` on query entry points | Skips dirty checking and hints a read replica. |
-| Keep HTTP calls, file IO, and message publishing out of the transaction | The connection is held for the whole external round trip. |
-| Publish domain events after commit | An in-transaction publish is lost on rollback. |
-| Re-throw or translate checked exceptions | A swallowed exception commits partial work. |
-| Expect a proxy, not a `new` | A manually constructed object has no transactional behavior. |
+| Put `@Transactional(readOnly = true)` on query entry points | Skips dirty checking and hints a read replica |
+| Keep HTTP calls, file IO, and message publishing out of the transaction, and publish events after commit | The connection is held for the whole round trip, and an in-transaction publish is lost on rollback |
 
-Self-invocation remedies, in order of preference: move the method to a second bean, inject the proxy with `@Lazy`, or use `TransactionTemplate` for an explicit programmatic boundary. Never rely on the annotation on an internal call.
+Self-invocation remedies, in order of preference: move the method to a second bean, inject the proxy with `@Lazy`, or use `TransactionTemplate`. Never rely on the annotation on an internal call, and never on a manually constructed object.
 
 ## N+1 and the four fixes
 
 | Fix | How | Cost and trap |
 | --- | --- | --- |
-| Join fetch in JPQL | `select distinct o from Order o left join fetch o.lines` | Duplicates rows; two collection fetches raise `MultipleBagFetchException`; ignores `Pageable` for the second collection |
+| Join fetch in JPQL | `select distinct o from Order o left join fetch o.lines` | Duplicates rows; two collection fetches raise `MultipleBagFetchException`; ignores `Pageable` |
 | `@EntityGraph` on the method | `@EntityGraph(attributePaths = "lines")` | Keeps derivation; only one graph per query; a collection fetch plus paging still degrades to in-memory paging |
 | JPA fetch graph | `EntityGraph` plus `query.setHint` | Full control, typed, verbose; must be applied per query |
 | Projection | Interface or record projection | Best for reads: only the selected columns, no entity in the persistence context, read-only |
 
-| Cause | Symptom | Fix |
-| --- | --- | --- |
-| Accessing a lazy association while serializing | `LazyInitializationException` once `open-in-view` is off | Fetch plan or projection |
-| Iterating a `List<Order>` and touching `order.getCustomer()` | One query per row in the log | `@EntityGraph` on the query |
-| Collection fetch plus `Pageable` | In-memory pagination, wrong counts | Fetch the collection separately or project it |
-| `@ElementCollection` or a `@OneToMany` bag | `MultipleBagFetchException` | Convert one side to a `Set` or fetch separately |
+A `LazyInitializationException` once `open-in-view` is off, or one query per row while iterating a `List<Order>` and touching `order.getCustomer()`, both mean the fetch plan is missing. A collection fetch plus `Pageable` degrades to in-memory pagination, so fetch that collection separately.
 
 ## Pagination, locking, and bulk updates
 
 | Need | Mechanism | Trap |
 | --- | --- | --- |
-| Small navigable lists with totals | `Pageable` plus `Page<T>` | `OFFSET` cost grows with the offset, and a count query runs on every page |
-| No totals needed | `Slice<T>` | Still offset-based, still deep-offset cost |
-| Large sequential scans | Keyset cursor with `ScrollPosition` and `Window<T>` | Sort columns must be non-nullable; a stable total order is mandatory |
-| Concurrency control on one row | `@Version` for optimistic locking | Throws `OptimisticLockingFailureException`; the caller must retry |
-| Exclusive row access | `@Lock(LockModeType.PESSIMISTIC_WRITE)` | Holds a database lock for the transaction duration; can deadlock |
-| Bulk status or flag change | `@Modifying` with a JPQL update | Bypasses the persistence context and skips entity callbacks |
-| Repeatable count | `countQuery` on a `@Query` | The count must not join the fetched collection |
+| Small navigable lists | `Page<T>` for totals, `Slice<T>` without | `OFFSET` cost grows with the offset, and a count query runs on every page |
+| Large sequential scans | Keyset cursor with `ScrollPosition` and `Window<T>` | Sort columns must be non-nullable and the total order stable |
+| Concurrency on one row | `@Version`, or `@Lock(LockModeType.PESSIMISTIC_WRITE)` | Optimistic throws `OptimisticLockingFailureException` and the caller must retry; pessimistic holds a lock and can deadlock |
+| Bulk status change | `@Modifying` with a JPQL update | Bypasses the persistence context, skips entity callbacks and audit listeners |
 
 ## JPA, JdbcClient, or jOOQ
 
 | Criterion | JPA | `JdbcClient` | jOOQ |
 | --- | --- | --- | --- |
-| Write with invariants and generated identifiers | Best | Acceptable, hand-mapped | Acceptable, hand-mapped |
-| Read of a few rows with a known shape | Viable, but hydrate entities | Best, one query, no proxies | Best |
-| Read-heavy reporting and joins | Costly | Good | Best, type-safe and composable |
-| Change detection and dirty checking | Automatic | Manual SQL | Manual SQL |
-| Query correctness at compile time | No, JPQL and HQL are strings | No, SQL strings | Yes, generated schema classes |
-| Batch loading without N+1 | Needs an explicit plan | Impossible to forget | Impossible to forget |
-| Cost to add to a service | Already present | Small, one starter | Build-time codegen and a schema dependency |
+| Writes with invariants, read-heavy joins | Best for writes, costly for joins | Good for reads | Best, type-safe and composable |
 
-Rule: keep writes and anything with invariants in JPA, push wide read-only joins to `JdbcClient` or jOOQ, and never mix the two inside a single transaction for the same row set.
+Keep writes and invariants in JPA, push wide read-only joins to `JdbcClient` or jOOQ, and never mix the two in one transaction for the same row set.
 
 ## Auditing
 
-```java
-package com.acme.billing.order;
-
-import java.time.Instant;
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-@EntityListeners(AuditingEntityListener.class)
-public abstract class AuditedEntity {
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
-
-    @CreatedBy
-    @Column(name = "created_by", updatable = false)
-    private String createdBy;
-
-    @LastModifiedBy
-    @Column(name = "updated_by")
-    private String updatedBy;
-}
-```
-
-Enable with `@EnableJpaAuditing` and provide an `AuditorAware<String>`; use `setDateTimeProvider` only if the clock must be controlled. A `@Modifying` bulk update bypasses these listeners, so set the audit column inside the update statement.
+Annotate the base entity with `@EntityListeners(AuditingEntityListener.class)` and the four fields `@CreatedDate`, `@LastModifiedDate`, `@CreatedBy`, and `@LastModifiedBy`; mark the created fields `updatable = false`, enable it with `@EnableJpaAuditing`, and provide an `AuditorAware<String>`. Use `setDateTimeProvider` only when the clock must be controlled. A `@Modifying` bulk update bypasses these listeners, so set the audit column inside the update statement.
 
 ## Reference routing
 
-| Task | Load |
-| --- | --- |
-| Design repository interfaces, place transaction boundaries, or debug self-invocation and rollback | [repositories-and-transactions.md](references/repositories-and-transactions.md) |
-| Fix N+1, choose a projection, paginate with a cursor, or apply locking and bulk updates | [fetching-and-pagination.md](references/fetching-and-pagination.md) |
+- Design repository interfaces, place transaction boundaries, or debug self-invocation and rollback: [repositories-and-transactions.md](references/repositories-and-transactions.md)
+- Fix N+1, choose a projection, paginate with a cursor, or apply locking and bulk updates: [fetching-and-pagination.md](references/fetching-and-pagination.md)
 
 ## Expected response
 
 - **Repository design:** one interface per aggregate, the exact method set the application needs, and what is deliberately not exposed.
 - **Transaction boundary:** the public entry point that owns it, propagation chosen, and what must stay outside.
-- **Fetch plan:** the fix for each N+1 path, with the chosen mechanism and its known trap.
-- **Result bound:** page size limit, count or no count, and keyset versus offset with the reason.
-- **Concurrency:** optimistic or pessimistic, retry expectation, and deadlock exposure.
-- **Engine choice:** JPA, `JdbcClient`, or jOOQ per read and write, with the specific trade-off.
-- **Verification:** a test that counts executed statements, plus a plan check on a production-sized dataset.
+- **Fetch plan:** the fix for each N+1 path, with the mechanism and its known trap.
+- **Result bound, concurrency, and engine choice:** page size limit, keyset versus offset, optimistic or pessimistic locking with the retry expectation, JPA versus `JdbcClient` versus jOOQ, and a test that counts executed statements on a production-sized dataset.

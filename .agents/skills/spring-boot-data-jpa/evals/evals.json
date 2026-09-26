@@ -1,0 +1,60 @@
+{
+  "skill": "spring-boot-data-jpa",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "transaction-not-applied",
+      "prompt": "We call @Transactional placeOrder from inside the same service class and sometimes it runs without a transaction. Why?",
+      "expectations": [
+        "Explains that self-invocation bypasses the Spring proxy so the annotation is inert",
+        "Moves the method to a second bean or uses TransactionTemplate for the explicit boundary",
+        "Adds a test that fails when the boundary is missing instead of relying on inspection"
+      ]
+    },
+    {
+      "id": "n-plus-one-list-endpoint",
+      "prompt": "GET /orders returns 200 rows in 900 ms and the log shows one select per row for the customer name. Fix it.",
+      "expectations": [
+        "Identifies per-row lazy access on the customer association as the N plus 1 cause",
+        "Applies EntityGraph, join fetch, or a projection and states the cost of each",
+        "Sets open-in-view to false and adds a test that asserts the statement count for a realistic list size"
+      ]
+    },
+    {
+      "id": "deep-pagination",
+      "prompt": "Page 800 of our report endpoint takes 9 seconds while page 1 takes 40 ms. The data set is 3 million rows.",
+      "expectations": [
+        "Explains that offset pagination makes the database skip rows and that the cost grows with the offset",
+        "Moves to a keyset cursor with ScrollPosition and Window, or Slice when totals are not needed",
+        "Requires a stable total order with the primary key tiebreaker and non-nullable sort columns"
+      ]
+    },
+    {
+      "id": "concurrent-update",
+      "prompt": "Two users editing the same order overwrite each other. We need a decision between optimistic and pessimistic locking.",
+      "expectations": [
+        "Recommends @Version optimistic locking with a caller retry as the default",
+        "Justifies PESSIMISTIC_WRITE only for a database-enforced invariant such as stock decrement",
+        "Requires a concurrency test and notes lock ordering to avoid deadlocks for batch updates"
+      ]
+    },
+    {
+      "id": "bulk-status-update",
+      "prompt": "We need to archive 200k orders with a bulk update and the updated rows still show the old status in the same request.",
+      "expectations": [
+        "Requires a transaction and clearAutomatically to evict stale entities from the persistence context",
+        "Sets audit columns inside the update statement because entity lifecycle listeners do not fire",
+        "Keeps the bulk update in bounded batches instead of one unbounded statement"
+      ]
+    },
+    {
+      "id": "jpa-or-jdbc",
+      "prompt": "Our reporting endpoint joins six tables and aggregates. Should it stay on JPA repositories?",
+      "expectations": [
+        "Recommends JdbcClient or jOOQ for the wide read-only join and keeps JPA for writes with invariants",
+        "Explains no proxy or N plus 1 cost in a hand-written query and the cost of losing compile-time query checks",
+        "Forbids mixing both for the same row set inside one transaction"
+      ]
+    }
+  ]
+}
