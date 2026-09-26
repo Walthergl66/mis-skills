@@ -337,6 +337,12 @@
       "skillPath": "skills/prospecting/SKILL.md",
       "computedHash": "3a7c70ae784135394073b5f99fad2356d86e3702b169605d03c7bedacaded777"
     },
+    "react-native-architecture": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/frontend-mobile-development/skills/react-native-architecture/SKILL.md",
+      "computedHash": "a83762db6ab371eb25e1b33e49d7895bb73df9d3952e26a3bdca90903d6ac91a"
+    },
     "referrals": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
