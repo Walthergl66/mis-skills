@@ -432,3 +432,9 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/video/SKILL.md`
 - Purpose: When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'video pipeline,' or 'make me a video.' Use this for video creation, generation, and production workflows. For video content strategy and what to post, see social. For paid video ad creative, see ad-creative.
 
+### Vitest Testing Patterns
+
+- Folder: `vitest-testing-patterns`
+- Path: `.agents/skills/vitest-testing-patterns/SKILL.md`
+- Purpose: Write tests using Vitest and React Testing Library. Use when creating unit tests, component tests, integration tests, or mocking dependencies. Activates for test file creation, mock patterns,
+

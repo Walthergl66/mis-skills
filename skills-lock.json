@@ -414,6 +414,11 @@
       "sourceType": "github",
       "skillPath": "skills/video/SKILL.md",
       "computedHash": "3b222617f41c03a3eb870747977d07159bf92861c905ea6b5af2de15d51bcabb"
+    },
+    "vitest-testing-patterns": {
+      "source": "https://github.com/curiositech/some_claude_skills",
+      "sourceType": "github",
+      "computedHash": "fa37bdbf40432145331bdf8197a2698eea76c489573102b95c2d8509eaddb022"
     }
   }
 }
