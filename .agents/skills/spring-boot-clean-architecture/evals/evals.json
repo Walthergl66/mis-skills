@@ -1,0 +1,72 @@
+{
+  "skill": "spring-boot-clean-architecture",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "domain-entity-is-also-jpa-entity",
+      "prompt": "Our OrderService has @Transactional and an EntityManager, and the Order class is annotated with @Entity and jpa persistence imports. We want to test our pricing rules fast. Where should each of these go?",
+      "expectations": [
+        "States that Order must lose @Entity and move to a persistence adapter class named as a row model, with an explicit mapper between row and domain",
+        "States that jakarta.persistence and org.springframework imports are forbidden in the domain package",
+        "Moves @Transactional to the use case entry point and removes it from domain and adapter methods",
+        "Declares a plain OrderRepository port in the domain and makes the existing Spring Data interface the implementation",
+        "Recommends setting spring.jpa.open-in-view to false and adding an ArchUnit test that fails on outward imports"
+      ]
+    },
+    {
+      "id": "is-clean-architecture-worth-it",
+      "prompt": "We are a team of 4 building an internal admin CRUD app over 6 tables. No business rules beyond required-field validation. A colleague says we should do full Clean Architecture with domain, application and adapter rings plus ports. Should we?",
+      "expectations": [
+        "Recommends against full rings for this case and gives the reason that there is no invariant to protect",
+        "Proposes the lowest structure that pays: adapter.in.web plus a service, validation in the request record, no domain ring and no ports",
+        "Identifies a specific trigger that would justify adding rings later, such as a non-trivial pricing or eligibility rule",
+        "Names one concrete thing to add now, for example open-in-view false plus a projection for lists",
+        "Does not propose a rewrite of the existing service layout"
+      ]
+    },
+    {
+      "id": "controller-holds-business-logic",
+      "prompt": "Our OrderController has an if statement checking status before cancel, then calls orderRepository.save(order). Review the layering of this service and tell me what to change.",
+      "expectations": [
+        "Identifies business branching in the controller and an entity passed straight to the repository from the transport layer",
+        "Moves the status check into a domain method on the aggregate that throws a named domain exception",
+        "Introduces an application service as the single transaction entry point that loads, mutates, and saves",
+        "Returns a record or void from the controller rather than the managed entity",
+        "Explains that an entity escaping the transaction causes lazy loading during serialization"
+      ]
+    },
+    {
+      "id": "jpql-in-usecase",
+      "prompt": "PlaceOrderUseCase builds a query string with EntityManager to find orders for a customer since a date. We want to keep JPA out of the use case but we also do not want to write a repository interface for every query. What is the pragmatic approach?",
+      "expectations": [
+        "States that no query mechanism of any kind belongs in the use case, including plain interfaces",
+        "Proposes one intent method on the port such as findByCustomer with a domain-level parameter type",
+        "Implements that method in the persistence adapter with Specification, a JPQL query, or a derived query",
+        "Rejects interface-per-use-case as noise and explains the port should describe a collaborator, not a use case",
+        "Confirms the use case unit test then needs no EntityManager and no Spring context"
+      ]
+    },
+    {
+      "id": "incremental-migration-plan",
+      "prompt": "We have 400 files in a flat layout: controllers, services, entities, repositories all under com.acme.shop. We cannot do a rewrite before our Q3 release. Give us a plan that does not fork the architecture effort.",
+      "expectations": [
+        "Rejects a rewrite and proposes an incremental slice-by-slice sequence",
+        "Puts the cheapest highest-value steps first, namely moving controllers and request records, then setting open-in-view false",
+        "Requires characterisation tests to be added before any code moves",
+        "Orders the steps so each is independently shippable and revertible, ending with flipping an ArchUnit rule from log to failure",
+        "Advises picking one vertical slice such as one endpoint and doing not start with the most-called code"
+      ]
+    },
+    {
+      "id": "component-scan-erases-rings",
+      "prompt": "We added @ComponentScan for domain, application, adapter and vendor so the beans all register. Now the domain package gets a repository injected and we cannot tell which layer is which at runtime. How do we make the rings real?",
+      "expectations": [
+        "Explains that component scanning draws no boundaries and rings exist only as package convention plus a test",
+        "Removes the wide @ComponentScan and keeps the bootstrap class at the package root with default scanning",
+        "Narrows scanning to explicit @Import of adapters and points @EntityScan and @EnableJpaRepositories at the adapter package",
+        "Adds an ArchUnit test asserting the domain package has no framework dependencies and application does not depend on adapter",
+        "States that use cases must depend on ports rather than on adapter classes for the boundary to hold at runtime"
+      ]
+    }
+  ]
+}

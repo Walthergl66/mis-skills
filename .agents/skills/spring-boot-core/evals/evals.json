@@ -1,0 +1,60 @@
+{
+  "skill": "spring-boot-core",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "starter-vs-auto-config",
+      "prompt": "We support an internal ledger service in three applications. One of them has no ledger dependency at all and must still start. Should I write an auto-configuration, add a starter, or just declare the client bean?",
+      "expectations": [
+        "Chooses starter plus auto-configuration because more than one application consumes the integration",
+        "Guards the bean with ConditionalOnClass so the application without the dependency still starts",
+        "Guards the bean with ConditionalOnMissingBean so an application can override the default client"
+      ]
+    },
+    {
+      "id": "auto-config-ordering-bug",
+      "prompt": "Our auto-configured Stripe client is created even though the application declares its own StripeClient bean, and both end up in the context.",
+      "expectations": [
+        "Identifies that ConditionalOnMissingBean is evaluated against definitions registered so far",
+        "Requires registration in the AutoConfiguration.imports file and an explicit after or before relation",
+        "Adds a context runner test for the back-off case and the create case"
+      ]
+    },
+    {
+      "id": "property-not-applied",
+      "prompt": "acme.ledger.url is correct in application-prod.yaml but the app still uses the value from application.yaml. The jar runs with -Dspring.profiles.active=prod.",
+      "expectations": [
+        "Checks the property source order and confirms a profile file beats its non-profile twin",
+        "Verifies the file is actually loaded, for example with the actuator env or configprops endpoint",
+        "Checks that -D system properties outrank config data files"
+      ]
+    },
+    {
+      "id": "properties-record-validation",
+      "prompt": "Bind acme.ledger into a typed record with a URL, a connect timeout, a retry block, and a currency list, and make the app refuse to start when a value is missing.",
+      "expectations": [
+        "Uses a record with ConfigurationProperties and Validated rather than Value injections",
+        "Applies NotBlank or NotNull plus Positive constraints and a nested Valid record",
+        "Uses DefaultValue for optional keys and reports the startup failure as intended fail-fast behavior"
+      ]
+    },
+    {
+      "id": "virtual-threads-decision",
+      "prompt": "Should we set spring.threads.virtual.enabled=true on our Spring Boot 3.5 service? Controllers block on JDBC and we are on Java 21.",
+      "expectations": [
+        "States it is an option with tradeoffs, not a default, and requires a load test before and after",
+        "Notes that thread pool properties stop applying and that the datasource pool and semaphores become the real bound",
+        "Warns about pinned carrier threads when blocking inside synchronized and about daemon threads needing spring.main.keep-alive"
+      ]
+    },
+    {
+      "id": "hidden-classpath-scan",
+      "prompt": "Add component scanning over our third-party SDK package so their client gets wired automatically. What is wrong with that?",
+      "expectations": [
+        "Rejects component scanning of a third-party package because it forces the dependency into the build",
+        "Proposes the starter or an explicit auto-configuration with ConditionalOnClass instead",
+        "Requires an application-owned client bean when the integration is single-application"
+      ]
+    }
+  ]
+}

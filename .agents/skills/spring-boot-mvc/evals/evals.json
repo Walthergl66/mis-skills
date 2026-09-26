@@ -1,0 +1,60 @@
+{
+  "skill": "spring-boot-mvc",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "filter-vs-interceptor",
+      "prompt": "We need a correlation id header on every response and we also want to measure handler execution time. Filter or interceptor?",
+      "expectations": [
+        "Uses a servlet filter for the correlation id because it must cover non-controller requests and write the response header",
+        "Uses a HandlerInterceptor for handler timing because it needs the mapped HandlerMethod",
+        "Registers the interceptor through WebMvcConfigurer and orders the filter explicitly, noting the security chain runs at order -100"
+      ]
+    },
+    {
+      "id": "advice-does-not-run",
+      "prompt": "Our @RestControllerAdvice handles IllegalStateException but the client still gets a 500 from the servlet container for exceptions thrown inside a filter.",
+      "expectations": [
+        "States that controller advice is only consulted inside MVC dispatch",
+        "Moves handling into the filter or wraps the chain to rethrow inside dispatch",
+        "Confirms the advice is not swallowing 404s with a catch-all Exception handler"
+      ]
+    },
+    {
+      "id": "sse-endpoint",
+      "prompt": "Add a server-sent event stream to a Spring Boot 3.5 REST controller for ledger updates.",
+      "expectations": [
+        "Returns SseEmitter with produces text/event-stream",
+        "Registers onTimeout, onError, and completion handlers and sends an initial event to flush proxy buffers",
+        "States the connection cost and the proxy heartbeat requirement rather than assuming thread-per-client"
+      ]
+    },
+    {
+      "id": "content-negotiation-406",
+      "prompt": "Clients get 406 when calling our JSON endpoint. Some callers send Accept: text/html. Fix it.",
+      "expectations": [
+        "Declares produces on the mapping so the handler declares what it can write",
+        "Keeps favor-parameter false and refuses to add a format query parameter override",
+        "Explains the 406 from HttpMediaTypeNotAcceptableException and the 415 counterpart for Content-Type"
+      ]
+    },
+    {
+      "id": "static-catch-all",
+      "prompt": "Our API returns an HTML 404 page for unknown paths instead of JSON, and someone noticed a config file is served statically.",
+      "expectations": [
+        "Identifies the catch-all static resource mapping as the cause of both the HTML 404 and the exposed file",
+        "Sets spring.web.resources.add-mappings to false for the API service or narrows the static path pattern",
+        "Renders 404 through a scoped RestControllerAdvice as a problem document"
+      ]
+    },
+    {
+      "id": "virtual-thread-mvc",
+      "prompt": "We are enabling virtual threads and our controller blocks on JDBC. What changes in DispatcherServlet and where is the new limit?",
+      "expectations": [
+        "States controllers run on virtual threads and container thread pool properties stop applying",
+        "Names the datasource pool and any semaphore or queue as the real concurrency bound",
+        "Calls out carrier-thread pinning under synchronized on Java 21 and requires a measured before and after"
+      ]
+    }
+  ]
+}
