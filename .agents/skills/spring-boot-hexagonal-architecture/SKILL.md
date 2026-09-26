@@ -18,7 +18,6 @@ Model the application as use cases that reach the outside world only through int
 - A vendor SDK, payment client, or ERP connector is spreading through application code.
 - `@Qualifier` literals are ambiguous, or a bean fails with a type collision.
 - A use case test needs a database or HTTP stub and should not.
-- An entry point class is an interface by habit, with no real port behind it.
 - A vendor changes their response model, or a second provider is being evaluated.
 
 ## When not to use
@@ -47,7 +46,6 @@ A port is an interface the application owns, named after a capability it needs, 
 | Primary port | An entry point the application offers, beside the use case | `PlaceOrderUseCase` |
 | Secondary port | A capability the application requires | `PaymentGateway` |
 | Driven adapter | The implementation of a secondary port | `StripePaymentGateway` |
-| Driving adapter | The caller of a primary port | `OrderController` |
 | Composition root | The only place naming concrete classes | `PaymentWiringConfig` |
 
 ## Wiring two implementations of one port
@@ -56,16 +54,18 @@ A port is an interface the application owns, named after a capability it needs, 
 package com.example.ordering.config;
 
 import com.example.ordering.adapter.out.payment.FakePaymentGateway;
+import com.example.ordering.adapter.out.payment.StripePaymentGateway;
 import com.example.ordering.application.port.PaymentGateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import vendor.sdk.StripeClient;
 
 @Configuration(proxyBeanMethods = false)
-public class PaymentWiringConfig {
+class PaymentWiringConfig {
 
     @Bean
-    PaymentGateway stripePaymentGateway(StripeClientFactory client) {
+    PaymentGateway stripePaymentGateway(StripeClient client) {
         return new StripePaymentGateway(client);
     }
 
@@ -86,7 +86,7 @@ public class PaymentWiringConfig {
 | One primary, one fallback | `@Primary` on the default | silent fallback when a qualifier is forgotten |
 | Genuinely optional | `ObjectProvider<Port>.getIfAvailable()` | fine for an absent capability |
 
-Qualifier strings must equal a bean method name, never a hand-typed literal that drifts. Never rely on bean definition order to pick a winner. A missing required binding must fail at startup, which is why `ObjectProvider` is reserved for ports that may legitimately be absent. A use case that names `StripeClientFactory` has moved the composition root inward: it should name `PaymentGateway`, and a `config` class decides how the port is satisfied.
+Qualifier strings must equal a bean method name, never a hand-typed literal that drifts. `spring.threads.virtual.enabled=true` is an option for blocking adapter calls: it raises how many can wait at once, but not pool size, timeouts, or downstream rate limits. Never rely on bean definition order to pick a winner. A missing required binding must fail at startup, which is why `ObjectProvider` is reserved for ports that may legitimately be absent. A use case that names `StripeClientFactory` has moved the composition root inward: it should name `PaymentGateway`, and a `config` class decides how the port is satisfied.
 
 ## Anti-corruption around a vendor SDK
 
