@@ -1,191 +1,132 @@
 ---
 name: skill-router
-description: Use when the user wants help choosing which skills to use, starts a broad or ambiguous task, begins a new professional project, or asks an agent to decide the right workflow. Routes user intent to the best skills in this repository and explains the recommended sequence briefly.
+description: 'Primary entry point and orchestrator for this skill repository. Use FIRST, before any other skill, whenever a request is broad, ambiguous, or does not name a skill: decide which skill fits, in what order, and who owns what. Triggers include "which skill", "not sure which skill to use", "how should I start", "help me decide", a new project or feature request, a bug report, a slow system, a review or audit request, a release or launch request, and any mention of Spring Boot, NestJS, React, React Native, backend architecture, databases, APIs, testing, DevOps, marketing, SEO, or design. Resolves the catalog into one primary skill plus at most two supporting skills, assigns ownership when several apply, and then proceeds with the work instead of only advising. Do not use when the user already named a specific skill or when the task is a single trivial edit. When other skills also apply, reconcile ownership before mutation.'
+license: MIT
+metadata:
+  author: Walthergl66
+  version: '2.0.0'
 ---
 
 # Skill Router
 
-Use this skill as the entry point when the user does not know which skill to invoke.
+Activate this skill first, resolve the request into a skill, then hand the work to that skill. Routing is a decision, not a menu: one primary owner, at most two supporting skills, and a stated order.
 
-Your job is to translate the user's intent into the right skill sequence. Be practical, concise, and decisive.
+## When to use
 
-## Core Behavior
+- The request does not name a skill, or names a technology instead of a workflow.
+- The request is broad, spans domains, or is a new project, new feature, or new service.
+- Something is broken, slow, unsafe, or failing review and the correct discipline is not obvious.
+- The user asks which skill, which order, or where to start.
 
-1. Identify the user's goal.
-2. Classify the work area.
-3. Choose one primary skill.
-4. Add supporting skills only when they clearly help.
-5. Explain the recommended sequence in plain language.
-6. Then proceed with the work using the selected skill guidance.
+## When not to use
 
-Do not overwhelm the user with a long menu. If the task is clear, choose the workflow and move.
+- The user named a specific skill: load it directly.
+- The task is a one-line edit, a lookup, or a command: answer it.
+- Another skill was already activated and is mid-work: finish that work instead of re-routing.
 
-## Routing Principles
+## Core algorithm
 
-- Prefer one primary skill over many.
-- Use supporting skills for review, polish, launch, measurement, or distribution.
-- If the request is broad, start with planning or research before execution.
-- If the user asks to install or update skills, use `clean-skill-install`.
-- If the user asks for UI, product polish, motion, or interaction quality, include `emil-design-eng`.
-- If the user asks for marketing but lacks product context, start with `product-marketing`.
-- If the user asks for growth ideas without a channel, start with `marketing-ideas`.
-- If the user asks to improve a page that already exists, start with `cro`.
-- If the user asks to write new copy, start with `copywriting`.
-- If the user asks to edit existing copy, start with `copy-editing`.
+Run these steps in order. Stop early when the answer is already clear.
 
-## Common Routes
+### 1. Honor explicit intent
 
-### New Professional Project
+If the user named a skill, a framework-specific need, or a specific deliverable, that wins. Skip to step 6 and use it.
 
-Use when the user is starting a serious app, SaaS, product, or client project.
+### 2. Fence the domain
 
-Recommended sequence:
+Pick the domain from the stack and the artifact, not from the vocabulary. A request about a Spring Boot service is backend work even when it mentions users, pricing, or onboarding.
 
-1. `product-marketing` for audience, positioning, and product context.
-2. `marketing-plan` for the growth roadmap.
-3. `site-architecture` for the website/page structure.
-4. `copywriting` for core pages.
-5. `emil-design-eng` for UI polish and product feel.
-6. `analytics` for measurement.
+| Signal | Domain | Router |
+| --- | --- | --- |
+| Spring Boot, Maven, Gradle, JPA, Hibernate, Flyway, Actuator, Testcontainers, `@RestController` | Spring Boot | [spring-boot-routing.md](references/spring-boot-routing.md) |
+| NestJS, providers, modules, guards, pipes, decorators | NestJS | `nestjs-professional-software-engineering` then `nestjs-architecture-principles` |
+| React, Next.js, Vite, TanStack Query, hooks, RSC | React frontend | `vercel-react-best-practices` plus `frontend-architecture` |
+| React Native, Expo, Reanimated, Gesture Handler, Fabric, Skia, Worklets | React Native | `react-native-best-practices` first, always |
+| Vitest, RTL, Playwright on a JS project | JS testing | `vitest-testing-patterns` |
+| Positioning, ICP, campaigns, funnels, ads, SEO, launch, docs | Marketing and growth | [sequences.md](sequences.md) marketing routes |
+| Mobile listing, app store, ASO | App growth | `aso` |
+| Animation, polish, interaction feel, UI detail | Design | `emil-design-eng` |
+| Installing, publishing, syncing, auditing skills | Skill system | `clean-skill-install` |
+| Commit, push, PR, release notes for a NestJS repo | Git and delivery | `nestjs-git-commit-pr-message` |
 
-### Landing Page Or Website
+### 3. Classify the work type
 
-Use when the user wants to create, review, or improve a marketing page.
+| Work type | What the user is asking for | Bias |
+| --- | --- | --- |
+| Design | Choosing a structure, a boundary, a model, a contract | Start with the architecture or domain skills, not the framework skills |
+| Build | Writing new code | Framework skill first, then the architecture or domain skill that owns placement |
+| Review | Judging existing code | Audit or review skill; do not rewrite |
+| Diagnose | Explaining a symptom | Diagnosis skill, evidence before remedy |
+| Optimize | Making something faster or cheaper | Measurement first, one change at a time |
+| Harden | Security, validation, failure behavior | Security or validation skill, with the contract skill |
+| Ship | Build, release, deploy, promote | Production or delivery skills |
+| Measure | Instrumentation, tracking, experiments | Observability or analytics skills |
 
-Recommended sequence:
+### 4. Pick the primary skill
 
-1. `product-marketing` if context is missing.
-2. `copywriting` for new page copy.
-3. `cro` for conversion review.
-4. `emil-design-eng` for interface polish.
-5. `seo-audit` and `schema` for search readiness.
+Score every plausible candidate on three questions:
 
-### Launch
+1. **Ownership:** does the skill explicitly own the decision in question? Prefer the narrowest owner.
+2. **Trigger match:** does the request match concrete triggers in the description, not just the topic area?
+3. **Cost of being wrong:** which wrong choice forces rework? Prefer the skill whose miss is expensive.
 
-Use when the user is preparing a product, feature, app, or campaign launch.
+Choose the highest total. If two tie, choose the one whose skill names the narrower scope. If the tie is about architecture versus mechanics, architecture wins first and mechanics second.
 
-Recommended sequence:
+### 5. Add supporting skills, then stop
 
-1. `launch` for launch strategy and checklist.
-2. `product-marketing` for positioning.
-3. `directory-submissions` for listing and backlink opportunities.
-4. `social` for launch posts.
-5. `emails` for announcement sequences.
-6. `analytics` for launch measurement.
+Add at most two, only when they own a decision the primary cannot make alone. State the order. Never route to more than three skills for one request; a long list is how work gets skipped.
 
-### SEO And Organic Growth
+If the request needs a plan before execution, the primary is the planning skill and the framework skill is supporting, not the reverse.
 
-Use when the user wants traffic from search or AI answers.
+### 6. Assign ownership for conflicts
 
-Recommended sequence:
+When two active skills would touch the same decision, name one owner and bound the other to advice. Order of authority:
 
-1. `seo-audit` for baseline issues.
-2. `content-strategy` for topic planning.
-3. `programmatic-seo` for scalable page systems.
-4. `schema` for structured data.
-5. `ai-seo` for AI search visibility.
+1. explicit user intent;
+2. repository contracts and verified runtime or production constraints;
+3. the narrowest primary owner from step 4.
 
-### Paid Ads
+Example: a request to move a validation error into the API error body is owned by the validation skill for the constraint set and by the REST skill for the response shape. The validation skill decides what the violations are; the REST skill decides the body.
 
-Use when the user wants paid acquisition.
-
-Recommended sequence:
-
-1. `ads` for channel, campaign, targeting, and budget strategy.
-2. `ad-creative` for ad variations.
-3. `cro` for landing page conversion.
-4. `analytics` for conversion tracking.
-5. `ab-testing` for experiment design.
-
-### Email And Lifecycle
-
-Use when the user wants onboarding, nurture, retention, or win-back flows.
-
-Recommended sequence:
-
-1. `emails` for lifecycle sequences.
-2. `onboarding` for post-signup activation.
-3. `churn-prevention` for retention and cancellation flows.
-4. `copywriting` or `copy-editing` for message quality.
-5. `analytics` for tracking.
-
-### Sales And Outbound
-
-Use when the user wants B2B leads, outreach, or sales assets.
-
-Recommended sequence:
-
-1. `prospecting` for lead lists and account qualification.
-2. `cold-email` for outbound sequences.
-3. `sales-enablement` for decks, one-pagers, objection handling, and demo scripts.
-4. `competitor-profiling` and `competitors` for competitive positioning.
-5. `revops` for handoff and pipeline process.
-
-### Social And Content
-
-Use when the user wants posts, calendars, short-form content, or repurposing.
-
-Recommended sequence:
-
-1. `content-strategy` for themes and pillars.
-2. `social` for platform-specific posts.
-3. `video` for video production workflows.
-4. `image` for marketing visuals.
-5. `copy-editing` for polish.
-
-### App Store Or Mobile Growth
-
-Use when the user works on a mobile app listing or app growth.
-
-Recommended sequence:
-
-1. `aso` for app store optimization.
-2. `product-marketing` for positioning.
-3. `signup` for registration flow.
-4. `onboarding` for activation.
-5. `analytics` for funnel measurement.
-
-### Pricing And Monetization
-
-Use when the user wants to improve revenue, pricing, packaging, or upgrade flows.
-
-Recommended sequence:
-
-1. `pricing` for model and packaging.
-2. `paywalls` for in-product upgrade moments.
-3. `cro` for public pricing page conversion.
-4. `ab-testing` for pricing experiments.
-5. `analytics` for revenue tracking.
-
-### Skill System Maintenance
-
-Use when the user wants to add, install, update, publish, clean, or sync skills.
-
-Recommended sequence:
-
-1. `clean-skill-install`.
-2. Run the clean install workflow.
-3. Keep all installed skills under `.agents/skills`.
-4. Sync the public `skills/` mirror.
-5. Validate and regenerate inventory.
-
-## Response Format
-
-When routing, respond briefly:
+### 7. Announce, then work
 
 ```md
-Recommended route:
-- Primary: `skill-name`
-- Supporting: `skill-a`, `skill-b`
-- Why: one short reason
-
-I will start with `skill-name`.
+Route: <primary-skill> → <supporting-skill> → <supporting-skill>
+Why: one sentence naming the decision being made
 ```
 
-If the user asked you to perform the task, do not stop after routing. Start the work.
+Then load the primary skill and do the work. A route without execution is a failure to route.
 
-## If Unsure
+## Catalog
 
-Ask at most one clarifying question only when the wrong route would create real rework.
+Full index of every skill with trigger hints: [catalog.md](references/catalog.md). Consult it when step 4 has two plausible candidates. Do not read every `SKILL.md` to decide; the description is the contract.
 
-Otherwise choose the closest route and say your assumption.
+## Anti-patterns
+
+- **Menu dumping.** Listing ten options and asking the user to choose is a delegation failure. Choose, state the assumption, proceed.
+- **Topic matching.** Matching on words instead of on the decision the skill owns. Read the description, not the title.
+- **Over-routing.** Loading four skills to review one function wastes context and dilutes ownership.
+- **Framework first, always.** Architecture and domain skills decide structure; framework skills execute inside it. Reversing them produces a framework-shaped domain model.
+- **Silent routing.** Choosing a skill without saying so makes the choice unreviewable.
+- **Routing to a skill that does not exist.** Verify the name against the catalog.
+
+## Clarify only when it matters
+
+Ask at most one question, and only when two routes lead to materially different work. Otherwise pick the closest route, name the assumption in one clause, and continue.
+
+## Reference routing
+
+| Task | Load |
+| --- | --- |
+| See every available skill with its trigger hints | [catalog.md](references/catalog.md) |
+| Route a Spring Boot request across the 26 backend skills | [spring-boot-routing.md](references/spring-boot-routing.md) |
+| Pick a multi-skill sequence for a real scenario | [sequences.md](references/sequences.md) |
+
+## Expected response
+
+- **Route:** primary skill, then supporting skills, in order.
+- **Why:** the decision being owned, in one sentence.
+- **Assumption:** stated only if the request was ambiguous.
+- **Work:** the actual result, not a plan to produce the result later.
+
+If the request is already unambiguous, skip the route block and just do the work.
