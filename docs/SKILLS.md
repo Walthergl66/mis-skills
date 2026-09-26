@@ -228,6 +228,48 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/marketing-psychology/SKILL.md`
 - Purpose: When the user wants to apply psychological principles, mental models, or behavioral science to marketing. Also use when the user mentions 'psychology,' 'mental models,' 'cognitive bias,' 'persuasion,' 'behavioral science,' 'why people buy,' 'decision-making,' 'consumer behavior,' 'anchoring,' 'social proof,' 'scarcity,' 'loss aversion,' 'framing,' or 'nudge.' Use this whenever someone wants to understand or leverage how people think and make decisions in a marketing context. For applying psychology to specific pages, see cro; for pricing tactics, see pricing; for copy framing, see copywriting.
 
+### Nestjs Architecture Principles
+
+- Folder: `nestjs-architecture-principles`
+- Path: `.agents/skills/nestjs-architecture-principles/SKILL.md`
+- Purpose: Designs and reviews NestJS application architecture using cohesive feature modules, modular monoliths, layered or hexagonal boundaries, dependency inversion, and pragmatic engineering principles. Use when planning a NestJS project, changing module boundaries, evaluating Clean Architecture or DDD, resolving circular dependencies, defining ports and adapters, reviewing coupling, or deciding whether CQRS or microservices are justified. Do not use for pure frontend work or non-NestJS backends. When other skills also apply, reconcile ownership before mutation.
+
+### Nestjs Code Audit
+
+- Folder: `nestjs-code-audit`
+- Path: `.agents/skills/nestjs-code-audit/SKILL.md`
+- Purpose: Audits an existing NestJS repository with the NestJS Architecture, OOP, and Features skills and returns one prioritized, evidence-backed code-quality report. Use when asked to check a whole NestJS codebase or a scoped folder for syntax, TypeScript, lint, module-boundary, dependency, design-smell, security, testing, performance, reliability, or production-readiness problems. This is a read-only review workflow: it does not fix code, install dependencies, run migrations, or deploy. When other skills also apply, reconcile ownership before mutation.
+
+### Nestjs Feature Audit
+
+- Folder: `nestjs-feature-audit`
+- Path: `.agents/skills/nestjs-feature-audit/SKILL.md`
+- Purpose: Audits one NestJS feature against its documented roadmap on a specific Git branch and returns an evidence-backed implementation, gap, legacy, bug, and blocker report. Use when asked to audit a feature, validate feature completeness, compare code with a roadmap or acceptance plan, run a feature gap analysis, review migration status, or invoke /audit_feature with a feature name and optional branch. It stops when no clear roadmap is available and does not implement fixes. When other skills also apply, reconcile ownership before mutation.
+
+### Nestjs Features Performance
+
+- Folder: `nestjs-features-performance`
+- Path: `.agents/skills/nestjs-features-performance/SKILL.md`
+- Purpose: Selects and implements NestJS runtime features, error and API contracts, security, testing, DevOps, performance, and safe scale. Use for middleware, guards, pipes, interceptors, exception filters, typed failures/results, Problem Details, validation errors, HTTP/GraphQL/RPC/gRPC/WebSocket error mapping, deadlines, cancellation, retry classification, fatal process errors, authentication, authorization, caching, queues, schedulers, CI/CD, containers, Kubernetes, configuration and secrets, migrations, supply-chain controls, health probes, logs/metrics/traces, SLOs and alerts, incident recovery, rollout and rollback, event-loop or database bottlenecks, load tests, horizontal scaling, idempotency, backpressure, and graceful shutdown. Do not use for frontend-only performance or non-NestJS services. When other skills also apply, reconcile ownership before mutation.
+
+### Nestjs Git Commit Pr Message
+
+- Folder: `nestjs-git-commit-pr-message`
+- Path: `.agents/skills/nestjs-git-commit-pr-message/SKILL.md`
+- Purpose: Prepares and publishes intentional Git changes for NestJS projects. Use when the user asks to commit, push, create or update a pull request, prepare changelog or release text, or verify a GitHub Pages deployment after publication. It inspects the complete diff, preserves unrelated work, scans staged content for secrets, matches repository commit conventions, runs relevant checks, and performs only the explicitly requested remote actions. When other skills also apply, reconcile ownership before mutation.
+
+### Nestjs Oop Design Patterns
+
+- Folder: `nestjs-oop-design-patterns`
+- Path: `.agents/skills/nestjs-oop-design-patterns/SKILL.md`
+- Purpose: Applies pragmatic OOP, SOLID, object-design rules, and design patterns to NestJS and TypeScript code. Use when writing or refactoring controllers, providers, use cases, entities, value objects, repositories, adapters, factories, strategies, handlers, or tests; when diagnosing god services, primitive obsession, inheritance misuse, duplicated conditionals, or leaky abstractions; and when selecting a pattern without over-engineering. Do not use for pure functional codebases or non-NestJS frontend work. When other skills also apply, reconcile ownership before mutation.
+
+### Nestjs Professional Software Engineering
+
+- Folder: `nestjs-professional-software-engineering`
+- Path: `.agents/skills/nestjs-professional-software-engineering/SKILL.md`
+- Purpose: Designs, implements, refactors, debugs, reviews, and verifies production-quality NestJS and TypeScript software. Use for NestJS feature development, bug fixes, APIs, libraries, testing, maintainability, developer experience, idiomatic syntax, or syntactic sugar. It inspects the current project and official version-appropriate documentation before selecting syntax, preserves public behavior, and tests the result. When other skills also apply, reconcile ownership before mutation.
+
 ### Onboarding
 
 - Folder: `onboarding`
