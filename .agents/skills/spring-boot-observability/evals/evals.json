@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-observability",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "custom-timer-registration",
+      "prompt": "Add a counter for rejected ledger publishes and a timer for how long a publish takes, tagged with currency.",
+      "expectations": [
+        "Checks the Actuator baseline first and states that http.server.requests already covers inbound request duration",
+        "Registers the counter and timer once in a constructor or a DefaultMeterBinder rather than inside the request path",
+        "Uses a lowercase dotted name with a seconds base unit and a currency tag drawn from a bounded list",
+        "Adds a MeterFilter maximumAllowableTags cap for the currency tag so the cardinality budget is enforced in code"
+      ]
+    },
+    {
+      "id": "cardinality-explosion",
+      "prompt": "Our Prometheus instance ran out of series after we tagged the publish metric with the account id and the request path. Fix it.",
+      "expectations": [
+        "Rejects account id and raw path as tag values as unbounded and as personal data in the metric store",
+        "Replaces the raw path with the route template and moves the account id to a high-cardinality span attribute only",
+        "Adds a MeterFilter budget with an explicit numeric cap and MeterFilter.deny as the rejection action",
+        "Adds a dashboard panel on series count per meter so a future jump is detected"
+      ]
+    },
+    {
+      "id": "tracing-wiring",
+      "prompt": "Wire OpenTelemetry tracing into our Spring Boot 3.5 service and make sure traces are useful but affordable.",
+      "expectations": [
+        "Adds micrometer-tracing-bridge-otel and micrometer-registry-otlp and configures management.tracing.sampling.probability and management.otlp.tracing.endpoint",
+        "Justifies the probability from traffic and span fanout rather than picking a number without a reason",
+        "Sets histogram buckets through management.metrics.distribution.percentiles-histogram instead of publishPercentiles in code",
+        "States that head-based sampling cannot force-keep errored requests and that mixed probability runs make a test unreadable"
+      ]
+    },
+    {
+      "id": "async-context-loss",
+      "prompt": "Our @Async handler produces log lines with no trace id and no spans, even though the caller is instrumented.",
+      "expectations": [
+        "Diagnoses thread-local context loss at the async boundary",
+        "Wraps the executor with a ContextPropagatingTaskDecorator and points out that it also copies SecurityContext",
+        "Notes the same decorator is required for the task scheduler and that new Thread is never an answer",
+        "Hands the traceId and spanId rendering decision to spring-boot-logging instead of generating a second correlation id"
+      ]
+    },
+    {
+      "id": "signal-without-slo",
+      "prompt": "Add as many metrics as you can so we can debug anything later. Also set up alerts for the important ones.",
+      "expectations": [
+        "Rejects the volume-first framing and requires each meter to name the decision it serves",
+        "Maps signals to concrete SLOs using the actuator meters that already exist instead of adding duplicates",
+        "Specifies an error-ratio SLI, a 28-day window, and a two-window burn-rate page and ticket rule",
+        "Requires every alert to carry a dashboard link, a runbook, and an owner, and to be reviewed after an incident"
+      ]
+    },
+    {
+      "id": "observation-versus-timer",
+      "prompt": "Should I add a Timer around the payment settlement method or use Observation with @Observed?",
+      "expectations": [
+        "Chooses Observation when a span is needed because one declaration produces both a metric and a span that cannot drift",
+        "Explains that ObservedAspect is Spring AOP, needs spring-boot-starter-aop, and does not apply to self-invocation",
+        "Explains that Observed cannot interpolate a tag from a method argument so a dynamic dimension needs an explicit Observation",
+        "States that a manual Timer is correct only when no trace is required and the meter is registered once"
+      ]
+    }
+  ]
+}
