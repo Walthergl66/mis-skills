@@ -140,7 +140,7 @@ class OrderRow {
         this.customerId = customerId;
         this.status = status;
         this.totalAmount = total.amount();
-        this.currency = total.currency();
+        this.currency = total.currency().getCurrencyCode();
     }
 
     UUID id() {
@@ -170,7 +170,7 @@ final class OrderRowMapper {
 
     static Order toDomain(OrderRow row) {
         return Order.restore(new OrderId(row.id()),
-                new Money(row.totalAmount(), row.currency()));
+                Money.of(row.totalAmount(), row.currency()));
     }
 }
 ```

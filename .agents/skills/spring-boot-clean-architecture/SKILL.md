@@ -92,7 +92,7 @@ spring:
 
 - Annotate the public entry point an outside caller invokes, not every service method; `readOnly = true` on query use cases skips dirty checking.
 - Keep the transaction free of outbound HTTP, file IO, and broker round trips; persist the intent and publish after commit.
-- Self-invocation bypasses the proxy; for an explicit boundary inject the auto-configured `TransactionTemplate` and call `execute`.
+- Self-invocation bypasses the proxy; for an explicit boundary inject the auto-configured `TransactionTemplate` and call `execute`. For blocking IO, `spring.threads.virtual.enabled=true` is an option: it raises how many calls can wait at once, but not pool size, rate limits, or how long a transaction holds a lock.
 
 ```java
 package com.example.ordering.application;

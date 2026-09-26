@@ -175,7 +175,7 @@ A wide `@ComponentScan` over `domain`, `application`, `adapter`, and `vendor` re
 | Fix | Mechanism |
 | --- | --- |
 | Remove the wide scan | Keep the `@SpringBootApplication` class at the package root and accept default scanning |
-| Bound the JPA infrastructure | `@EnableJpaRepositories(basePackages = "..adapter.out.persistence")` and `@EntityScan(basePackages = "..adapter.out.persistence")` |
+| Bound the JPA infrastructure | `@EnableJpaRepositories(basePackages = "com.example.ordering.adapter.out.persistence")` and `@EntityScan(basePackages = "com.example.ordering.adapter.out.persistence")` |
 | Import adapters explicitly | `@Import({OrderController.class, PersistenceAdapters.class})` from a single `config` class |
 | Keep the defaults only when safe | No class outside the adapter package carries `@Entity` or extends a Spring Data interface |
 | Leave `open-in-view` on | A lazy load during serialization hides a missing mapper | Set the property to `false` and map explicitly |
@@ -209,4 +209,4 @@ A relay process reads unpublished rows after commit; nothing inside the transact
 2. `grep -rn "JpaRepository\|CrudRepository" --include=*.java <domain-dir>` returns nothing.
 3. `grep -rn "@Transactional" --include=*.java <domain-dir> <adapter-dir>` returns nothing.
 4. `grep -rn "OrderRow\|JpaOrderRepository" --include=*.java <application-dir>` returns nothing.
-6. The ArchUnit test from `references/layer-mapping.md` passes on a clean checkout, and `open-in-view` is `false` in every profile.
+5. The ArchUnit test from `references/layer-mapping.md` passes on a clean checkout, and `open-in-view` is `false` in every profile.
