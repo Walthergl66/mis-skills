@@ -1,0 +1,65 @@
+{
+  "skill": "spring-boot-rest-api",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "status-code-for-cancel",
+      "prompt": "POST /api/v1/orders/{id}/cancellation sometimes finishes instantly and sometimes queues a refund job. What status and body should it return?",
+      "expectations": [
+        "Chooses 202 with a Location header pointing at a pollable cancellation status resource when the work is not finished",
+        "Defines the status resource fields such as state, completed, and updatedAt and pins one behaviour for the already-finished case",
+        "Rejects returning 200 with an empty body for the queued case because the client has nowhere to poll"
+      ]
+    },
+    {
+      "id": "duplicate-post-retry",
+      "prompt": "Clients retry our payment POST when they get a gateway timeout and sometimes we charge twice. We want retries to be safe.",
+      "expectations": [
+        "Requires an Idempotency-Key header on the payment POST",
+        "Stores key plus request fingerprint plus stored response and replays the stored result for a repeat with the same payload",
+        "Returns 409 with a stable code such as IDEMPOTENCY_KEY_REUSED when the same key arrives with a different body",
+        "Enforces single execution through a unique index on the key rather than application-level checks alone"
+      ]
+    },
+    {
+      "id": "error-leaks-internals",
+      "prompt": "Our 500 responses currently look like {\"message\": \"could not execute statement [call prc_audit...]\", \"trace\": [...]} because of a global @ExceptionHandler that returns ex.getMessage(). Fix it.",
+      "expectations": [
+        "Removes exception class name, SQL, and stack trace from every error body",
+        "Uses ProblemDetail with a stable type URI and a machine-readable code such as INTERNAL_ERROR",
+        "Echoes a correlation traceId that is searchable in the server log instead of the message",
+        "Keeps one 500 fallback for unknown failures and logs the cause with the same correlation id"
+      ]
+    },
+    {
+      "id": "lost-update-concurrency",
+      "prompt": "Two agents editing the same order record overwrite each other. We want the API to reject the second write instead of silently losing data.",
+      "expectations": [
+        "Emits a strong quoted ETag on reads from a version column or representation hash",
+        "Requires If-Match on PATCH, PUT, and DELETE and compares it against the current validator",
+        "Returns 412 Precondition Failed on mismatch and includes the current ETag so the client can re-read",
+        "States that 412 is correct here and 409 is not for a validator mismatch"
+      ]
+    },
+    {
+      "id": "unbounded-list-endpoint",
+      "prompt": "GET /api/v1/customers currently returns every row and clients use ?page=2 with an offset. Redesign the read contract.",
+      "expectations": [
+        "Returns a typed page envelope DTO instead of a Page or a bare list",
+        "Uses an opaque keyset cursor over a stable sort tuple and rejects cursors it did not issue",
+        "Bounds limit with a documented maximum and derives hasMore by fetching limit plus one",
+        "States that offset paging degrades at large offsets and ties the contract to result-set size"
+      ]
+    },
+    {
+      "id": "conflict-versus-unprocessable",
+      "prompt": "Should a duplicate customer email be 409 or 422? What about a request whose start date is before the end date?",
+      "expectations": [
+        "Returns 409 for the duplicate email because it conflicts with current server state, with a stable DUPLICATE_RESOURCE code",
+        "Returns 422 for the invalid date range because the body parsed but violates a payload rule",
+        "Applies the tie-breaker rule that 409 is about the world and 422 is about the meaning of the payload",
+        "Suggests 422 for the field-level case includes a per-field errors array in the problem body"
+      ]
+    }
+  ]
+}
