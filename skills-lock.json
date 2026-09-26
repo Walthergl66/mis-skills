@@ -175,6 +175,42 @@
       "skillPath": "skills/free-tools/SKILL.md",
       "computedHash": "0266eedaea37e19e4c9e2f1cc7ef6cdc8c7ee0726c6f2b5837a061c6ac7f9376"
     },
+    "frontend-architecture": {
+      "source": "stareezy-1/frontend-architecture-skill",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-architecture/SKILL.md",
+      "computedHash": "b1ea19ad13770f25e050b4979784ca3c1cff7a86ae89f69b825b7970c0eba530"
+    },
+    "frontend-data-contracts": {
+      "source": "stareezy-1/frontend-architecture-skill",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-data-contracts/SKILL.md",
+      "computedHash": "53e2097dd8390aeee693b3c79d3756fd3d3513701028e0273fff4f6637dbfa1f"
+    },
+    "frontend-lighthouse": {
+      "source": "stareezy-1/frontend-architecture-skill",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-lighthouse/SKILL.md",
+      "computedHash": "6dc8932cc106ddd988820010f05291897a75ea2f243345031ec3156da48065cf"
+    },
+    "frontend-observability": {
+      "source": "stareezy-1/frontend-architecture-skill",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-observability/SKILL.md",
+      "computedHash": "882548b6a34211307721e8a460ba101e480f608b23272d07026870b4aaa45903"
+    },
+    "frontend-optimistic-mutations": {
+      "source": "stareezy-1/frontend-architecture-skill",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-optimistic-mutations/SKILL.md",
+      "computedHash": "0f007f414b2f0c20ae48cb67632a3ae756fc246cd7c6e58048500b1a3ec77c67"
+    },
+    "frontend-seo": {
+      "source": "stareezy-1/frontend-architecture-skill",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-seo/SKILL.md",
+      "computedHash": "19aa7aad1ab707e52c53cbd9d2a1768edc5ee677bd9210483b9e53bbb558d367"
+    },
     "humanizer": {
       "source": "blader/humanizer",
       "sourceType": "github",

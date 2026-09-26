@@ -186,6 +186,42 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/free-tools/SKILL.md`
 - Purpose: When the user wants to plan, evaluate, or build a free tool for marketing purposes - lead generation, SEO value, or brand awareness. Also use when the user mentions "engineering as marketing," "free tool," "marketing tool," "calculator," "generator," "interactive tool," "lead gen tool," "build a tool for leads," "free resource," "ROI calculator," "grader tool," "audit tool," "should I build a free tool," or "tools for lead gen." Use this whenever someone wants to build something useful and give it away to attract leads or earn links. For downloadable content lead magnets (ebooks, checklists, templates), see lead-magnets.
 
+### Frontend Architecture
+
+- Folder: `frontend-architecture`
+- Path: `.agents/skills/frontend-architecture/SKILL.md`
+- Purpose: A portable, framework-agnostic architecture style for any React or React Native frontend. Organizes apps into feature modules with page/screen directories, a strict server-state vs UI-state split, barrel-only cross-module imports, co-located styles, and clear component-promotion rules. State-management agnostic (Zustand, Redux Toolkit, MobX, Jotai, Valtio, or Context). Styling agnostic (Tailwind, CSS Modules, Tamagui, StyleSheet, styled-components). Use this skill when scaffolding a new app, adding a feature or module, deciding where a component, hook, or piece of state should live, naming types and interfaces, or reviewing folder structure and import boundaries. Works with Next.js App Router, React + Vite SPA, Remix, and Expo / React Native.
+
+### Frontend Data Contracts
+
+- Folder: `frontend-data-contracts`
+- Path: `.agents/skills/frontend-data-contracts/SKILL.md`
+- Purpose: A portable, framework-agnostic discipline for type safety at the network edge of any React or React Native app. Establishes one typed API client as the single fetch boundary, a parse-don't-validate rule that turns wire JSON into trusted domain types before it enters the app, a single response envelope ({ data } / { error }), one normalized typed error class for every failure mode (server error, bad status, network/abort), per-field validation errors mapped to forms, branded ID types so identifiers can't be mixed, and the rule that raw API shapes never leak past the client. Works with fetch, Zod/Valibot validation, and TanStack Query / RTK Query / SWR. Use this skill when designing an API client, validating or parsing API responses, modeling request/response types, handling API errors, mapping server validation to form fields, or stopping untyped fetch calls from spreading through components. Works with React + Vite, Next.js, Remix, and Expo / React Native.
+
+### Frontend Lighthouse
+
+- Folder: `frontend-lighthouse`
+- Path: `.agents/skills/frontend-lighthouse/SKILL.md`
+- Purpose: A portable, framework-agnostic Lighthouse CI performance-gate system for any web frontend. Enforces Core Web Vitals budgets (LCP, INP via the TBT lab proxy, CLS) and category score floors (performance, SEO, accessibility, best-practices) as a blocking CI check on every pull request. Runs Lighthouse against the production build with median-of-N runs for stability, on mobile emulation by default with an opt-in desktop form factor. Ships a single `lighthouserc.cjs` config, an npm `lhci` script, and a GitHub Actions workflow. Use this skill when adding performance gates to a project, configuring Lighthouse CI, tuning Core Web Vitals budgets, setting category score thresholds, wiring a Lighthouse GitHub Action, or debugging flaky or failing Lighthouse runs. Works with Next.js, Remix, Astro, SvelteKit, Vite, or any app that serves a production build over HTTP.
+
+### Frontend Observability
+
+- Folder: `frontend-observability`
+- Path: `.agents/skills/frontend-observability/SKILL.md`
+- Purpose: A portable, framework-agnostic field-side observability system for any React or React Native app. Establishes one typed event taxonomy (canonical event-name constants, never inline strings), a best-effort non-blocking provider fan-out so a failing or absent analytics provider can never throw into the app or block other providers, a single track() entry point exposed through a context hook, real-user Core Web Vitals (RUM) reporting that complements lab Lighthouse budgets, error reporting at deliberate boundaries, and consent/privacy gating so nothing fires before opt-in. Provider-agnostic (Firebase Analytics, GA4, Microsoft Clarity, PostHog, OpenPanel, Sentry, Vercel/Cloudflare analytics) and works the same on web and React Native via one adapter shape. Use this skill when adding analytics or product tracking, instrumenting user actions, reporting Web Vitals from real users, wiring Firebase Analytics on web or React Native, wiring error reporting, gating telemetry on consent, or designing an event schema. Pairs with the frontend-lighthouse skill (lab budgets ↔ field reality). Works with React + Vite, Next.js, Remix, and Expo / React Native.
+
+### Frontend Optimistic Mutations
+
+- Folder: `frontend-optimistic-mutations`
+- Path: `.agents/skills/frontend-optimistic-mutations/SKILL.md`
+- Purpose: A portable, framework-agnostic discipline for the write path of any React or React Native app using a query/cache layer. Codifies the optimistic-update lifecycle (cancel in-flight queries → snapshot every affected cache → patch instantly → roll back verbatim on error → invalidate on settle), idempotency keys generated once at form init so retries replay the original response on money-moving writes, multi-cache coherence so a detail view and every list page update in lock-step, and the rule that server state is never mirrored into a client store. Shows TanStack Query, RTK Query, and SWR variants. Use this skill when writing create/update/delete mutations, adding optimistic UI with rollback, making writes idempotent, keeping list and detail caches consistent after a write, or reviewing mutation and cache-invalidation code. Works with React + Vite, Next.js, Remix, and Expo / React Native.
+
+### Frontend Seo
+
+- Folder: `frontend-seo`
+- Path: `.agents/skills/frontend-seo/SKILL.md`
+- Purpose: A portable, framework-agnostic SEO system for any React or React Native-for-web frontend. Centralizes site metadata in one constants module, derives canonical URLs from a single base, builds per-route metadata (title, description, canonical, Open Graph, Twitter/X cards), generates sitemap.xml, robots.txt, and an RSS feed from real content, and emits typed JSON-LD structured data (Person, WebSite, BlogPosting, CreativeWork, BreadcrumbList, FAQPage). Pure, testable builder functions with a thin framework adapter on top. Use this skill when adding SEO to a site, wiring metadata into routes, generating sitemaps/robots/feeds, adding schema.org structured data, fixing canonical URLs or duplicate-content issues, or reviewing SEO coverage. Pairs with the frontend-architecture skill (SEO lives in a service module) and works with Next.js App Router, Remix, Astro, React + Vite, and Expo Router for web.
+
 ### Humanizer
 
 - Folder: `humanizer`
