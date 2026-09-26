@@ -33,7 +33,7 @@ Choose aggregate boundaries, enforce invariants inside them, and make identity a
 This skill owns bounded contexts, aggregate boundaries, identity, value objects, invariants, domain services, domain events, and repository contract semantics.
 
 - `spring-boot-data-jpa` owns how an aggregate is stored. Hand it the mapping, the queries, and the indexes.
-- `spring-boot-hibernate` owns fetch plans, batching, and dialect behaviour. Hand it anything about `Session` and `LazyInitializationException`.
+- `spring-boot-hibernate` owns fetch strategies, Session behavior, and dialect implementation. Hand it anything about `Session` and `LazyInitializationException`; the choice of what to load belongs to `spring-boot-data-jpa`.
 - `spring-boot-modular-monolith` owns module enforcement. Hand it package visibility and the verification test.
 - `spring-boot-clean-architecture` owns ring placement. Hand it which package a domain class goes in.
 - `spring-boot-observability` owns telemetry only. Hand it metrics and traces; reliable event delivery remains a design decision here and an operational one there.

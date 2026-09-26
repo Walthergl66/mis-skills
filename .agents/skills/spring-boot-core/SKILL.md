@@ -24,7 +24,7 @@ Own the composition root: which starter enters the build, which auto-configurati
 - Repository, entity mapping, and transaction wiring belong to `spring-boot-data-jpa`.
 - Filter chains, authentication, and authorization belong to `spring-boot-security`.
 - Build pipelines, image layers, and secret injection belong to `spring-boot-ci-cd`.
-- Slice test mechanics and test context configuration belong to `spring-boot-junit`.
+- Test layer selection and slice mechanics belong to `spring-boot-integration-testing`, and the mechanics inside a test class to `spring-boot-junit`.
 
 ## Ownership and sibling boundaries
 
@@ -33,7 +33,7 @@ This skill owns the composition root, starter selection, auto-configuration, and
 - `spring-boot-mvc` owns everything after `DispatcherServlet` takes the request. Hand it controller mapping and converters.
 - `spring-boot-data-jpa` owns repository and transaction beans. Hand it entity, query, and fetch-plan questions.
 - `spring-boot-security` owns `SecurityFilterChain` beans; `spring-boot-ci-cd` owns build and deploy. Hand them filter ordering, packaging, secret injection, and environment wiring.
-- `spring-boot-junit` owns test slices and context configuration. Hand it slice annotations and test properties.
+- `spring-boot-integration-testing` owns test layer selection and context configuration; `spring-boot-junit` owns the mechanics inside a test class. Hand them slice annotations, test properties, and JUnit usage.
 
 ## Hard rules
 
