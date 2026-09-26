@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-query-optimization",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "pool-timeout-not-slow-query",
+      "prompt": "Our app throws CannotGetJdbcConnectionException after 3 seconds and p99 is 8 seconds. Should we raise the pool size?",
+      "expectations": [
+        "Treats pool wait as a symptom and asks what the queries are doing",
+        "Checks database CPU and session count before proposing a pool change",
+        "Insists on the slow statement and its plan before any sizing change",
+        "Orders the diagnosis steps numerically with before-and-after percentiles"
+      ]
+    },
+    {
+      "id": "deep-offset-pagination",
+      "prompt": "Page 10000 of invoices takes 6 seconds. Page 1 is fast. Fix it.",
+      "expectations": [
+        "Explains that OFFSET makes the database read and discard the skipped rows",
+        "Proposes keyset pagination with the full sort key including the tiebreaker",
+        "States the tradeoff that keyset loses numbered page jumps and needs a cursor",
+        "Requires the cursor to be opaque and the composite index to match filter then sort"
+      ]
+    },
+    {
+      "id": "count-on-hot-path",
+      "prompt": "Every page load runs SELECT count(*) on a 40 million row invoices table.",
+      "expectations": [
+        "Rejects a full count per request and distinguishes it from an existence check",
+        "Proposes SELECT 1 LIMIT 1 for existence and a cached or approximate total for pagination",
+        "Warns that pg_class.reltuples is only as fresh as the last ANALYZE",
+        "Rejects the count for any billing or compliance figure"
+      ]
+    },
+    {
+      "id": "it-is-fast-in-dev",
+      "prompt": "This query is 4 ms on my laptop with 2000 rows. Why is it 900 ms in production?",
+      "expectations": [
+        "Rejects the dev measurement as invalid evidence",
+        "Lists row count, skew, cache state, storage, and concurrency as the differences to reproduce",
+        "Requires a production-like data load with a distribution and a fresh ANALYZE",
+        "Notes the plan chosen for a small table is legitimately a sequential scan"
+      ]
+    },
+    {
+      "id": "batch-size-tuning",
+      "prompt": "Should we raise hibernate.jdbc.batch_size from 50 to 5000 to speed up our imports?",
+      "expectations": [
+        "Treats batch size as a memory and lock trade rather than a bigger-is-better dial",
+        "Requires measurement at multiple sizes such as 10, 50, and 200",
+        "Checks that the identifier strategy permits batching at all",
+        "Warns that a large batch holds more rows and locks inside a single statement"
+      ]
+    },
+    {
+      "id": "prove-the-fix",
+      "prompt": "We added an index and the EXPLAIN looks much better. Can we close the ticket?",
+      "expectations": [
+        "Rejects a plan change as proof of an improvement",
+        "Requires before-and-after p50, p95, and p99 on the same workload and data volume",
+        "Requires a regression guard such as a statement count assertion or a perf budget",
+        "Requires a revert plan if the metric does not move"
+      ]
+    }
+  ]
+}
