@@ -1,0 +1,66 @@
+{
+  "skill": "spring-boot-openapi",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "empty-schema-triage",
+      "prompt": "Our generated openapi.json has responses for POST /api/v1/orders with schema type object and no properties. The controller method returns ResponseEntity<Map<String, Object>>.",
+      "expectations": [
+        "Identifies the Map return type in the controller signature as the root cause",
+        "States that the fix is a typed response DTO record rather than a schema annotation",
+        "Explains that a genuinely dynamic body must be declared as an object with additionalProperties and a description",
+        "Warns that returning an entity instead of a DTO is a separate leak defect owned by the DTO skill"
+      ]
+    },
+    {
+      "id": "page-schema-leak",
+      "prompt": "Spring Data page objects show up in the spec with a pageable object containing sort, page, and offset. Our list endpoints return Page<OrderDto>.",
+      "expectations": [
+        "Flags the Page return type as the cause of the pagination internals in the schema",
+        "Replaces it with a page DTO record exposing items, nextCursor, and hasMore",
+        "Notes that a single page DTO schema also removes the Spring Data dependency from the public contract"
+      ]
+    },
+    {
+      "id": "missing-failure-responses",
+      "prompt": "Every operation in our spec documents only 200. We return 409 for duplicate client references and 422 for validation failures.",
+      "expectations": [
+        "Requires declared 409 and 422 responses with the problem schema content",
+        "Defines one reusable problem response component and references it instead of inlining per operation",
+        "Notes the override-with-generic-response property when a ControllerAdvice response hides per-operation entries",
+        "Warns that the status contract itself is owned by the REST API skill"
+      ]
+    },
+    {
+      "id": "document-exposure",
+      "prompt": "swagger-ui.html and /v3/api-docs are reachable from the public internet in our production environment.",
+      "expectations": [
+        "Classifies the document and the UI as an internal surface that enumerates paths and security schemes",
+        "Disables the UI in production and protects or disables /v3/api-docs, optionally serving it on the management port",
+        "Suggests an authenticated security chain for the docs endpoints with a dedicated role",
+        "Notes that examples and descriptions must not contain real identifiers or tokens"
+      ]
+    },
+    {
+      "id": "spec-drift-gate",
+      "prompt": "We want CI to fail when a pull request silently changes the published API. How do we set that up?",
+      "expectations": [
+        "Generates the spec at build time with the springdoc Maven plugin during the integration-test phase",
+        "Diffs the pull request document against the same document generated on the merge target with identical JDK and dependencies",
+        "Classifies changes as additive, breaking, or noise and fails only on undeclared breaking changes",
+        "Normalises key order and excludes info.version and servers so the gate does not fail on noise",
+        "Says the document is generated from code and must still be reviewed by a human before publish"
+      ]
+    },
+    {
+      "id": "enum-contract-change",
+      "prompt": "We want to add CANCELLED to the orderStatus enum that clients receive. Does that need a new API version?",
+      "expectations": [
+        "Classifies adding an enum value as a breaking change for clients with strict deserialization",
+        "Hands the version decision to the API versioning skill instead of deciding it inside the document",
+        "Suggests documenting the field as an open string or introducing an unknown value when new values must be tolerated",
+        "Notes the schema must still list current values while the compatibility policy is settled"
+      ]
+    }
+  ]
+}
