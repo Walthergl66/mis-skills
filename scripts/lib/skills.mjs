@@ -45,6 +45,14 @@ export function parseSkillMarkdown(filePath) {
         collected.push(lines[index].trim());
       }
       meta[key] = collected.join(rawValue === ">" ? " " : "\n").replace(/\s+/g, " ").trim();
+    } else if (rawValue === "" && /^\s+[A-Za-z0-9_-]+:/.test(lines[index + 1] || "")) {
+      const nested = {};
+      while (index + 1 < lines.length && /^\s+([A-Za-z0-9_-]+):\s*(.*)$/.test(lines[index + 1])) {
+        index += 1;
+        const nestedItem = lines[index].match(/^\s+([A-Za-z0-9_-]+):\s*(.*)$/);
+        nested[nestedItem[1]] = nestedItem[2].trim().replace(/^["']|["']$/g, "");
+      }
+      meta[key] = nested;
     } else {
       meta[key] = rawValue.replace(/^["']|["']$/g, "").trim();
     }
@@ -52,6 +60,9 @@ export function parseSkillMarkdown(filePath) {
   return {
     name: meta.name || "",
     description: meta.description || "",
+    license: meta.license || "",
+    metadata: meta.metadata && typeof meta.metadata === "object" ? meta.metadata : null,
+    meta,
     hasFrontmatter: Boolean(match),
     body
   };

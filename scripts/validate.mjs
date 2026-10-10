@@ -3,6 +3,16 @@ import { join, relative } from "node:path";
 import { listSkillDirs, parseSkillMarkdown, readRegistry, rootDir, skillsDir } from "./lib/skills.mjs";
 
 const namePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const semverPattern = /^\d+\.\d+\.\d+$/;
+const allowedFrontmatterKeys = new Set([
+  "name",
+  "description",
+  "license",
+  "metadata",
+  "compatibility",
+  "keywords",
+  "allowed-tools",
+]);
 const localLinkPattern = /\]\((?!https?:|mailto:|#)([^)]+?\.(?:md|json))\)/g;
 const catalogPath = join(skillsDir, "skill-router", "references", "catalog.md");
 const errors = [];
@@ -46,6 +56,8 @@ for (const entry of entries) {
     if (previous) errors.push(`${entry.name}: duplicate description also used by ${previous}.`);
     seenDescriptions.set(normalized, entry.name);
   }
+
+  validateFrontmatter(entry, parsed, errors);
 
   for (const file of listMarkdownFiles(entry.dir)) {
     for (const link of localLinks(readFileSync(file, "utf8"))) {
@@ -108,6 +120,41 @@ function validateRegistry(list) {
   for (const name of registry.excludeSkills || []) {
     if (existsSync(join(skillsDir, name))) {
       list.push(`registry: excluded skill "${name}" is still installed in .agents/skills.`);
+    }
+  }
+}
+
+function validateFrontmatter(entry, parsed, list) {
+  if (!parsed.hasFrontmatter) return;
+
+  if (!parsed.body.endsWith("\n")) {
+    list.push(`${entry.name}: SKILL.md must end with a newline.`);
+  }
+
+  for (const key of Object.keys(parsed.meta)) {
+    if (!allowedFrontmatterKeys.has(key)) {
+      list.push(`${entry.name}: unknown frontmatter key "${key}".`);
+    }
+  }
+
+  if (parsed.license !== "MIT") {
+    list.push(`${entry.name}: frontmatter license must be "MIT".`);
+  }
+
+  const metadata = parsed.metadata;
+  if (!metadata || typeof metadata !== "object") {
+    list.push(`${entry.name}: frontmatter must include a metadata block with author and version.`);
+  } else {
+    if (!metadata.author || typeof metadata.author !== "string") {
+      list.push(`${entry.name}: metadata.author must be a non-empty string.`);
+    }
+    if (!semverPattern.test(metadata.version || "")) {
+      list.push(`${entry.name}: metadata.version must be semver (x.y.z).`);
+    }
+    for (const key of Object.keys(metadata)) {
+      if (key !== "author" && key !== "version") {
+        list.push(`${entry.name}: unknown metadata key "${key}".`);
+      }
     }
   }
 }
