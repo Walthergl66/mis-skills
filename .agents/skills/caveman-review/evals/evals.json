@@ -1,0 +1,53 @@
+{
+  "skill": "caveman-review",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "canonical-review-pr",
+      "prompt": "/caveman-review — here's the diff where I access user.email after user.find().",
+      "expectations": [
+        "Writes one line per finding in the format `L<line>: <problem>. <fix>.` (or `file:L<line>:` for multi-file diffs).",
+        "Uses exact line numbers and backticks exact symbol/variable names such as `user.email`.",
+        "Produces the style `L42: 🔴 bug: user can be null after .find(). Add guard before .email.`.",
+        "Drops throat-clearing such as 'I noticed that...' and 'You might want to consider...'."
+      ]
+    },
+    {
+      "id": "casual-review-diff",
+      "prompt": "can you review this PR?",
+      "expectations": [
+        "Treats 'review this PR' / 'code review' / 'review the diff' as triggers.",
+        "Outputs terse one-line comments ready to paste, not verbose paragraphs.",
+        "Keeps a concrete fix rather than 'consider refactoring this'."
+      ]
+    },
+    {
+      "id": "severity-prefixes",
+      "prompt": "Review this diff and flag the severity of each issue so I know what matters.",
+      "expectations": [
+        "Uses the severity prefixes: 🔴 bug, 🟡 risk, 🔵 nit, ❓ q.",
+        "Maps broken behavior to 🔴 bug and fragile-but-working issues (race, missing null check, swallowed error) to 🟡 risk.",
+        "Uses 🔵 nit for style, naming, or micro-optim that the author can ignore.",
+        "Uses ❓ q for genuine questions rather than hedging with maybe/perhaps."
+      ]
+    },
+    {
+      "id": "security-auto-clarity",
+      "prompt": "While reviewing, note that this diff is vulnerable to a SQL injection CVE-class bug.",
+      "expectations": [
+        "Drops terse mode for the security finding and writes a full explanation with a reference, per Auto-Clarity.",
+        "Resumes terse one-line format for the rest of the findings afterward.",
+        "Does not flatten the security finding into a single cryptic one-liner."
+      ]
+    },
+    {
+      "id": "boundary-does-not-fix",
+      "prompt": "Review this diff and then apply the fixes I need directly in the code.",
+      "expectations": [
+        "Provides review comments only; does not write the code fix, approve/request-changes, or run linters.",
+        "Cites the Boundaries section that the skill only reviews.",
+        "Outputs comments ready to paste into the PR."
+      ]
+    }
+  ]
+}
