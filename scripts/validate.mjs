@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { join, relative } from "node:path";
 import { listSkillDirs, parseSkillMarkdown, skillsDir } from "./lib/skills.mjs";
 
 const namePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -43,15 +43,25 @@ for (const entry of listSkillDirs()) {
     seenDescriptions.set(normalized, entry.name);
   }
 
-  for (const link of localLinks(parsed.body)) {
-    if (link.startsWith("..")) continue;
-    const target = join(entry.dir, link);
-    if (!existsSync(target)) {
-      errors.push(`${entry.name}: broken local link "${link}".`);
+  for (const file of listMarkdownFiles(entry.dir)) {
+    for (const link of localLinks(readFileSync(file, "utf8"))) {
+      const target = join(file, "..", link);
+      if (!existsSync(target)) {
+        errors.push(`${entry.name}: broken local link "${link}" in ${relative(entry.dir, file)}.`);
+      }
     }
   }
 
   validateEvals(entry.name, entry.dir, errors);
+}
+
+function listMarkdownFiles(dir, out = []) {
+  for (const name of readdirSync(dir)) {
+    const full = join(dir, name);
+    if (statSync(full).isDirectory()) listMarkdownFiles(full, out);
+    else if (name.endsWith(".md")) out.push(full);
+  }
+  return out;
 }
 
 function localLinks(body) {
@@ -59,7 +69,7 @@ function localLinks(body) {
   let match;
   localLinkPattern.lastIndex = 0;
   while ((match = localLinkPattern.exec(body)) !== null) {
-    const target = match[1].split("#")[0].replace(/^\.\//, "");
+    const target = match[1].split("#")[0].trim().split(/\s+/)[0].replace(/^\.\//, "");
     if (target) links.add(target);
   }
   return links;
