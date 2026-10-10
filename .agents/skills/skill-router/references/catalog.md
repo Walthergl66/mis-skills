@@ -77,7 +77,7 @@ Decision tree and sequences: [spring-boot-routing.md](spring-boot-routing.md).
 | `auth-implementation-patterns` | Auth and authorization implementation | JWT, OAuth2, sessions, RBAC, refresh rotation, securing an API |
 | `security-requirement-extraction` | Turning threats into requirements and tests | threat model to requirements, security user stories, security test cases |
 
-## Marketing and growth (42)
+## Marketing and growth (43)
 
 | Skill | Owns | Triggers |
 | --- | --- | --- |
@@ -152,3 +152,7 @@ Resolve ties between skills that share vocabulary. The first skill named owns th
 - `copywriting` writes new copy; `copy-editing` improves existing copy. Do not route an edit to `copywriting`.
 - `marketing-plan` owns the full AARRR plan; `marketing-ideas` owns ideation and `content-strategy` owns topic planning. Plan first, then the narrower skill.
 - `competitor-profiling` produces raw competitor profiles; `competitors` turns them into comparison and alternative pages.
+- `humanizer` removes AI-writing signals from any prose; `copy-editing` improves existing marketing copy for conversion. For marketing copy whose goal is conversion, prefer `copy-editing`; for text that must not read as AI-generated, prefer `humanizer`.
+- `schema` owns the marketing decision of which structured data to expose for rich results; `frontend-seo` owns implementing JSON-LD, metadata, sitemaps, and feeds inside a React or Next.js codebase. Decide the markup with `schema`, emit it with `frontend-seo`.
+- `frontend-architecture` owns the portable feature-module and state layout shared by React web and React Native; `react-native-architecture` owns RN-specific app structure, navigation, native modules, and offline sync. In an RN project, `react-native-best-practices` applies first; use `react-native-architecture` for RN-native structure and `frontend-architecture` for the portable module conventions.
+- `spring-boot-validation` normalizes violations into one problem shape; `spring-boot-rest-api` owns the HTTP status and the final error body. A validation failure is `422` with code `VALIDATION_FAILED`, not `400`.
