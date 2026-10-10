@@ -1,0 +1,61 @@
+{
+  "skill": "caveman-compress",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "canonical-compress-claude-md",
+      "prompt": "/caveman-compress C:\\Users\\me\\project\\CLAUDE.md",
+      "expectations": [
+        "Treats the `/caveman-compress <filepath>` invocation as the trigger and targets the given file.",
+        "Runs the compression via `python3 -m scripts <absolute_filepath>` from the directory containing SKILL.md.",
+        "Saves a human-readable backup as `<filename>.original.md` before overwriting the original.",
+        "Removes articles, filler, pleasantries, hedging, and connective fluff from the prose."
+      ]
+    },
+    {
+      "id": "casual-compress-memory-file",
+      "prompt": "Can you compress my preferences memory file to save input tokens?",
+      "expectations": [
+        "Recognizes the casual trigger 'compress memory file'.",
+        "Applies the compression rules (short synonyms, drop 'you should'/'make sure to', fragments OK).",
+        "Reports the result back to the user after the run."
+      ]
+    },
+    {
+      "id": "boundary-refuse-code-file",
+      "prompt": "Compress this file to save tokens: src/utils/parser.py",
+      "expectations": [
+        "Refuses to compress the `.py` file, citing the Boundaries rule that only natural language files (.md, .txt, .typ, .typst, .tex, extensionless) are compressed.",
+        "Names `.py` explicitly in the list of files that must NEVER be modified.",
+        "Does not overwrite or back up a non-natural-language file."
+      ]
+    },
+    {
+      "id": "preserve-code-blocks-exactly",
+      "prompt": "/caveman-compress ./docs/setup.md — it has a big fenced bash block and some inline code.",
+      "expectations": [
+        "Copies everything inside fenced ``` blocks EXACTLY, including comments, spacing, line order, and command text.",
+        "Preserves inline code in backticks exactly and does not modify anything inside backticks.",
+        "Treats code blocks as read-only regions and compresses only the prose outside them.",
+        "Preserves markdown headings, bullet hierarchy, numbered lists, and frontmatter/YAML headers."
+      ]
+    },
+    {
+      "id": "skip-original-backup-file",
+      "prompt": "/caveman-compress ./CLAUDE.md.original.md",
+      "expectations": [
+        "Skips the file because it is a `.original.md` backup, per the rule 'Never compress FILE.original.md (skip it)'.",
+        "Does not create a further backup or overwrite the original backup."
+      ]
+    },
+    {
+      "id": "failure-leaves-file-untouched",
+      "prompt": "/caveman-compress ./notes.md",
+      "expectations": [
+        "Describes the CLI retry behavior: validate output, cherry-pick targeted fixes, retry up to 2 times.",
+        "States that if still failing after 2 retries it reports the error and leaves the original file untouched.",
+        "Uses targeted fixes rather than recompressing the whole file on errors."
+      ]
+    }
+  ]
+}
