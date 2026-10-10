@@ -1,9 +1,10 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { listSkillDirs, parseSkillMarkdown, skillsDir } from "./lib/skills.mjs";
+import { listSkillDirs, parseSkillMarkdown, readRegistry, rootDir, skillsDir } from "./lib/skills.mjs";
 
 const namePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const localLinkPattern = /\]\((?!https?:|mailto:|#)([^)]+?\.(?:md|json))\)/g;
+const catalogPath = join(skillsDir, "skill-router", "references", "catalog.md");
 const errors = [];
 const seenNames = new Map();
 const seenDescriptions = new Map();
@@ -12,7 +13,10 @@ if (!existsSync(skillsDir)) {
   errors.push(`Missing canonical skills directory: ${skillsDir}`);
 }
 
-for (const entry of listSkillDirs()) {
+const entries = listSkillDirs();
+const installedNames = new Set(entries.map((entry) => entry.name));
+
+for (const entry of entries) {
   const skillFile = join(entry.dir, "SKILL.md");
   const parsed = parseSkillMarkdown(skillFile);
 
@@ -53,6 +57,59 @@ for (const entry of listSkillDirs()) {
   }
 
   validateEvals(entry.name, entry.dir, errors);
+}
+
+validateCatalog(installedNames, errors);
+validateRegistry(errors);
+
+function validateCatalog(installed, list) {
+  if (!existsSync(catalogPath)) {
+    list.push(`Missing skill catalog: ${relative(rootDir, catalogPath)}.`);
+    return;
+  }
+  const sections = [];
+  const catalogNames = new Map();
+  let current = null;
+  for (const line of readFileSync(catalogPath, "utf8").split(/\r?\n/)) {
+    const heading = line.match(/^##\s+(.+?)\s+\((\d+)\)\s*$/);
+    if (heading) {
+      current = { title: heading[1], declared: Number(heading[2]), rows: 0 };
+      sections.push(current);
+      continue;
+    }
+    if (/^##\s+/.test(line)) {
+      current = null;
+      continue;
+    }
+    const row = line.match(/^\|\s*`([a-z0-9-]+)`\s*\|/);
+    if (row && current) {
+      const name = row[1];
+      current.rows += 1;
+      const previous = catalogNames.get(name);
+      if (previous) list.push(`catalog: skill "${name}" is listed in both ${previous} and ${current.title}.`);
+      else catalogNames.set(name, current.title);
+    }
+  }
+  for (const section of sections) {
+    if (section.rows !== section.declared) {
+      list.push(`catalog: section "${section.title}" declares ${section.declared} skills but lists ${section.rows}.`);
+    }
+  }
+  for (const name of catalogNames.keys()) {
+    if (!installed.has(name)) list.push(`catalog: "${name}" has no installed skill folder.`);
+  }
+  for (const name of installed) {
+    if (!catalogNames.has(name)) list.push(`catalog: installed skill "${name}" is missing from the catalog.`);
+  }
+}
+
+function validateRegistry(list) {
+  const registry = readRegistry();
+  for (const name of registry.excludeSkills || []) {
+    if (existsSync(join(skillsDir, name))) {
+      list.push(`registry: excluded skill "${name}" is still installed in .agents/skills.`);
+    }
+  }
 }
 
 function listMarkdownFiles(dir, out = []) {
@@ -116,4 +173,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Validated ${listSkillDirs().length} skills in .agents/skills.`);
+console.log(`Validated ${entries.length} skills in .agents/skills.`);
