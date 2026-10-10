@@ -1,0 +1,56 @@
+{
+  "skill": "clean-skill-install",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "install-external-skill-pack",
+      "prompt": "Install the marketingskills pack from coreyhaines31 into this repo.",
+      "expectations": [
+        "Uses the command npx skills add coreyhaines31/marketingskills -a codex --copy -y",
+        "Does not use --all for the install",
+        "Writes to .agents/skills as the canonical universal location",
+        "Runs the maintenance commands npm run sync -- package, npm run inventory, npm run validate, and npx skills add . --list afterward"
+      ]
+    },
+    {
+      "id": "single-specific-skill",
+      "prompt": "Just add the 'schema' skill from owner/repo, not their whole collection.",
+      "expectations": [
+        "Uses --skill schema with the install command",
+        "Keeps the flags -a codex --copy -y",
+        "Still runs the post-install maintenance commands",
+        "Does not use --all"
+      ]
+    },
+    {
+      "id": "clean-up-scattered-folders",
+      "prompt": "I accidentally ran the install with --all and now there are .claude, .windsurf, .aider-desk and a bunch of other folders. Help me clean up.",
+      "expectations": [
+        "First verifies .agents/skills contains the installed skills before deleting anything",
+        "Removes only generated agent adapter folders such as .claude, .windsurf, .aider-desk, and the stray data folder",
+        "Does not delete app folders, source folders, user files, or unrelated project content",
+        "Confirms the generated folders are inside the intended workspace before deleting"
+      ]
+    },
+    {
+      "id": "install-repo-into-target-project",
+      "prompt": "I want to pull this skills repo into my new project so I can use the skills there. What's the command?",
+      "expectations": [
+        "Gives the clean command npx skills add Walthergl66/mis-skills -a codex --copy -y",
+        "States this installs into .agents/skills in the target project",
+        "Explicitly warns to avoid the --all variant because it creates many agent-specific folders"
+      ]
+    },
+    {
+      "id": "post-install-report",
+      "prompt": "OK I ran the install, what do I tell the team and how do we confirm it worked?",
+      "expectations": [
+        "Reports how many skills are installed",
+        "States .agents/skills is the canonical location",
+        "States skills/ was synced as the public npx skills add mirror",
+        "Lists which validation commands passed (npm run validate, npx skills add . --list)",
+        "Provides the clean install command for target projects"
+      ]
+    }
+  ]
+}
