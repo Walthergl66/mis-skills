@@ -1,0 +1,56 @@
+{
+  "skill": "frontend-lighthouse",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "add-blocking-cwv-gate",
+      "prompt": "I want every PR to fail if the site gets slow. Can you set up a Lighthouse performance gate for my Next.js app?",
+      "expectations": [
+        "Adds a single lighthouserc.cjs as the one source of truth for budgets and assertions.",
+        "Sets Core Web Vitals budgets at Google good thresholds: LCP <= 2500 ms, TBT (INP lab proxy) <= 200 ms, CLS <= 0.1.",
+        "Gates category floors as errors: performance >= 0.9, SEO >= 0.95, accessibility >= 0.95, best-practices >= 0.9.",
+        "Adds the lhci npm script (lhci autorun --config=./lighthouserc.cjs) and a GitHub Actions workflow that blocks PRs."
+      ]
+    },
+    {
+      "id": "median-of-n-not-single-run",
+      "prompt": "My Lighthouse check passes locally but keeps flaking red in CI. What's wrong?",
+      "expectations": [
+        "Prescribes aggregationMethod: \"median-run\" so the gate compares the median across runs.",
+        "Requires numberOfRuns >= 3 (odd numbers give a clean median).",
+        "Suggests raising numberOfRuns to 5 if runs are still flaky and ensuring nothing else competes for CPU on the runner.",
+        "Explains single-run gates flake constantly due to cold caches and CI noise."
+      ]
+    },
+    {
+      "id": "inp-is-warn-not-error",
+      "prompt": "I added an assertion for the interaction-to-next-paint audit as an error and now CI fails even on good builds. Help?",
+      "expectations": [
+        "Says the experimental interaction-to-next-paint audit should be a warn, not an error, because it is not present in every Lighthouse build.",
+        "Explains INP is a field metric with no direct lab audit, so the lab gates on TBT at the same 200 ms budget as an error.",
+        "Keeps total-blocking-time as the error-level INP proxy.",
+        "Notes hard-failing on a missing audit is the cause of the failure."
+      ]
+    },
+    {
+      "id": "gate-production-build-not-dev",
+      "prompt": "I pointed Lighthouse at my localhost dev server so it runs fast in CI. Is that good enough?",
+      "expectations": [
+        "Rejects auditing the dev server; dev-server numbers are meaningless for a budget.",
+        "Requires gating the production build: run build then start the production server (startServerCommand / startServerReadyPattern).",
+        "For purely static output, allows collect.staticDistDir pointing at the build folder instead of a server.",
+        "Notes local pnpm build && pnpm lhci should reproduce exactly what CI does."
+      ]
+    },
+    {
+      "id": "ci-uploads-reports-always",
+      "prompt": "When the Lighthouse check fails in CI I can't see why. How should the workflow be set up?",
+      "expectations": [
+        "Uploads Lighthouse reports with if: always() so a red check is debuggable even on failure.",
+        "Triggers the workflow on the app path and the workflow file itself so config changes are self-testing.",
+        "Uploads the .lighthouseci report directory as a CI artifact.",
+        "Points the reader to open the artifact and read the failed audit's Opportunities/Diagnostics rather than raising the budget."
+      ]
+    }
+  ]
+}
