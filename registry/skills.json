@@ -33,7 +33,8 @@
     "spring-boot-validation"
   ],
   "excludeSkills": [
-    "caveman-help"
+    "caveman-help",
+    "caveman-stats"
   ],
   "sources": [
     {
@@ -46,7 +47,7 @@
       "source": "juliusbrussee/caveman",
       "status": "installed",
       "category": "agent-productivity",
-      "notes": "Installed as cavecrew, caveman, caveman-commit, caveman-compress, caveman-review, caveman-stats. caveman-help is merged into caveman (see excludeSkills)."
+      "notes": "Installed as cavecrew, caveman, caveman-commit, caveman-compress, caveman-review. caveman-help is merged into caveman and caveman-stats is dropped (both in excludeSkills)."
     },
     {
       "source": "coreyhaines31/marketingskills",

@@ -76,7 +76,7 @@ See `docs/SKILLS.md` for the generated list of installed skills and what each on
 
 Currently installed:
 
-- 99 total skills
+- 98 total skills
 - Base design/productivity skills from `emilkowalski/skill` and `juliusbrussee/caveman`
 - Marketing skills from `coreyhaines31/marketingskills`
 - Backend families for Spring Boot (26 skills) and NestJS (7 skills), plus frontend, mobile, and testing families

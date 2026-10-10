@@ -78,12 +78,6 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/caveman-review/SKILL.md`
 - Purpose: Ultra-compressed code review comments. Cuts noise from PR feedback while preserving the actionable signal. Each comment is one line: location, problem, fix. Use when user says "review this PR", "code review", "review the diff", "/review", or invokes /caveman-review. Auto-triggers when reviewing pull requests.
 
-### Caveman Stats
-
-- Folder: `caveman-stats`
-- Path: `.agents/skills/caveman-stats/SKILL.md`
-- Purpose: Show real token usage and estimated savings for the current session. Reads directly from the Claude Code session log - no AI estimation. Triggers on /caveman-stats. Output is injected by the mode-tracker hook; the model itself does not compute the numbers.
-
 ### Churn Prevention
 
 - Folder: `churn-prevention`
