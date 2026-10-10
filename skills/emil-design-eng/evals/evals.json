@@ -1,0 +1,63 @@
+{
+  "skill": "emil-design-eng",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "review-dropdown-animation",
+      "prompt": "Can you review the animations in this dropdown menu component? It uses `transition: all 300ms ease-in` and the menu scales in from `transform: scale(0)`.",
+      "expectations": [
+        "Responds with a single markdown table using exactly the columns | Before | After | Why |, one row per issue, not a Before/After list.",
+        "Flags `transition: all 300ms` and recommends specifying exact properties, e.g. `transition: transform 200ms ease-out`.",
+        "Flags `ease-in` on a UI element and recommends `ease-out` or a stronger custom cubic-bezier curve for entering elements.",
+        "Flags the `scale(0)` entry and recommends starting from `scale(0.95)` combined with `opacity: 0`.",
+        "Keeps the recommended dropdown animation duration under 300ms (150-250ms for dropdowns/selects)."
+      ]
+    },
+    {
+      "id": "command-palette-feels-slow",
+      "prompt": "My Cmd+K command palette has a 250ms fade and slide animation but it feels sluggish. How do I speed up the animation?",
+      "expectations": [
+        "Recommends removing the animation entirely rather than shortening it.",
+        "Explains the reason using the frequency table: keyboard-initiated actions are used 100+ times per day, so they should have no animation ever.",
+        "Cites the Raycast example (no open/close animation) as the optimal experience for something used hundreds of times a day.",
+        "Avoids treating this as a normal 'occasional' animation that just needs a faster duration."
+      ]
+    },
+    {
+      "id": "popover-scales-from-center",
+      "prompt": "My popover scales in from the center of the screen and it looks disconnected from the button that opened it. Should I just center it more deliberately?",
+      "expectations": [
+        "Says popovers should be origin-aware and scale in from their trigger, not from center.",
+        "Recommends `transform-origin: var(--radix-popover-content-transform-origin)` (Radix) or `transform-origin: var(--transform-origin)` (Base UI).",
+        "Explicitly notes that modals are the exception and should stay `transform-origin: center`."
+      ]
+    },
+    {
+      "id": "framer-motion-drops-frames",
+      "prompt": "Our dashboard uses Framer Motion `animate={{ x: 100 }}` for a tab indicator and it drops frames while the page is loading. What's going on?",
+      "expectations": [
+        "Explains that Framer Motion shorthand props `x`, `y`, and `scale` are NOT hardware-accelerated and run on the main thread via requestAnimationFrame.",
+        "Recommends the full transform string, e.g. `animate={{ transform: \"translateX(100px)\" }}`, or switching to CSS animations for off-main-thread performance.",
+        "References the Vercel dashboard example where Shared Layout Animations dropped frames during page loads and switching to CSS animations fixed it."
+      ]
+    },
+    {
+      "id": "reduced-motion-drawer",
+      "prompt": "A user reported motion sickness from our drawer animation. Should I just delete all the animations?",
+      "expectations": [
+        "Explains that prefers-reduced-motion means fewer and gentler animations, not zero.",
+        "Says to keep opacity and color transitions that aid comprehension while removing movement and position (transform) animations.",
+        "References the `@media (prefers-reduced-motion: reduce)` block and/or the `useReducedMotion()` hook."
+      ]
+    },
+    {
+      "id": "button-press-feedback",
+      "prompt": "Our buttons don't feel very responsive when you press them. Any quick wins?",
+      "expectations": [
+        "Recommends `transform: scale(0.97)` on the `:active` state for instant press feedback.",
+        "Keeps the scale subtle (within 0.95-0.98) and pairs it with a short transition such as `transform 160ms ease-out`.",
+        "Notes the same applies to any pressable element."
+      ]
+    }
+  ]
+}
