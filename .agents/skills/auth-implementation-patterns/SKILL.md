@@ -1,6 +1,15 @@
 ---
 name: auth-implementation-patterns
-description: Master authentication and authorization patterns including JWT, OAuth2, session management, and RBAC to build secure, scalable access control systems. Use when implementing auth systems, securing APIs, or debugging security issues.
+description: >
+  Framework-agnostic authentication and authorization design: JWT, OAuth2/OpenID
+  Connect, session versus token, refresh-token rotation, RBAC and ABAC, SSO, API
+  keys, and multi-tenancy. Use when implementing an auth system, securing an API,
+  or debugging login, token, or permission logic. Triggers include "JWT",
+  "OAuth2", "OIDC", "refresh token", "session cookie", "RBAC", "ABAC", "SSO",
+  "multi-tenant", "API key". Do not use for the Spring Security filter chain or
+  Java security config - use spring-boot-security. Do not use for NestJS guards,
+  pipes, and interceptors - use nestjs-features-performance. This skill decides
+  the scheme; the framework skill decides the wiring.
 ---
 
 # Authentication & Authorization Implementation Patterns
@@ -17,6 +26,15 @@ Build secure, scalable authentication and authorization systems using industry-s
 - Migrating authentication systems
 - Debugging auth issues
 - Implementing SSO or multi-tenancy
+
+## Boundaries
+
+This skill owns the framework-agnostic scheme. It does not own framework wiring:
+
+- Spring Security filter chain, `SecurityFilterChain`, `@PreAuthorize`, `JwtDecoder` beans → `spring-boot-security`.
+- NestJS guards, pipes, interceptors, exception filters → `nestjs-features-performance`.
+
+When both apply, decide the scheme here (session versus token, OAuth2 flow, RBAC model) and implement the wiring in the framework skill.
 
 ## Core Concepts
 

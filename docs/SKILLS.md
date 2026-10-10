@@ -46,7 +46,7 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 
 - Folder: `auth-implementation-patterns`
 - Path: `.agents/skills/auth-implementation-patterns/SKILL.md`
-- Purpose: Master authentication and authorization patterns including JWT, OAuth2, session management, and RBAC to build secure, scalable access control systems. Use when implementing auth systems, securing APIs, or debugging security issues.
+- Purpose: Framework-agnostic authentication and authorization design: JWT, OAuth2/OpenID Connect, session versus token, refresh-token rotation, RBAC and ABAC, SSO, API keys, and multi-tenancy. Use when implementing an auth system, securing an API, or debugging login, token, or permission logic. Triggers include "JWT", "OAuth2", "OIDC", "refresh token", "session cookie", "RBAC", "ABAC", "SSO", "multi-tenant", "API key". Do not use for the Spring Security filter chain or Java security config - use spring-boot-security. Do not use for NestJS guards, pipes, and interceptors - use nestjs-features-performance. This skill decides the scheme; the framework skill decides the wiring.
 
 ### Cavecrew
 
