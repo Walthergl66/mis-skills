@@ -2,6 +2,36 @@
   "version": 1,
   "canonicalDir": ".agents/skills",
   "naming": "lowercase-kebab-case",
+  "localSkills": [
+    "skill-router",
+    "clean-skill-install",
+    "spring-boot-actuator",
+    "spring-boot-api-versioning",
+    "spring-boot-ci-cd",
+    "spring-boot-clean-architecture",
+    "spring-boot-core",
+    "spring-boot-data-jpa",
+    "spring-boot-ddd",
+    "spring-boot-docker",
+    "spring-boot-dto",
+    "spring-boot-flyway",
+    "spring-boot-hexagonal-architecture",
+    "spring-boot-hibernate",
+    "spring-boot-integration-testing",
+    "spring-boot-junit",
+    "spring-boot-logging",
+    "spring-boot-mockito",
+    "spring-boot-modular-monolith",
+    "spring-boot-mvc",
+    "spring-boot-observability",
+    "spring-boot-openapi",
+    "spring-boot-postgresql",
+    "spring-boot-query-optimization",
+    "spring-boot-rest-api",
+    "spring-boot-security",
+    "spring-boot-testcontainers",
+    "spring-boot-validation"
+  ],
   "sources": [
     {
       "source": "emilkowalski/skill",
@@ -20,6 +50,54 @@
       "status": "installed",
       "category": "marketing",
       "notes": "Installed 43 marketing skills including ads, SEO, copywriting, lifecycle, conversion, pricing, social, video, and growth workflows."
+    },
+    {
+      "source": "wshobson/agents",
+      "status": "installed",
+      "category": "backend",
+      "notes": "Installed as auth-implementation-patterns, react-native-architecture, security-requirement-extraction."
+    },
+    {
+      "source": "wondelai/skills",
+      "status": "installed",
+      "category": "architecture",
+      "notes": "Installed as clean-architecture."
+    },
+    {
+      "source": "stareezy-1/frontend-architecture-skill",
+      "status": "installed",
+      "category": "frontend",
+      "notes": "Installed as frontend-architecture and its data-contracts, lighthouse, observability, optimistic-mutations, and seo siblings."
+    },
+    {
+      "source": "amirtaherkhani/nestjs-agent-skills",
+      "status": "installed",
+      "category": "backend",
+      "notes": "Installed 7 NestJS skills covering architecture, OOP, features, audits, and git/PR workflows."
+    },
+    {
+      "source": "vercel-labs/agent-skills",
+      "status": "installed",
+      "category": "frontend",
+      "notes": "Installed as vercel-react-best-practices."
+    },
+    {
+      "source": "software-mansion-labs/skills",
+      "status": "installed",
+      "category": "mobile",
+      "notes": "Installed as react-native-best-practices with its animations, audio, gestures, jsi, and multithreading references."
+    },
+    {
+      "source": "blader/humanizer",
+      "status": "installed",
+      "category": "content",
+      "notes": "Installed as humanizer."
+    },
+    {
+      "source": "https://github.com/curiositech/some_claude_skills",
+      "status": "installed",
+      "category": "quality",
+      "notes": "Installed as vitest-testing-patterns."
     },
     {
       "source": "impeccable/skill",
@@ -58,18 +136,6 @@
       "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
     },
     {
-      "source": "react-native-architecture/skill",
-      "status": "planned",
-      "category": "architecture",
-      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
-    },
-    {
-      "source": "clean-architecture/skill",
-      "status": "planned",
-      "category": "architecture",
-      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
-    },
-    {
       "source": "monorepo-manager/skill",
       "status": "planned",
       "category": "architecture",
@@ -101,12 +167,6 @@
     },
     {
       "source": "qa-reviewer/skill",
-      "status": "planned",
-      "category": "quality",
-      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
-    },
-    {
-      "source": "vitest-jest/skill",
       "status": "planned",
       "category": "quality",
       "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
@@ -157,12 +217,6 @@
       "source": "dev-productivity/skill",
       "status": "planned",
       "category": "agent-productivity",
-      "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
-    },
-    {
-      "source": "humanizer/skill",
-      "status": "planned",
-      "category": "content",
       "notes": "Source did not resolve publicly during bootstrap. Keep as planned until URL/access is confirmed."
     },
     {
