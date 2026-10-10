@@ -43,7 +43,7 @@ Pick the domain from the stack and the artifact, not from the vocabulary. A requ
 | React, Next.js, Vite, TanStack Query, hooks, RSC | React frontend | `vercel-react-best-practices` plus `frontend-architecture` |
 | React Native, Expo, Reanimated, Gesture Handler, Fabric, Skia, Worklets | React Native | `react-native-best-practices` first, always |
 | Vitest, RTL, Playwright on a JS project | JS testing | `vitest-testing-patterns` |
-| Positioning, ICP, campaigns, funnels, ads, SEO, launch, docs | Marketing and growth | [sequences.md](sequences.md) marketing routes |
+| Positioning, ICP, campaigns, funnels, ads, SEO, launch, docs | Marketing and growth | [sequences.md](references/sequences.md) marketing routes |
 | Mobile listing, app store, ASO | App growth | `aso` |
 | Animation, polish, interaction feel, UI detail | Design | `emil-design-eng` |
 | Installing, publishing, syncing, auditing skills | Skill system | `clean-skill-install` |
