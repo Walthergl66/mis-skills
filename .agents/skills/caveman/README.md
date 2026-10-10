@@ -25,9 +25,18 @@ Auto-clarity rule: caveman drops to normal prose for security warnings, irrevers
 /caveman              # full mode (default)
 /caveman lite         # lighter compression
 /caveman ultra        # extreme compression
-/caveman wenyan       # classical Chinese
+/caveman wenyan       # classical Chinese (wenyan-full)
+/caveman-help         # one-shot reference card, no mode change
 stop caveman          # back to normal prose
 ```
+
+## Default mode
+
+Default mode = `full`. Change it with the `CAVEMAN_DEFAULT_MODE` environment variable (highest priority) or `~/.config/caveman/config.json` with `{ "defaultMode": "lite" }`. Resolution order: env var > config file > `full`. Set `"off"` to disable auto-activation on session start; manual `/caveman` still works.
+
+## Help
+
+`/caveman-help` (also "caveman help", "what caveman commands") prints a one-shot cheat sheet of modes, sibling skills, and default-mode config. It does not change the active mode.
 
 ## Example output
 

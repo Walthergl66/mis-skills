@@ -6,6 +6,8 @@ description: >
   wenyan-lite, wenyan-full, wenyan-ultra.
   Use when user says "caveman mode", "talk like caveman", "use caveman", "less tokens",
   "be brief", or invokes /caveman. Also auto-triggers when token efficiency is requested.
+  Handles /caveman-help and "caveman help" by printing a one-shot reference card
+  (modes, sibling skills, and how to set the default mode) without changing the active mode.
 ---
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.
@@ -72,3 +74,34 @@ Example — destructive op:
 ## Boundaries
 
 Code/commits/PRs: write normal. "stop caveman" or "normal mode": revert. Level persist until changed or session end.
+
+## Configure Default Mode
+
+Default mode = `full`. Resolution order: env var > config file > `full`.
+
+**Environment variable** (highest priority):
+```bash
+export CAVEMAN_DEFAULT_MODE=ultra
+```
+
+**Config file** (`~/.config/caveman/config.json`):
+```json
+{ "defaultMode": "lite" }
+```
+
+Set `"off"` to disable auto-activation on session start. Manual `/caveman` still works.
+
+## Help
+
+Trigger: `/caveman-help`, "caveman help", "what caveman commands", "how do I use caveman". One-shot: print the reference below, then stop. Do NOT change the active mode, write flag files, or persist anything. Output in caveman style. If the user wants the mode itself, tell them to run `/caveman` separately.
+
+Sibling skills:
+
+| Skill | Trigger | What it do |
+|-------|---------|-----------|
+| `caveman-commit` | `/caveman-commit` | Terse commit messages. Conventional Commits. ≤50 char subject. |
+| `caveman-review` | `/caveman-review` | One-line PR comments: `L42: bug: user null. Add guard.` |
+| `caveman-compress` | `/caveman-compress <file>` | Compress .md files to caveman prose. Saves ~46% input tokens. |
+| `cavecrew` | "delegate to subagent" | Decide when to spawn cavecrew subagents to save context. |
+
+Full docs: https://github.com/JuliusBrussee/caveman

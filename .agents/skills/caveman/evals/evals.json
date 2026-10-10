@@ -56,6 +56,43 @@
         "Confirms caveman mode is off, matching the deactivation phrases 'stop caveman' / 'normal mode'.",
         "Stops applying dropped articles and fragments in subsequent responses."
       ]
+    },
+    {
+      "id": "canonical-caveman-help",
+      "prompt": "/caveman-help",
+      "expectations": [
+        "Displays the one-shot reference card for caveman modes, sibling skills, and default-mode config.",
+        "Lists the modes Lite, Full, Ultra, Wenyan-Lite, Wenyan-Full, and Wenyan-Ultra with their triggers.",
+        "Lists the sibling skills caveman-commit, caveman-review, caveman-compress, and cavecrew.",
+        "Output is written in caveman style."
+      ]
+    },
+    {
+      "id": "casual-what-commands",
+      "prompt": "what caveman commands do I have?",
+      "expectations": [
+        "Recognizes the casual trigger 'what caveman commands' and shows the reference card.",
+        "Includes the deactivate instructions: say 'stop caveman' or 'normal mode'.",
+        "Notes that the default mode is `full`."
+      ]
+    },
+    {
+      "id": "help-one-shot-no-persist",
+      "prompt": "/caveman-help — and switch me into caveman mode while you're at it.",
+      "expectations": [
+        "Does NOT change the mode, write flag files, or persist anything, per the one-shot rule.",
+        "Only displays the reference card.",
+        "Tells the user to activate the mode separately with `/caveman` if they want it."
+      ]
+    },
+    {
+      "id": "config-default-mode",
+      "prompt": "how do I make caveman start in ultra mode by default?",
+      "expectations": [
+        "Describes both configuration paths: the `CAVEMAN_DEFAULT_MODE` environment variable and `~/.config/caveman/config.json` with `\"defaultMode\"`.",
+        "States the resolution order: env var > config file > `full`.",
+        "Mentions setting `\"off\"` disables auto-activation on session start while manual `/caveman` still works."
+      ]
     }
   ]
 }

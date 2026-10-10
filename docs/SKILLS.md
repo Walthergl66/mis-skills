@@ -58,7 +58,7 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 
 - Folder: `caveman`
 - Path: `.agents/skills/caveman/SKILL.md`
-- Purpose: Ultra-compressed communication mode. Cuts token usage ~75% by speaking like caveman while keeping full technical accuracy. Supports intensity levels: lite, full (default), ultra, wenyan-lite, wenyan-full, wenyan-ultra. Use when user says "caveman mode", "talk like caveman", "use caveman", "less tokens", "be brief", or invokes /caveman. Also auto-triggers when token efficiency is requested.
+- Purpose: Ultra-compressed communication mode. Cuts token usage ~75% by speaking like caveman while keeping full technical accuracy. Supports intensity levels: lite, full (default), ultra, wenyan-lite, wenyan-full, wenyan-ultra. Use when user says "caveman mode", "talk like caveman", "use caveman", "less tokens", "be brief", or invokes /caveman. Also auto-triggers when token efficiency is requested. Handles /caveman-help and "caveman help" by printing a one-shot reference card (modes, sibling skills, and how to set the default mode) without changing the active mode.
 
 ### Caveman Commit
 
@@ -71,12 +71,6 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Folder: `caveman-compress`
 - Path: `.agents/skills/caveman-compress/SKILL.md`
 - Purpose: Compress natural language memory files (CLAUDE.md, todos, preferences) into caveman format to save input tokens. Preserves all technical substance, code, URLs, and structure. Compressed version overwrites the original file. Human-readable backup saved as FILE.original.md. Trigger: /caveman-compress FILEPATH or "compress memory file"
-
-### Caveman Help
-
-- Folder: `caveman-help`
-- Path: `.agents/skills/caveman-help/SKILL.md`
-- Purpose: Quick-reference card for all caveman modes, skills, and commands. One-shot display, not a persistent mode. Trigger: /caveman-help, "caveman help", "what caveman commands", "how do I use caveman".
 
 ### Caveman Review
 

@@ -125,17 +125,16 @@ Decision tree and sequences: [spring-boot-routing.md](spring-boot-routing.md).
 | `video` | Video production | demo video, explainer, AI video, Remotion, avatar video |
 | `aso` | App store listing optimization | ASO, app store ranking, listing conversion, keyword volume |
 
-## Skill system and agent workflow (9)
+## Skill system and agent workflow (8)
 
 | Skill | Owns | Triggers |
 | --- | --- | --- |
 | `skill-router` | This routing decision | ambiguous request, which skill, where to start |
 | `clean-skill-install` | Installing, publishing, syncing skills | add a skill, install skills, update the mirror, publish this repo |
-| `caveman` | Compressed response mode | talk like caveman, fewer tokens, be brief |
+| `caveman` | Compressed response mode and its command reference | talk like caveman, fewer tokens, be brief, caveman help |
 | `caveman-commit` | Compressed commit messages | write a commit, commit message, conventional commit |
 | `caveman-review` | Compressed review comments | review this PR, review the diff, code review |
 | `caveman-compress` | Compressing memory files | compress CLAUDE.md, compress memory file |
-| `caveman-help` | Command reference | caveman help, what caveman commands |
 | `caveman-stats` | Token usage report | caveman stats, token savings |
 | `cavecrew` | When to delegate to subagents | delegate to subagent, spawn investigator, save context |
 
