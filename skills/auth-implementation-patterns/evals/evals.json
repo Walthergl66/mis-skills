@@ -1,0 +1,59 @@
+{
+  "skill": "auth-implementation-patterns",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "jwt-login-flow",
+      "prompt": "I'm adding username/password login to my Express API. I was going to sign a JWT and save it in localStorage on the client. Can you implement the auth flow?",
+      "expectations": [
+        "Rejects storing the JWT in localStorage and explains it is vulnerable to XSS, recommending httpOnly cookies instead",
+        "Hashes passwords with bcrypt or argon2 rather than storing plain passwords",
+        "Sets short-lived access tokens of 15-30 minutes maximum",
+        "Sets secure cookie flags (httpOnly, secure, sameSite)",
+        "Validates input server-side (email format, password strength) rather than trusting client data",
+        "Adds rate limiting on the auth endpoints to prevent brute-force attacks"
+      ]
+    },
+    {
+      "id": "rbac-permissions",
+      "prompt": "How should I decide what each logged-in user is allowed to do? I have admins, editors, and regular users.",
+      "expectations": [
+        "Distinguishes authorization (what you can do) from authentication (who you are)",
+        "Describes role-based access control (RBAC) for the admin/editor/user roles",
+        "Includes resource ownership validation in addition to role checks",
+        "Emphasizes that permission checks must be enforced server-side, not only in client code",
+        "Warns against trusting client-provided role or permission data"
+      ]
+    },
+    {
+      "id": "social-login-oauth2",
+      "prompt": "Can you add a 'Sign in with Google' button to our app?",
+      "expectations": [
+        "Frames this as OAuth2/OpenID Connect delegated authentication",
+        "Mentions validating the identity token/claims on the server rather than trusting the client",
+        "Notes short-lived access tokens and token expiration",
+        "Keeps secrets/server credentials on the backend and out of client code"
+      ]
+    },
+    {
+      "id": "password-reset-security",
+      "prompt": "We need a forgot-password flow that emails the user a reset link. What's the secure way to build it?",
+      "expectations": [
+        "Uses secure, single-use reset tokens with an expiration rather than guessing user identity",
+        "Avoids user enumeration, so the response is the same whether or not the email exists",
+        "Rate limits password reset requests to prevent abuse",
+        "Hashes the new password with bcrypt/argon2 before storing it"
+      ]
+    },
+    {
+      "id": "session-vs-token-authz-debugging",
+      "prompt": "Our API is broken because the frontend reportedly hides the admin button from non-admins, but someone still hit the admin endpoint directly and it worked. Why, and how do we fix it?",
+      "expectations": [
+        "Identifies that client-side auth checks alone are insufficient",
+        "States that authorization must always be validated on the server",
+        "Recommends enforcing the permission check in the API/route handler for the admin endpoint",
+        "References logging security events such as failed or unauthorized access attempts"
+      ]
+    }
+  ]
+}
