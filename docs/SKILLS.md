@@ -382,7 +382,7 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 
 - Folder: `security-requirement-extraction`
 - Path: `.agents/skills/security-requirement-extraction/SKILL.md`
-- Purpose: Derive security requirements from threat models and business context. Use when translating threats into actionable requirements, creating security user stories, or building security test cases.
+- Purpose: Turn a threat model and business context into actionable, testable security requirements: security user stories, acceptance criteria, and security test cases, traced to threats and compliance frameworks. Use when translating threats into requirements, writing security user stories, or building security test cases. Triggers include "threat model to requirements", "security user story", "security acceptance criteria", "security test case", "compliance mapping". Do not use to design or implement the controls themselves - for auth mechanics use auth-implementation-patterns, for Spring Security wiring use spring-boot-security. This skill produces the requirements, not the code.
 
 ### Seo Audit
 

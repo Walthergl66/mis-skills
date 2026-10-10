@@ -1,6 +1,15 @@
 ---
 name: security-requirement-extraction
-description: Derive security requirements from threat models and business context. Use when translating threats into actionable requirements, creating security user stories, or building security test cases.
+description: >
+  Turn a threat model and business context into actionable, testable security
+  requirements: security user stories, acceptance criteria, and security test
+  cases, traced to threats and compliance frameworks. Use when translating
+  threats into requirements, writing security user stories, or building security
+  test cases. Triggers include "threat model to requirements", "security user
+  story", "security acceptance criteria", "security test case", "compliance
+  mapping". Do not use to design or implement the controls themselves - for auth
+  mechanics use auth-implementation-patterns, for Spring Security wiring use
+  spring-boot-security. This skill produces the requirements, not the code.
 ---
 
 # Security Requirement Extraction
@@ -15,6 +24,16 @@ Transform threat analysis into actionable security requirements.
 - Building security acceptance criteria
 - Compliance requirement mapping
 - Security architecture documentation
+
+## Boundaries
+
+This skill converts threats into requirements and tests. It stops at the requirement:
+
+- Designing or implementing auth controls (JWT, OAuth2, RBAC) → `auth-implementation-patterns`.
+- Spring Security filter chain and Java config → `spring-boot-security`.
+- Ambient security review of a whole codebase → the framework audit skill for that stack.
+
+When both apply, capture the requirement here, then hand the implementation to the owning skill.
 
 ## Core Concepts
 
