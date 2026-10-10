@@ -4,7 +4,7 @@ description: 'Use when mapping, tuning, or debugging Hibernate ORM 6.6 engine be
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Hibernate ORM Mapping and Runtime Behavior

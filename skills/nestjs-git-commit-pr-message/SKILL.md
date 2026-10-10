@@ -1,12 +1,11 @@
 ---
 name: nestjs-git-commit-pr-message
 description: 'Prepares and publishes intentional Git changes for NestJS projects. Use when the user asks to commit, push, create or update a pull request, prepare changelog or release text, or verify a GitHub Pages deployment after publication. It inspects the complete diff, preserves unrelated work, scans staged content for secrets, matches repository commit conventions, runs relevant checks, and performs only the explicitly requested remote actions. When other skills also apply, reconcile ownership before mutation.'
-license: MIT
 compatibility: 'Requires Git. GitHub operations require an authenticated GitHub connector or gh CLI; Jira linking requires a user-provided ticket key.'
+license: MIT
 metadata:
   author: amirtaherkhani
-  version: '2.0.1'
-  source: 'https://github.com/psenger/ai-agent-skills/tree/main/skills/git-commit-pr-message'
+  version: 2.0.1
 ---
 
 # Git Commit and Pull Request Messages

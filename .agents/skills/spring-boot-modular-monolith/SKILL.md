@@ -4,7 +4,7 @@ description: 'Use when defining Spring Modulith application modules, named inter
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Modulith Modular Monolith

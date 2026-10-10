@@ -1,6 +1,10 @@
 ---
 name: clean-skill-install
 description: Use when the user asks an agent to install, add, import, update, or publish skills in this repository. Enforces the clean universal workflow, avoids scattered agent folders, syncs the public skills mirror, regenerates inventory, validates the repo, and provides the correct install command for target projects.
+license: MIT
+metadata:
+  author: Walthergl66
+  version: 1.0.0
 ---
 
 # Clean Skill Install

@@ -10,6 +10,10 @@ description: >
   Java security config - use spring-boot-security. Do not use for NestJS guards,
   pipes, and interceptors - use nestjs-features-performance. This skill decides
   the scheme; the framework skill decides the wiring.
+license: MIT
+metadata:
+  author: wshobson
+  version: 1.0.0
 ---
 
 # Authentication & Authorization Implementation Patterns

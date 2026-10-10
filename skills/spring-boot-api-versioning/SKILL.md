@@ -4,7 +4,7 @@ description: 'Use when choosing or implementing an API versioning strategy in Sp
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot API Versioning

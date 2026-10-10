@@ -4,7 +4,7 @@ description: 'Use when generating, reviewing, gating, or publishing the OpenAPI 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot OpenAPI Contract

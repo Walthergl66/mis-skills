@@ -4,7 +4,7 @@ description: 'Use when tracing a Spring MVC request from DispatcherServlet to a 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring MVC Request Lifecycle, Filters, and Async

@@ -4,7 +4,7 @@ description: 'Use when a Spring Boot 3.5 test must run against a real PostgreSQL
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Testcontainers for Spring Boot Tests

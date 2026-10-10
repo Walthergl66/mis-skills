@@ -4,7 +4,7 @@ description: 'Use when exposing, securing, or debugging Spring Boot 3.5 Actuator
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot Actuator, Probes, and Shutdown

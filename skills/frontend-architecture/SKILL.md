@@ -1,9 +1,12 @@
 ---
 name: frontend-architecture
 description: A portable, framework-agnostic architecture style for any React or React Native frontend. Organizes apps into feature modules with page/screen directories, a strict server-state vs UI-state split, barrel-only cross-module imports, co-located styles, and clear component-promotion rules. State-management agnostic (Zustand, Redux Toolkit, MobX, Jotai, Valtio, or Context). Styling agnostic (Tailwind, CSS Modules, Tamagui, StyleSheet, styled-components). Use this skill when scaffolding a new app, adding a feature or module, deciding where a component, hook, or piece of state should live, naming types and interfaces, or reviewing folder structure and import boundaries. Works with Next.js App Router, React + Vite SPA, Remix, and Expo / React Native.
-license: MIT — use, copy, and adapt freely.
 compatibility: Works with Claude Code, OpenCode, Codex, Cursor, Windsurf, Copilot, and any tool that reads SKILL.md or is pointed here from AGENTS.md / CLAUDE.md.
 keywords: frontend architecture, react, react native, expo, nextjs, vite, remix, feature modules, folder structure, project structure, state management, zustand, redux, mobx, jotai, tanstack query, barrel exports, tamagui, tailwind, styling conventions, naming conventions, scalable
+license: MIT
+metadata:
+  author: stareezy-1
+  version: 1.0.0
 ---
 
 # Frontend Architecture (portable, module-based)

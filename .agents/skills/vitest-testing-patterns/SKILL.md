@@ -2,14 +2,10 @@
 name: vitest-testing-patterns
 description: 'Use when writing, reviewing, or repairing JavaScript or TypeScript tests with Vitest and React Testing Library: unit tests for utilities, component tests, mocks for API calls, databases, or external services, integration patterns, coverage, and CI setup. Triggers include vitest.config.ts, jsdom, setup file, vi.mock, mocking, coverage, React Testing Library, and npm test. Do not use for end-to-end browser tests (Playwright or Cypress directly), JVM tests (spring-boot-junit owns those), or API contract testing tools.'
 allowed-tools: Read,Write,Edit,Bash(npm:*,npx:*)
+license: MIT
 metadata:
-  category: Code Quality & Testing
-  tags:
-  - testing
-  - code
-  - automation
-  - jest
-  - react
+  author: curiositech
+  version: 1.0.0
 ---
 
 # Vitest Testing Patterns

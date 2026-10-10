@@ -4,7 +4,7 @@ description: 'Use when designing, repairing, or reviewing the delivery pipeline 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot Delivery Pipeline

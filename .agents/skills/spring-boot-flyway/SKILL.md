@@ -4,7 +4,7 @@ description: 'Use when authoring, ordering, baselining, repairing, or validating
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Flyway Migration Authoring and Deployment

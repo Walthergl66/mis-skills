@@ -4,7 +4,7 @@ description: 'Use when enforcing the dependency rule in a Spring Boot service, c
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Clean Architecture In Spring Boot

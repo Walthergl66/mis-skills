@@ -1,9 +1,12 @@
 ---
 name: frontend-lighthouse
 description: A portable, framework-agnostic Lighthouse CI performance-gate system for any web frontend. Enforces Core Web Vitals budgets (LCP, INP via the TBT lab proxy, CLS) and category score floors (performance, SEO, accessibility, best-practices) as a blocking CI check on every pull request. Runs Lighthouse against the production build with median-of-N runs for stability, on mobile emulation by default with an opt-in desktop form factor. Ships a single `lighthouserc.cjs` config, an npm `lhci` script, and a GitHub Actions workflow. Use this skill when adding performance gates to a project, configuring Lighthouse CI, tuning Core Web Vitals budgets, setting category score thresholds, wiring a Lighthouse GitHub Action, or debugging flaky or failing Lighthouse runs. Works with Next.js, Remix, Astro, SvelteKit, Vite, or any app that serves a production build over HTTP.
-license: MIT — use, copy, and adapt freely.
 compatibility: Works with Claude Code, OpenCode, Codex, Cursor, Windsurf, Copilot, and any tool that reads SKILL.md or is pointed here from AGENTS.md / CLAUDE.md.
 keywords: lighthouse, lighthouse ci, lhci, core web vitals, cwv, performance budget, LCP, INP, CLS, TBT, total blocking time, web performance, performance gate, github actions, ci, seo score, accessibility score, best practices, mobile emulation, web vitals, pagespeed
+license: MIT
+metadata:
+  author: stareezy-1
+  version: 1.0.0
 ---
 
 # Frontend Lighthouse (portable performance gate)

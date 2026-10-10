@@ -4,7 +4,7 @@ description: 'Use when configuring SecurityFilterChain beans and their order, ch
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Security Configuration, Authorization, and Tokens

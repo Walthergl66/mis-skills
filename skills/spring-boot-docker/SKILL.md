@@ -4,7 +4,7 @@ description: 'Use when building or reviewing a container image for a Spring Boot
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot Container Images

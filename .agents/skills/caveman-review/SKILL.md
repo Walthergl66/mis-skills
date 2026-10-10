@@ -5,6 +5,10 @@ description: >
   the actionable signal. Each comment is one line: location, problem, fix. Use when user
   says "review this PR", "code review", "review the diff", "/review", or invokes
   /caveman-review. Auto-triggers when reviewing pull requests.
+license: MIT
+metadata:
+  author: juliusbrussee
+  version: 1.0.0
 ---
 
 Write code review comments terse and actionable. One line per finding. Location, problem, fix. No throat-clearing.

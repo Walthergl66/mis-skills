@@ -10,6 +10,10 @@ description: >
   mapping". Do not use to design or implement the controls themselves - for auth
   mechanics use auth-implementation-patterns, for Spring Security wiring use
   spring-boot-security. This skill produces the requirements, not the code.
+license: MIT
+metadata:
+  author: wshobson
+  version: 1.0.0
 ---
 
 # Security Requirement Extraction

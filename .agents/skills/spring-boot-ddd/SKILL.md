@@ -4,7 +4,7 @@ description: 'Use when modelling bounded contexts, aggregates, entity identity, 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Domain Driven Design In Spring Boot

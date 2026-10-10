@@ -4,7 +4,7 @@ description: 'Use when designing or reviewing test doubles in a Spring Boot 3.5 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Test Doubles with Mockito and Spring Test Overrides

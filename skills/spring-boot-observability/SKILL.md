@@ -4,7 +4,7 @@ description: 'Use when adding or reviewing metrics, traces, and instrumentation 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot Metrics, Traces, and Instrumentation

@@ -4,7 +4,7 @@ description: 'Use when writing, restructuring, naming, or running JUnit 5 tests 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # JUnit 5 Mechanics for Spring Boot Services

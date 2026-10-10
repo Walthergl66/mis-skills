@@ -4,7 +4,7 @@ description: 'Use when configuring or reviewing logging in a Spring Boot 3.5 ser
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot Logging and Log Structure

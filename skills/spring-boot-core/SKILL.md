@@ -4,7 +4,7 @@ description: 'Use when picking Spring Boot starters, writing or repairing auto-c
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot Core, Auto-Configuration, and Configuration

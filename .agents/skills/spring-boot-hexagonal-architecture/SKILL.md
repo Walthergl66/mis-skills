@@ -4,7 +4,7 @@ description: 'Use when defining or reviewing port interfaces, driven adapters, c
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Hexagonal Architecture In Spring Boot

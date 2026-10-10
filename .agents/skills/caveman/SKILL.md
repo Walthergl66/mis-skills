@@ -8,6 +8,10 @@ description: >
   "be brief", or invokes /caveman. Also auto-triggers when token efficiency is requested.
   Handles /caveman-help and "caveman help" by printing a one-shot reference card
   (modes, sibling skills, and how to set the default mode) without changing the active mode.
+license: MIT
+metadata:
+  author: juliusbrussee
+  version: 1.0.0
 ---
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.

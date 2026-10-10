@@ -1,9 +1,12 @@
 ---
 name: frontend-seo
 description: A portable, framework-agnostic SEO system for any React or React Native-for-web frontend. Centralizes site metadata in one constants module, derives canonical URLs from a single base, builds per-route metadata (title, description, canonical, Open Graph, Twitter/X cards), generates sitemap.xml, robots.txt, and an RSS feed from real content, and emits typed JSON-LD structured data (Person, WebSite, BlogPosting, CreativeWork, BreadcrumbList, FAQPage). Pure, testable builder functions with a thin framework adapter on top. Use this skill when adding SEO to a site, wiring metadata into routes, generating sitemaps/robots/feeds, adding schema.org structured data, fixing canonical URLs or duplicate-content issues, or reviewing SEO coverage. Pairs with the frontend-architecture skill (SEO lives in a service module) and works with Next.js App Router, Remix, Astro, React + Vite, and Expo Router for web.
-license: MIT — use, copy, and adapt freely.
 compatibility: Works with Claude Code, OpenCode, Codex, Cursor, Windsurf, Copilot, and any tool that reads SKILL.md or is pointed here from AGENTS.md / CLAUDE.md.
 keywords: seo, metadata, open graph, og image, twitter card, canonical url, sitemap, robots.txt, rss feed, json-ld, structured data, schema.org, BlogPosting, Person, WebSite, BreadcrumbList, FAQPage, nextjs metadata, generateMetadata, search console, indexing, crawling, react, react native web
+license: MIT
+metadata:
+  author: stareezy-1
+  version: 1.0.0
 ---
 
 # Frontend SEO (portable, builder-based)

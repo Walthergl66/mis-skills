@@ -4,7 +4,7 @@ description: 'Use when designing or changing the request and response model of a
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot DTO Design

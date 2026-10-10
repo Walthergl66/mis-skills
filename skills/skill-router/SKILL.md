@@ -4,7 +4,7 @@ description: 'Primary entry point and orchestrator for this skill repository. Us
 license: MIT
 metadata:
   author: Walthergl66
-  version: '2.0.0'
+  version: 2.0.0
 ---
 
 # Skill Router

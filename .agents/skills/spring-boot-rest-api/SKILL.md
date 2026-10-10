@@ -4,7 +4,7 @@ description: 'Use when designing or changing the HTTP contract of a Spring Boot 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Boot REST API Contract

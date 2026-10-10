@@ -1,9 +1,12 @@
 ---
 name: frontend-observability
 description: A portable, framework-agnostic field-side observability system for any React or React Native app. Establishes one typed event taxonomy (canonical event-name constants, never inline strings), a best-effort non-blocking provider fan-out so a failing or absent analytics provider can never throw into the app or block other providers, a single track() entry point exposed through a context hook, real-user Core Web Vitals (RUM) reporting that complements lab Lighthouse budgets, error reporting at deliberate boundaries, and consent/privacy gating so nothing fires before opt-in. Provider-agnostic (Firebase Analytics, GA4, Microsoft Clarity, PostHog, OpenPanel, Sentry, Vercel/Cloudflare analytics) and works the same on web and React Native via one adapter shape. Use this skill when adding analytics or product tracking, instrumenting user actions, reporting Web Vitals from real users, wiring Firebase Analytics on web or React Native, wiring error reporting, gating telemetry on consent, or designing an event schema. Pairs with the frontend-lighthouse skill (lab budgets ↔ field reality). Works with React + Vite, Next.js, Remix, and Expo / React Native.
-license: MIT — use, copy, and adapt freely.
 compatibility: Works with Claude Code, OpenCode, Codex, Cursor, Windsurf, Copilot, and any tool that reads SKILL.md or is pointed here from AGENTS.md / CLAUDE.md.
 keywords: observability, analytics, telemetry, web vitals, rum, real user monitoring, event tracking, event taxonomy, track, provider fan-out, firebase, firebase analytics, ga4, google analytics, clarity, posthog, openpanel, sentry, error reporting, consent, privacy, gdpr, LCP, INP, CLS, react, react native, expo
+license: MIT
+metadata:
+  author: stareezy-1
+  version: 1.0.0
 ---
 
 # Frontend Observability (the field side)

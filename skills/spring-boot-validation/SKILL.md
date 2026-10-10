@@ -4,7 +4,7 @@ description: 'Use when applying Jakarta Bean Validation in a Spring Boot service
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Jakarta Bean Validation in Spring Boot

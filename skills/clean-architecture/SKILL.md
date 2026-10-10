@@ -4,7 +4,7 @@ description: 'Structure software around the Dependency Rule: source code depende
 license: MIT
 metadata:
   author: wondelai
-  version: "1.4.0"
+  version: 1.4.0
 ---
 
 # Clean Architecture Framework

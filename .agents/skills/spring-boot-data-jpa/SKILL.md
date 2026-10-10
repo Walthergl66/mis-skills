@@ -4,7 +4,7 @@ description: 'Use when designing Spring Data JPA repository interfaces, mapping 
 license: MIT
 metadata:
   author: Walthergl66
-  version: '1.0.0'
+  version: 1.0.0
 ---
 
 # Spring Data JPA Repositories, Transactions, and Fetching
