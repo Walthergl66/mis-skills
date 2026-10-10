@@ -1,0 +1,56 @@
+{
+  "skill": "frontend-seo",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "add-seo-system-to-site",
+      "prompt": "I want proper SEO on my portfolio site without copy-pasting meta tags on every page. How should I set it up?",
+      "expectations": [
+        "Creates one constants/seo module as the single source of truth for site identity (URL, name, description, keywords, author, handles, OG image, verification).",
+        "Adds types/seo and a services/seo barrel exposing pure builders (canonicalUrl, buildMetadata, sitemapEntries, robots, rssItems, structuredData).",
+        "Sets global metadata (title template, default OG/Twitter cards, robots, verification, manifest) once in the root layout.",
+        "Keeps builders framework-free except the single buildMetadata adapter; route files mount builder output."
+      ]
+    },
+    {
+      "id": "canonical-url-single-function",
+      "prompt": "Some of my links have trailing slashes and some don't, and Google is indexing duplicates. What's the fix?",
+      "expectations": [
+        "Routes every absolute URL through a single canonicalUrl(path) function instead of manual SITE_URL + path concatenation.",
+        "canonicalUrl guarantees absolute, trailing-slash-normalized, double-slash-free URLs (root returns SITE_URL with no trailing slash).",
+        "Applies one trailing-slash policy everywhere (this skill: no trailing slash).",
+        "Ensures every OG url, sitemap url, RSS link, and JSON-LD @id/url goes through canonicalUrl."
+      ]
+    },
+    {
+      "id": "generate-discovery-surfaces",
+      "prompt": "How do I create sitemap.xml, robots.txt, and an RSS feed that stay in sync with my blog posts?",
+      "expectations": [
+        "Generates sitemap.xml, robots.txt, and the RSS feed from the same content collections the app renders, deduped and all absolute.",
+        "Sitemap entries are produced by a sitemapEntries() builder and mounted by a thin app/sitemap.ts adapter.",
+        "robots disallows private surfaces (/api/, /admin/, build internals) and points at the sitemap.",
+        "RSS items sort newest-first and CDATA-wrap titles/descriptions so apostrophes and markup never break the feed."
+      ]
+    },
+    {
+      "id": "typed-jsonld-cross-referenced",
+      "prompt": "What structured data should my blog post page emit, and how do I avoid repeating the author everywhere?",
+      "expectations": [
+        "Emits a BlogPosting for the post plus a BreadcrumbList on the nested page, using the shared structuredData/JsonLd builders.",
+        "Gives each entity a stable @id (e.g. ${SITE_URL}/#person) and references it elsewhere instead of duplicating fields.",
+        "Places Person + WebSite on the home page and FAQPage only where real Q&A is shown.",
+        "Injects via a script type=\"application/ld+json\" with JSON.stringify and recommends validating with Google's Rich Results Test."
+      ]
+    },
+    {
+      "id": "dynamic-route-metadata-override",
+      "prompt": "My blog [slug] pages all show the same title and description in search results. How do I give each post its own metadata?",
+      "expectations": [
+        "Uses a dynamic generateMetadata (or equivalent adapter) that loads the entity and calls buildMetadata({ path, title, description, ogImage }).",
+        "Uses a title template so child pages don't repeat the site name.",
+        "Overrides per route only what differs from the global layout defaults.",
+        "Ensures each page resolves exactly one canonical — never duplicate or relative canonicals."
+      ]
+    }
+  ]
+}
