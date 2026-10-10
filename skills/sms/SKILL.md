@@ -311,18 +311,18 @@ Keep recommendations specific. Don't say "send an SMS at the right time" — say
 
 ## Tool Integrations
 
-For implementation, see the [tools registry](../../tools/REGISTRY.md). Key SMS tools:
+For implementation, key SMS tools:
 
-| Tool | Best For | MCP | Guide |
-|------|----------|:---:|-------|
-| **Klaviyo** | E-commerce email + SMS combined | ✓ | [klaviyo.md](../../tools/integrations/klaviyo.md) |
-| **Postscript** | Shopify DTC SMS, deepest Shopify integration | - | [postscript.md](../../tools/integrations/postscript.md) |
-| **Attentive** | Mid-market+ DTC SMS, full-service | - | [attentive.md](../../tools/integrations/attentive.md) |
-| **Twilio** | Raw API for custom builds, transactional, dev-first | - | [twilio.md](../../tools/integrations/twilio.md) |
-| **Plivo** | Twilio alternative, lower per-send cost | - | [plivo.md](../../tools/integrations/plivo.md) |
-| **AudienceTap** | AI-forward DTC, on-pack QR opt-in | - | [audiencetap.md](../../tools/integrations/audiencetap.md) |
-| **Brevo** | EU email + SMS, SMB-friendly | ✓ | [brevo.md](../../tools/integrations/brevo.md) |
-| **Customer.io** | Behavior-based SMS automation | - | [customer-io.md](../../tools/integrations/customer-io.md) |
+| Tool | Best For | MCP |
+| ------ | ---------- | :---: |
+| **Klaviyo** | E-commerce email + SMS combined | ✓ |
+| **Postscript** | Shopify DTC SMS, deepest Shopify integration | - |
+| **Attentive** | Mid-market+ DTC SMS, full-service | - |
+| **Twilio** | Raw API for custom builds, transactional, dev-first | - |
+| **Plivo** | Twilio alternative, lower per-send cost | - |
+| **AudienceTap** | AI-forward DTC, on-pack QR opt-in | - |
+| **Brevo** | EU email + SMS, SMB-friendly | ✓ |
+| **Customer.io** | Behavior-based SMS automation | - |
 
 ---
 

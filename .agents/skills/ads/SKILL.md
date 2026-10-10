@@ -386,16 +386,16 @@ If any check fails, rewrite before responding. Do not ship partial RSAs.
 
 ## Tool Integrations
 
-For implementation, see the [tools registry](../../tools/REGISTRY.md). Key advertising platforms:
+For implementation, key advertising platforms:
 
-| Platform | Best For | MCP | Guide |
-|----------|----------|:---:|-------|
-| **Google Ads** | Search intent, high-intent traffic | ✓ | [google-ads.md](../../tools/integrations/google-ads.md) |
-| **Meta Ads** | Demand gen, visual products, B2C | - | [meta-ads.md](../../tools/integrations/meta-ads.md) |
-| **LinkedIn Ads** | B2B, job title targeting | - | [linkedin-ads.md](../../tools/integrations/linkedin-ads.md) |
-| **TikTok Ads** | Younger demographics, video | - | [tiktok-ads.md](../../tools/integrations/tiktok-ads.md) |
+| Platform | Best For | MCP |
+| ---------- | ---------- | :---: |
+| **Google Ads** | Search intent, high-intent traffic | ✓ |
+| **Meta Ads** | Demand gen, visual products, B2C | - |
+| **LinkedIn Ads** | B2B, job title targeting | - |
+| **TikTok Ads** | Younger demographics, video | - |
 
-For tracking setup, see [references/conversion-tracking.md](references/conversion-tracking.md), [ga4.md](../../tools/integrations/ga4.md), [segment.md](../../tools/integrations/segment.md)
+For tracking setup, see [references/conversion-tracking.md](references/conversion-tracking.md), GA4, Segment
 
 ---
 
