@@ -1,0 +1,66 @@
+{
+  "skill": "frontend-optimistic-mutations",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "mark-paid-optimistic-lifecycle",
+      "prompt": "I want clicking 'mark paid' on an invoice to update the UI instantly but roll back if the server fails. How do I write that with TanStack Query?",
+      "expectations": [
+        "Implements the fixed five beats: cancel in-flight queries, snapshot affected caches, patch the cache, roll back verbatim on error, invalidate on settle.",
+        "Calls queryClient.cancelQueries in onMutate before patching so a late refetch cannot clobber the optimistic state.",
+        "Stores the previous detail value and every list page snapshot in the mutation context and restores them verbatim in onError.",
+        "Calls invalidateQueries in onSettled (on both success and error) so server-computed fields like paidAt refetch."
+      ]
+    },
+    {
+      "id": "detail-and-lists-lockstep",
+      "prompt": "After I optimistically change an invoice status, the detail page updates but the list still shows the old badge. Why?",
+      "expectations": [
+        "Explains the entity lives in multiple caches: its detail plus every filtered/paginated list page, and all must be patched together.",
+        "Uses a hierarchical key factory (invoiceKeys.all / lists() / list(params) / detail(id)) to target caches precisely.",
+        "Enumerates every cached list page with getQueriesData({ queryKey: invoiceKeys.lists() }) and patches the matching row.",
+        "Snapshots each touched page keyed by its exact query key so rollback restores every page, not just the visible one."
+      ]
+    },
+    {
+      "id": "idempotency-key-at-intent-time",
+      "prompt": "A user got double-charged when a payment request retried. How do I make the write safe to retry?",
+      "expectations": [
+        "Generates the idempotency key once at form init / first user intent (e.g. useMemo(() => crypto.randomUUID(), [])), carried across retries.",
+        "Warns that generating the key inside mutationFn re-runs per retry and defeats the purpose.",
+        "Forwards the key to the client which sends it as a header so the server replays the original response for a repeated key.",
+        "Pairs idempotency with a disabled-while-pending UI so the user can't fire a second distinct write."
+      ]
+    },
+    {
+      "id": "retry-policy-for-writes",
+      "prompt": "Should my mutations auto-retry like my queries do? Sometimes I get a 409 and it keeps hammering the server.",
+      "expectations": [
+        "Says non-idempotent writes must not auto-retry; retry only when an idempotency key guarantees replay or only on network errors (status 0).",
+        "Never retries on 4xx responses.",
+        "Specifically does not retry 409 conflicts — surface the typed error, invalidate, and let the user re-decide on fresh data.",
+        "Shows a bounded network-only retry such as retry: (count, error) => error.isNetworkError && count < 2."
+      ]
+    },
+    {
+      "id": "when-not-optimistic-create",
+      "prompt": "I want to optimistically add a new invoice to the list before the server assigns an id and total. Good idea?",
+      "expectations": [
+        "Explains a create that returns server-generated fields (id/number/total) cannot be fully optimistic; use a pending state instead.",
+        "On success, seeds the detail cache with the server response and invalidates the lists.",
+        "Notes a temporary optimistic row is optional but must reconcile on success.",
+        "Cites the decision table: high-confidence low-conflict writes are optimistic; destructive or hard-to-reverse writes confirm first and are never silent-optimistic."
+      ]
+    },
+    {
+      "id": "server-state-never-in-client-store",
+      "prompt": "Can I keep the optimistic invoice state in my Zustand store so components read it faster?",
+      "expectations": [
+        "Rejects copying server state into a client store; optimistic state lives in the query cache.",
+        "States the query cache is the single source of truth for server data (per frontend-architecture).",
+        "Notes rollback and invalidation only work when the cache owns the state.",
+        "Reinforces that query keys come from a hierarchical factory and invalidation is scoped, not global-blunt."
+      ]
+    }
+  ]
+}
