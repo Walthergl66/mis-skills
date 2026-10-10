@@ -1,0 +1,64 @@
+{
+  "skill": "cavecrew",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "locate-symbol-investigator",
+      "prompt": "Where is the `parseConfig` function defined, and what calls it? Delegate it to keep your context small.",
+      "expectations": [
+        "Selects `cavecrew-investigator` for the locate task rather than doing the search inline or using vanilla `Explore`.",
+        "Output contract is file-path-first with line-number attachment and backticked symbols, matching `<path:line> — \\`symbol\\` — short note`.",
+        "Ends with a `totals:` line or exactly `No match.` when nothing is found.",
+        "Notes that output is safe to grep with a `path:\\d+` pattern."
+      ]
+    },
+    {
+      "id": "save-context-routing",
+      "prompt": "This session is getting long and I don't want to blow my context. Use cavecrew so the subagent results come back compressed.",
+      "expectations": [
+        "Explains the cavecrew win: subagent tool results injected into main context are ~60% smaller than vanilla agents.",
+        "Applies the rule of thumb: pick cavecrew when the output is wanted in 1/3 the tokens, vanilla when prose is wanted.",
+        "Routes a locate-style task to `cavecrew-investigator` and a diff review to `cavecrew-reviewer`.",
+        "Does not route a new feature / 3+ file cross-cutting refactor to `cavecrew-builder`."
+      ]
+    },
+    {
+      "id": "too-big-refactor-boundary",
+      "prompt": "Spawn cavecrew-builder and let it do a full refactor across about eight files to rename this module everywhere.",
+      "expectations": [
+        "Refuses to hand a 5+ file cross-cutting refactor to `cavecrew-builder`.",
+        "States the builder is scoped to surgical edits of <=2 files and will return the terminal token `too-big.`.",
+        "Suggests the main thread or `feature-dev:code-architect` for the multi-file refactor instead.",
+        "Does not chain `cavecrew-investigator -> cavecrew-builder` for a 5-file refactor."
+      ]
+    },
+    {
+      "id": "review-diff-contract",
+      "prompt": "Review this diff for bugs before I merge.",
+      "expectations": [
+        "Selects `cavecrew-reviewer` rather than `Code Reviewer` for findings-only output.",
+        "Formats each finding as `path:line: <emoji> <severity>: <problem>. <fix>.`.",
+        "Ends with a `totals: N🔴 N🟡 N🔵 N❓` line or `No issues.` when clean.",
+        "Sorts findings by file then line ascending and does not add architecture opinions or 'general feedback'."
+      ]
+    },
+    {
+      "id": "one-line-no-subagent",
+      "prompt": "Quick one: which file holds the package version string? I'm pretty sure I know already, just confirm.",
+      "expectations": [
+        "Does not spawn a cavecrew subagent for a one-line answer the main thread already knows.",
+        "Applies the table rule for 'One-line answer you already know' -> Main thread, no subagent.",
+        "Avoids spending a delegation turn when there is no context-saving benefit."
+      ]
+    },
+    {
+      "id": "auto-clarity-security",
+      "prompt": "Have cavecrew write the summary, but the change I'm about to make drops the production database — make sure the warning is clear.",
+      "expectations": [
+        "Drops caveman/terse output for the security or irreversible-action warning, using normal English.",
+        "Acknowledges the inherited auto-clarity rule that covers security warnings and irreversible-action confirmations.",
+        "Resumes compressed cavecrew output only after the clear warning portion is done."
+      ]
+    }
+  ]
+}
