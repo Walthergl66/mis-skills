@@ -1,0 +1,29 @@
+name: validate
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate skills
+        run: npm run validate
+
+      - name: Check inventory is up to date
+        run: |
+          npm run inventory
+          git diff --exit-code -- docs/SKILLS.md
+
+      - name: Check public mirror is in sync
+        run: |
+          npm run sync -- package
+          git diff --exit-code -- skills
