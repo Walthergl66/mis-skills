@@ -131,7 +131,7 @@ Inject the application `Validator` and call `validate(target, group)`, because v
 
 ## The validation error contract
 
-1. One shape for every failure: a `ProblemDetail` with an `errors` extension returned as `application/problem+json` with 400.
+1. One shape for every failure: a `ProblemDetail` with an `errors` extension returned as `application/problem+json`. The status is owned by `spring-boot-rest-api`: a validation failure is `422` with code `VALIDATION_FAILED`, not `400`.
 2. Each entry carries a field path, a message, and a stable code. Never a stack trace, never the entity class, never the rejected value.
 3. Sort deterministically, for example by field path, and deduplicate identical field and code pairs produced by a cascade.
 4. Map the framework exception types to that one shape: `MethodArgumentNotValidException` for bodies, `HandlerMethodValidationException` for parameters, `BindValidationException` for configuration, `ConstraintViolationException` for service-level.

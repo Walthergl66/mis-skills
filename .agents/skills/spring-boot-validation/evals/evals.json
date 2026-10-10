@@ -43,6 +43,7 @@
       "prompt": "Our validation errors come back in three different shapes depending on whether the violation came from a body, a query parameter, or a service method. Normalize them.",
       "expectations": [
         "Maps MethodArgumentNotValidException, HandlerMethodValidationException, and ConstraintViolationException into one ProblemDetail body",
+        "Uses status 422 with code VALIDATION_FAILED, deferring the status policy to spring-boot-rest-api rather than returning 400",
         "Includes field, code, and message per entry with deterministic ordering and deduplication",
         "Excludes the rejected value, the entity class, and the raw exception message, and pins the shape with a contract test"
       ]

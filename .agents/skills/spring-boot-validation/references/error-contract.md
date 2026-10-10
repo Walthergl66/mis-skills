@@ -19,8 +19,8 @@ Map all five into one shape. A client should not need to know which mechanism pr
 ```json
 {
   "type": "https://api.acme.example/problems/validation-failed",
-  "title": "Bad Request",
-  "status": 400,
+  "title": "Validation Failed",
+  "status": 422,
   "detail": "The request payload contains 2 invalid fields",
   "instance": "/api/orders",
   "errors": [
@@ -104,7 +104,7 @@ class ValidationErrorHandler {
     ResponseEntity<ProblemDetail> onInvalidBody(MethodArgumentNotValidException exception) {
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         List<ApiError> errors = ApiError.fromFieldErrors(fieldErrors);
-        return response(HttpStatus.BAD_REQUEST, "validation-failed", "The request payload is invalid", errors);
+        return response(HttpStatus.UNPROCESSABLE_ENTITY, "validation-failed", "The request payload is invalid", errors);
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
@@ -114,7 +114,7 @@ class ValidationErrorHandler {
                         .map(error -> new ApiError(parameterName(result), codeOf(error), error.getDefaultMessage())))
                 .sorted(Comparator.comparing(ApiError::field))
                 .toList();
-        return response(HttpStatus.BAD_REQUEST, "validation-failed", "A request parameter is invalid", errors);
+        return response(HttpStatus.UNPROCESSABLE_ENTITY, "validation-failed", "A request parameter is invalid", errors);
     }
 
     private static String codeOf(MessageSourceResolvable error) {
@@ -143,7 +143,7 @@ class ValidationErrorHandler {
 | Use `@RestControllerAdvice` and return `ResponseEntity<ProblemDetail>` | The body is serialized as `application/problem+json` |
 | `setProperty("errors", ...)` for the extension | `ProblemDetail` extensions are the RFC 9457 mechanism for extra members |
 | Handler methods for the four validation exceptions, and nothing catch-all | A catch-all hides real failures |
-| Return 400 for every validation class | The status is part of the contract |
+| Return 422 for every validation class | The status `VALIDATION_FAILED` is owned by `spring-boot-rest-api` and is part of the contract; a parsed body that violates a rule is `422`, only an unparseable body is `400` |
 | Handle configuration and service violations as 500 or a startup failure | They are not client input errors; the instance is broken |
 
 ## Messages and localization
