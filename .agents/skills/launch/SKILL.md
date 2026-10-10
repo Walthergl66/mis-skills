@@ -345,7 +345,7 @@ Even small changelog updates remind customers your product is evolving. This bui
 
 ## Related Skills
 
-- **marketing-ideas**: For additional launch tactics (#22 Product Hunt, #23 Early Access Referrals)
+- **marketing-ideas**: For additional launch tactics (#78 Product Hunt Launch, #79 Early-Access Referrals)
 - **emails**: For launch and onboarding email sequences
 - **cro**: For optimizing launch landing pages
 - **marketing-psychology**: For psychology behind waitlists and exclusivity
