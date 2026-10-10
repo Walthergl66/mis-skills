@@ -1,0 +1,66 @@
+{
+  "skill": "frontend-data-contracts",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "add-typed-api-client",
+      "prompt": "I need to set up a typed API layer for my React app so we stop calling fetch everywhere. How should it look?",
+      "expectations": [
+        "Creates exactly one apiClient in shared/api-client/ (client.ts, error.ts, types.ts, config.ts) as the only fetch boundary.",
+        "Makes every verb return the unwrapped data payload typed by the caller and throw an ApiError on failure.",
+        "Keeps the client framework-free — no toasts, router, or React inside it.",
+        "Adds a lint rule (no-restricted-imports/no-restricted-globals) banning fetch/axios outside shared/api-client/."
+      ]
+    },
+    {
+      "id": "parse-dont-validate-response",
+      "prompt": "The backend sometimes renames fields and I get undefined deep in my components. How do I stop that?",
+      "expectations": [
+        "Runs a schema parse at the boundary (e.g. Zod invoiceSchema.parse(raw)) that converts unknown wire JSON into a typed domain value.",
+        "Explains parse-don't-validate: the parsed value is trusted downstream, so components write no defensive ?. chains.",
+        "Surfaces contract drift at the edge with a typed failure instead of leaking undefined three components deep.",
+        "Notes a 2xx with an unparseable body is a contract violation that throws INVALID_RESPONSE, not a silent undefined."
+      ]
+    },
+    {
+      "id": "no-raw-fetch-in-component",
+      "prompt": "In my InvoiceList component I just do const res = await fetch('/api/invoices') and use res. Is that a problem?",
+      "expectations": [
+        "Flags the raw fetch as a boundary bypass: no fetch/axios/XMLHttpRequest outside shared/api-client/.",
+        "Routes the call through the typed client, e.g. await apiClient.get<Invoice[]>(`/invoices`).",
+        "Wraps it in a typed query/mutation hook rather than calling the client from a component.",
+        "Mentions the missing envelope unwrap and unhandled typed errors as additional problems."
+      ]
+    },
+    {
+      "id": "brand-ids-to-prevent-mixups",
+      "prompt": "My loadInvoice function keeps getting called with a customer id. Can I make the compiler catch that?",
+      "expectations": [
+        "Brands domain IDs as nominal types (InvoiceId, CustomerId) using a Brand<T, B> helper with a unique symbol.",
+        "Shows that loadInvoice(customerId) is a compile error while loadInvoice(invoiceId) passes.",
+        "Brands IDs at the parse boundary so every ID in the app is already nominal.",
+        "Notes the runtime cost is zero because brands erase at compile time."
+      ]
+    },
+    {
+      "id": "normalized-error-to-form-fields",
+      "prompt": "The server returns validation errors per field but I keep throwing new Error(string). How should I handle write failures and show them on the form?",
+      "expectations": [
+        "Collapses every failure mode (server error envelope, non-2xx, malformed body, network, abort) into one ApiError with a machine code, status, and optional fields.",
+        "Never throws a bare new Error(string) from the data layer.",
+        "Maps server per-field errors onto form fields using error.hasFieldErrors and error.fields (form.setError per field).",
+        "Never shows error.message directly to users; resolves error.messageKey through i18n instead."
+      ]
+    },
+    {
+      "id": "one-envelope-unwrapped-once",
+      "prompt": "Some endpoints return { data: ... } and 204s return nothing. How do I keep response handling consistent?",
+      "expectations": [
+        "Uses one envelope: { data } on success or { error } on failure, unwrapped once in the client.",
+        "Handles 204 No Content as undefined, { error } as a throw, and { data } as the returned payload.",
+        "Synthesizes an ApiError for a non-2xx response with no well-formed envelope.",
+        "Ensures callers only ever see a typed payload or a typed throw, never the raw envelope."
+      ]
+    }
+  ]
+}
