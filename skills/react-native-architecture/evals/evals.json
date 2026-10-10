@@ -15,7 +15,7 @@
       "id": "long-list-and-inline-styles",
       "prompt": "My React Native screen has a 5,000-item list and it's janky. Also I've been defining styles inline and fetching data inside render. What should I change?",
       "expectations": [
-        "Recommends FlashList over FlatList for long lists.",
+        "Routes the list-jank and rendering-performance fix to `react-native-best-practices` (FlashList, memoization, and Reanimated are owned there).",
         "Says to stop inlining styles and use StyleSheet.create for performance.",
         "Says to stop fetching in render and move data fetching to useEffect or React Query."
       ]

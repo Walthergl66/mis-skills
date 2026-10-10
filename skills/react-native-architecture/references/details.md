@@ -462,68 +462,9 @@ const styles = StyleSheet.create({
 })
 ```
 
-### Pattern 6: Performance Optimization
+### Pattern 6 onward
 
-```typescript
-// components/ProductList.tsx
-import { FlashList } from '@shopify/flash-list'
-import { memo, useCallback } from 'react'
-
-interface ProductListProps {
-  products: Product[]
-  onProductPress: (id: string) => void
-}
-
-// Memoize list item
-const ProductItem = memo(function ProductItem({
-  item,
-  onPress,
-}: {
-  item: Product
-  onPress: (id: string) => void
-}) {
-  const handlePress = useCallback(() => onPress(item.id), [item.id, onPress])
-
-  return (
-    <Pressable onPress={handlePress} style={styles.item}>
-      <FastImage
-        source={{ uri: item.image }}
-        style={styles.image}
-        resizeMode="cover"
-      />
-      <Text style={styles.title}>{item.name}</Text>
-      <Text style={styles.price}>${item.price}</Text>
-    </Pressable>
-  )
-})
-
-export function ProductList({ products, onProductPress }: ProductListProps) {
-  const renderItem = useCallback(
-    ({ item }: { item: Product }) => (
-      <ProductItem item={item} onPress={onProductPress} />
-    ),
-    [onProductPress]
-  )
-
-  const keyExtractor = useCallback((item: Product) => item.id, [])
-
-  return (
-    <FlashList
-      data={products}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      estimatedItemSize={100}
-      // Performance optimizations
-      removeClippedSubviews={true}
-      maxToRenderPerBatch={10}
-      windowSize={5}
-      // Pull to refresh
-      onRefresh={onRefresh}
-      refreshing={isRefreshing}
-    />
-  )
-}
-```
+List and rendering performance — `FlashList` versus `FlatList`, `memo`/`useCallback`, Reanimated, and worklets — is owned by `react-native-best-practices`. Use this skill for app-level structure (navigation, native modules, offline sync) and take list and animation performance there.
 
 ## EAS Build & Submit
 

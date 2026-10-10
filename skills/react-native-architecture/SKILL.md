@@ -13,8 +13,14 @@ Production-ready patterns for React Native development with Expo, including navi
 - Implementing complex navigation patterns
 - Integrating native modules and platform APIs
 - Building offline-first mobile applications
-- Optimizing React Native performance
 - Setting up CI/CD for mobile releases
+
+## Boundaries
+
+This skill owns app-level structure: navigation, native modules, offline sync, and project layout. It does not own RN code mechanics:
+
+- Rendering performance, `FlashList`, memoization, Reanimated, worklets, Fabric, and TurboModules → `react-native-best-practices` (it applies first in any RN or Expo task).
+- Portable feature-module and state layout shared with React web → `frontend-architecture`.
 
 ## Core Concepts
 
@@ -88,10 +94,8 @@ Detailed pattern documentation lives in `references/details.md`. Read that file 
 ### Do's
 
 - **Use Expo** - Faster development, OTA updates, managed native code
-- **FlashList over FlatList** - Better performance for long lists
-- **Memoize components** - Prevent unnecessary re-renders
-- **Use Reanimated** - 60fps animations on native thread
 - **Test on real devices** - Simulators miss real-world issues
+- **Defer RN mechanics to `react-native-best-practices`** - rendering performance, FlashList, Reanimated, and memoization are owned there; this skill owns app structure
 
 ### Don'ts
 
