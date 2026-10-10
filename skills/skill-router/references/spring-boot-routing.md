@@ -2,6 +2,8 @@
 
 The 26 Spring Boot skills overlap by design. Use this file to pick the primary owner when a request names a framework symptom instead of a decision.
 
+> **Aliases:** bare backticked names in this file (`core`, `mvc`, `ddd`, `rest-api`, ...) are shorthand for the installed `spring-boot-` siblings. Prefix the name with `spring-boot-` before loading a skill. `clean-architecture`, `hexagonal-architecture`, `ddd`, `modular-monolith`, `rest-api`, `dto`, `api-versioning`, and `openapi` resolve to the Spring Boot family here, not to any same-named generic skill.
+
 ## Rule of precedence
 
 Inside a Spring Boot request, decide in this order. The first question that fits owns the primary slot.
