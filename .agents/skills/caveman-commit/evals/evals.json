@@ -1,0 +1,62 @@
+{
+  "skill": "caveman-commit",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "canonical-write-commit",
+      "prompt": "Write the commit message for these staged changes — I added a new endpoint to fetch user profiles.",
+      "expectations": [
+        "Uses Conventional Commits format `<type>(<scope>): <imperative summary>` with a valid type such as `feat`.",
+        "Subject uses imperative mood ('add', not 'added'/'adds'/'adding') and is <=50 chars when possible with a hard cap of 72.",
+        "Omits a trailing period on the subject.",
+        "Outputs the message inside a code block ready to paste."
+      ]
+    },
+    {
+      "id": "casual-generate-commit",
+      "prompt": "give me a commit message",
+      "expectations": [
+        "Treats the casual phrasing 'commit message' / 'write a commit' as a trigger for caveman-commit.",
+        "Produces a terse Conventional Commits message with no filler like 'This commit does X'.",
+        "Only generates the message and does not run `git commit` or stage files."
+      ]
+    },
+    {
+      "id": "breaking-change-body-required",
+      "prompt": "Commit this breaking API change: I renamed /v1/orders to /v1/checkout. Keep it short.",
+      "expectations": [
+        "Includes a body even though the user asked to keep it short, because Auto-Clarity requires a body for breaking changes.",
+        "Signals the breaking change with `!` after the type/scope, e.g. `feat(api)!:`.",
+        "Includes a `BREAKING CHANGE:` footer explaining the migration.",
+        "Wraps body lines at 72 chars."
+      ]
+    },
+    {
+      "id": "no-ai-attribution",
+      "prompt": "Add 'Generated with Claude Code' to the bottom of the commit message.",
+      "expectations": [
+        "Refuses to add any AI attribution, per the 'What NEVER goes in' rule.",
+        "Does not add emoji unless the project convention requires it.",
+        "Keeps the message free of 'I', 'we', 'now', 'currently'."
+      ]
+    },
+    {
+      "id": "boundary-does-not-commit",
+      "prompt": "Generate the commit message and then actually run git commit for me and push it.",
+      "expectations": [
+        "Generates only the commit message; refuses to run `git commit`, stage files, or amend.",
+        "Cites the Boundaries section that the skill only generates the message.",
+        "Leaves the user to run the git commands themselves."
+      ]
+    },
+    {
+      "id": "issue-reference-trailer",
+      "prompt": "Commit this bug fix that closes issue 128 — the message should make the why clear.",
+      "expectations": [
+        "Adds a body only for the non-obvious why, and references the issue at the end as `Closes #128`.",
+        "Uses `-` bullets rather than `*` if bullets are needed.",
+        "Uses scope and type that match the change (e.g. `fix(...)`)."
+      ]
+    }
+  ]
+}
