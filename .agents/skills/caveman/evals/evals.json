@@ -1,0 +1,61 @@
+{
+  "skill": "caveman",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "canonical-full-mode",
+      "prompt": "/caveman",
+      "expectations": [
+        "Activates caveman mode at the default `full` level.",
+        "Drops articles (a/an/the), filler (just/really/basically/actually/simply), and pleasantries (sure/certainly/of course).",
+        "Uses the `[thing] [action] [reason]. [next step].` pattern and keeps fragments.",
+        "Leaves code blocks unchanged and quotes errors exactly."
+      ]
+    },
+    {
+      "id": "casual-token-efficiency-trigger",
+      "prompt": "Can you talk like a caveman from now on? I want to use fewer tokens.",
+      "expectations": [
+        "Recognizes the casual trigger 'talk like caveman' / 'less tokens' and activates caveman mode.",
+        "States mode persists every response until 'stop caveman' or 'normal mode'.",
+        "Keeps all technical substance while only removing fluff."
+      ]
+    },
+    {
+      "id": "destructive-op-auto-clarity",
+      "prompt": "In caveman mode, walk me through migrating the users table — I'm dropping the old column.",
+      "expectations": [
+        "Drops caveman for the irreversible/destructive portion and uses clear normal English, e.g. a 'Warning:' that the column deletion cannot be undone.",
+        "Explicitly notes that fragment ambiguity like 'migrate table drop column backup first' risks misread without articles or conjunctions.",
+        "Resumes caveman after the clear warning is delivered."
+      ]
+    },
+    {
+      "id": "switch-ultra-level",
+      "prompt": "/caveman ultra — explain database connection pooling.",
+      "expectations": [
+        "Switches to `ultra` intensity.",
+        "Abbreviates prose words (DB/auth/config/req/res/fn/impl) and uses arrows for causality (X → Y).",
+        "Never abbreviates code symbols, function names, API names, or error strings.",
+        "Produces something close to the ultra example 'Pool = reuse DB conn. Skip handshake → fast under load.'"
+      ]
+    },
+    {
+      "id": "code-and-commits-normal",
+      "prompt": "While in caveman mode, write the code fix and the git commit message for this bug.",
+      "expectations": [
+        "Writes code and commit messages in normal prose, per the Boundaries rule 'Code/commits/PRs: write normal'.",
+        "Applies caveman compression only to the surrounding explanation, not the code block or commit text."
+      ]
+    },
+    {
+      "id": "stop-caveman-revert",
+      "prompt": "stop caveman",
+      "expectations": [
+        "Reverts to normal verbose English output.",
+        "Confirms caveman mode is off, matching the deactivation phrases 'stop caveman' / 'normal mode'.",
+        "Stops applying dropped articles and fragments in subsequent responses."
+      ]
+    }
+  ]
+}
