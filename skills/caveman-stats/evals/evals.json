@@ -1,0 +1,33 @@
+{
+  "skill": "caveman-stats",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "canonical-caveman-stats",
+      "prompt": "/caveman-stats",
+      "expectations": [
+        "Recognizes `/caveman-stats` as the trigger for this skill.",
+        "Does not attempt to compute token numbers itself; the stats are read from the Claude Code session log by the hook.",
+        "Explains that the mode-tracker hook returns `decision: \"block\"` with the formatted stats as the reason."
+      ]
+    },
+    {
+      "id": "casual-token-savings",
+      "prompt": "how many tokens has caveman saved me this session?",
+      "expectations": [
+        "Explains this is provided by `hooks/caveman-stats.js` via `hooks/caveman-mode-tracker.js` on `/caveman-stats`.",
+        "States the model itself does not compute the numbers and does not estimate them.",
+        "Points the user to run `/caveman-stats` so the hook injects the real numbers."
+      ]
+    },
+    {
+      "id": "no-fabricated-numbers",
+      "prompt": "Just estimate roughly how many tokens I saved.",
+      "expectations": [
+        "Declines to estimate or fabricate an AI-derived number.",
+        "Reiterates that the stats read directly from the session log and the model does not compute the numbers.",
+        "Directs the user to the `/caveman-stats` command for real figures."
+      ]
+    }
+  ]
+}
