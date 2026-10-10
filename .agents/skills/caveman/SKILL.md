@@ -93,7 +93,7 @@ Set `"off"` to disable auto-activation on session start. Manual `/caveman` still
 
 ## Help
 
-Trigger: `/caveman-help`, "caveman help", "what caveman commands", "how do I use caveman". One-shot: print the reference below, then stop. Do NOT change the active mode, write flag files, or persist anything. Output in caveman style. If the user wants the mode itself, tell them to run `/caveman` separately.
+Trigger: `/caveman-help`, "caveman help", "what caveman commands", "how do I use caveman". One-shot: print the reference — modes from the Intensity table above, the sibling-skills table below, and how to set the default mode — then stop. Do NOT change the active mode, write flag files, or persist anything. Output in caveman style. If the user wants the mode itself, tell them to run `/caveman` separately.
 
 Sibling skills:
 
