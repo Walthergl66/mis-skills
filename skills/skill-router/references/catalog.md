@@ -138,3 +138,17 @@ Decision tree and sequences: [spring-boot-routing.md](spring-boot-routing.md).
 | `caveman-help` | Command reference | caveman help, what caveman commands |
 | `caveman-stats` | Token usage report | caveman stats, token savings |
 | `cavecrew` | When to delegate to subagents | delegate to subagent, spawn investigator, save context |
+
+## Look-alike boundaries
+
+Resolve ties between skills that share vocabulary. The first skill named owns the decision; the second supplies the mechanism or repeats it at a narrower scope.
+
+- `clean-architecture` (framework-agnostic dependency rule) owns layer placement in the abstract; `spring-boot-clean-architecture` and `nestjs-architecture-principles` own how to place code in those specific frameworks. When the stack is named, prefer the framework skill.
+- `react-native-best-practices` owns every RN and Expo code decision and applies first; `react-native-architecture` owns app-level structure, navigation, native modules, and offline sync when no more specific RN sub-skill fits.
+- `frontend-architecture` owns module and state layout; `vercel-react-best-practices` owns runtime and rendering performance inside that layout. Structure first, performance second.
+- `auth-implementation-patterns` owns framework-agnostic auth mechanics (JWT, OAuth2, RBAC); `spring-boot-security` owns the Spring Security filter chain and Java config. For a Spring auth task the patterns skill decides the scheme and the security skill decides the wiring.
+- `vitest-testing-patterns` owns JS and TS test mechanics; `spring-boot-junit` owns JVM test mechanics. Never route a JVM test to the Vitest skill or the reverse.
+- `seo-audit` diagnoses; `ai-seo`, `programmatic-seo`, `schema`, and `site-architecture` build the fix each owns. Audit first, then the builder.
+- `copywriting` writes new copy; `copy-editing` improves existing copy. Do not route an edit to `copywriting`.
+- `marketing-plan` owns the full AARRR plan; `marketing-ideas` owns ideation and `content-strategy` owns topic planning. Plan first, then the narrower skill.
+- `competitor-profiling` produces raw competitor profiles; `competitors` turns them into comparison and alternative pages.
