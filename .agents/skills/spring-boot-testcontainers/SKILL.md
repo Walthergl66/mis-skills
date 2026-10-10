@@ -112,7 +112,7 @@ abstract class RedisContainerSupport {
 }
 ```
 
-A Kafka dependency uses `org.testcontainers.kafka.KafkaContainer` in KRaft mode with `@ServiceConnection`; the full declaration is in [container-patterns.md](container-patterns.md).
+A Kafka dependency uses `org.testcontainers.kafka.KafkaContainer` in KRaft mode with `@ServiceConnection`; the full declaration is in [container-patterns.md](references/container-patterns.md).
 
 ## Isolation, parallelism, and cleanup
 
