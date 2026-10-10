@@ -1,0 +1,60 @@
+{
+  "skill": "vercel-react-best-practices",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "api-route-waterfall",
+      "prompt": "Here's my Next.js API route. It does `const session = await auth(); const config = await fetchConfig(); const data = await fetchData(session.user.id);`. Is there a performance problem?",
+      "expectations": [
+        "Identifies a server-side waterfall and categorizes it under the CRITICAL 'Eliminating Waterfalls' priority (async-api-routes).",
+        "Recommends starting independent operations immediately (e.g. const sessionPromise = auth(); const configPromise = fetchConfig();) and awaiting with Promise.all.",
+        "Notes the 2-10x improvement the rule claims."
+      ]
+    },
+    {
+      "id": "rerender-derived-state-effect",
+      "prompt": "My React component re-renders on every keystroke and feels laggy. I store a `fullName` in useState and update it inside a useEffect whenever firstName or lastName changes.",
+      "expectations": [
+        "Cites rerender-derived-state-no-effect: derive state during render instead of storing it and syncing with an effect.",
+        "Suggests replacing the state+effect with a computed value (e.g. const fullName = firstName + ' ' + lastName).",
+        "Explains that this avoids redundant renders and state drift."
+      ]
+    },
+    {
+      "id": "barrel-imports-nextjs",
+      "prompt": "Should I rewrite all my `import { Check } from 'lucide-react'` imports to deep paths to speed up my Next.js app?",
+      "expectations": [
+        "For Next.js 13.5+, says to keep the standard imports because Next.js transforms them to direct imports (optimizePackageImports) while preserving TypeScript types.",
+        "Only recommends manual deep imports for non-Next.js projects, and warns that libraries like lucide-react do not ship types for deep paths.",
+        "Frames the issue as bundle-barrel-imports in the CRITICAL bundle size category."
+      ]
+    },
+    {
+      "id": "stray-zero-conditional-render",
+      "prompt": "When my notification count is 0, my badge shows a stray '0'. Here's the code: `{count && <span className=\"badge\">{count}</span>}`. Why?",
+      "expectations": [
+        "Explains that `&&` renders the falsy number 0 when count is 0.",
+        "Recommends an explicit ternary such as `count > 0 ? <span className=\"badge\">{count}</span> : null`.",
+        "Cites the rendering-conditional-render rule."
+      ]
+    },
+    {
+      "id": "theme-hydration-flicker",
+      "prompt": "My Next.js theme toggle flashes the default light theme before switching to dark after hydration. How do I fix it without breaking SSR?",
+      "expectations": [
+        "Explains that reading localStorage during render breaks SSR and that setting it in useEffect causes a visible flash.",
+        "Recommends injecting a synchronous inline script that sets the correct theme class on the DOM before React hydrates.",
+        "Cites rendering-hydration-no-flicker, and distinguishes it from suppressHydrationWarning which is only for expected mismatches."
+      ]
+    },
+    {
+      "id": "server-action-auth",
+      "prompt": "I have a Next.js server action: `'use server'; export async function deleteUser(userId: string) { await db.user.delete({ where: { id: userId } }) }`. Is that fine?",
+      "expectations": [
+        "Says Server Actions are public endpoints and must verify authentication and authorization inside the action itself.",
+        "Cites server-auth-actions, described as CRITICAL for preventing unauthorized mutations.",
+        "Also recommends validating input (e.g. with a schema) before performing the mutation."
+      ]
+    }
+  ]
+}
