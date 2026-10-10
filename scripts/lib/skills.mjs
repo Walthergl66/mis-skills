@@ -20,9 +20,13 @@ export function listSkillDirs(baseDir = skillsDir) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
+export function stripBom(text) {
+  return text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
+}
+
 export function parseSkillMarkdown(filePath) {
-  const body = readFileSync(filePath, "utf8");
-  const match = body.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const body = stripBom(readFileSync(filePath, "utf8"));
+  const match = body.match(/^\s*---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
   const frontmatter = match ? match[1] : "";
   const meta = {};
   const lines = frontmatter.split(/\r?\n/);
@@ -48,6 +52,7 @@ export function parseSkillMarkdown(filePath) {
   return {
     name: meta.name || "",
     description: meta.description || "",
+    hasFrontmatter: Boolean(match),
     body
   };
 }
