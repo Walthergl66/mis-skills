@@ -1,0 +1,66 @@
+{
+  "skill": "frontend-observability",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "typed-event-taxonomy",
+      "prompt": "I keep writing track(\"github-click\") in different components. How should I organize my analytics events?",
+      "expectations": [
+        "Creates one constants/analytics.ts file exporting ANALYTICS_EVENTS constants and an AnalyticsEvent union type.",
+        "Requires every call site to use ANALYTICS_EVENTS.GITHUB_CLICK, never an inline string literal.",
+        "Notes event names are snake_case and stable — renaming breaks historical dashboards, so treat the catalog as a contract.",
+        "Explains the union type makes typos a compile error (e.g. \"github-click\" vs \"github_click\")."
+      ]
+    },
+    {
+      "id": "best-effort-non-blocking-fanout",
+      "prompt": "One of our analytics providers throws sometimes and it takes down the page. How do I make tracking safe?",
+      "expectations": [
+        "Implements track() as the single entry point that iterates an adapter registry, each adapter call in its own try/catch.",
+        "Ensures a failing or absent provider can never throw into the caller or block dispatch to remaining providers.",
+        "Makes each adapter guard its provider global and no-op on the server (no window) or when the script is absent.",
+        "Keeps the adapter registry exported and mutable so tests can swap in a recording sink to assert dispatch."
+      ]
+    },
+    {
+      "id": "consent-gate-at-fanout",
+      "prompt": "We need to respect GDPR and not send any analytics before the user accepts cookies. Where should that check live?",
+      "expectations": [
+        "Checks consent once at the fan-out boundary — track() early-returns when hasConsent() is false.",
+        "Does not duplicate the consent check at every call site.",
+        "Gates events, web vitals, and error PII all through the same consent gate.",
+        "Defaults consent to false where required and keeps props PII-light (ids/enums, not emails/names)."
+      ]
+    },
+    {
+      "id": "ssr-safe-usenav-noop",
+      "prompt": "My tracked component crashes in tests and during server rendering because there's no analytics provider. How do I fix it?",
+      "expectations": [
+        "Exposes track through a 'use client' context hook, useAnalytics().",
+        "Returns a no-op (NOOP context value) when used outside a provider or on the server, so components never throw.",
+        "Wraps tracked leaves in thin client components because Server Components can't use the hook.",
+        "Keeps the provider render-work-free with a memoized/stable context value so it can mount at the root in SSR/RSC trees."
+      ]
+    },
+    {
+      "id": "field-vitals-loop",
+      "prompt": "Lighthouse says we're green but users still report the site feels slow. How can analytics help close that gap?",
+      "expectations": [
+        "Reports real-user Core Web Vitals (LCP, INP, CLS, plus FCP/TTFB) through the same track() fan-out.",
+        "Uses the same metrics and thresholds as the lighthouse skill: LCP <= 2500, INP <= 200, CLS <= 0.1.",
+        "Calls reportWebVitals() once on the client and includes name, value, rating, and id.",
+        "Explains lab-green + field-poor reveals a gap between test conditions and real devices/networks."
+      ]
+    },
+    {
+      "id": "firebase-adapter-one-shape-two-platforms",
+      "prompt": "I want Firebase Analytics on both my web app and my Expo app without forking all my tracking code. What's the approach?",
+      "expectations": [
+        "Uses one adapter shape over Firebase's shared logEvent(name, params) contract, with web and native variants resolved by file extension (.web.ts / .native.ts) or a Platform.OS switch.",
+        "On web, lazily imports firebase/analytics behind a browser-only init (initFirebaseAnalytics) so the adapter stays synchronous and SSR-safe.",
+        "On native, guards the @react-native-firebase/analytics module instead of window.",
+        "Leaves the taxonomy, track() fan-out, consent gate, and useAnalytics hook unchanged across platforms."
+      ]
+    }
+  ]
+}
