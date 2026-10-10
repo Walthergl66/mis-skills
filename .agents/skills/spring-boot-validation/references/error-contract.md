@@ -23,6 +23,7 @@ Map all five into one shape. A client should not need to know which mechanism pr
   "status": 422,
   "detail": "The request payload contains 2 invalid fields",
   "instance": "/api/orders",
+  "code": "VALIDATION_FAILED",
   "errors": [
     { "field": "customerReference", "code": "NotBlank", "message": "must not be blank" },
     { "field": "allocations[sku-1].amount", "code": "Positive", "message": "must be greater than 0" }
@@ -34,6 +35,7 @@ Map all five into one shape. A client should not need to know which mechanism pr
 | --- | --- | --- |
 | `type` | Stable URI identifying the failure class | Additive only |
 | `title` and `status` | Fixed per class | Changing a status is a breaking change |
+| `code` | The stable registry value `VALIDATION_FAILED`, owned by `spring-boot-rest-api` | Clients branch on it; never reuse it |
 | `detail` | Human-readable summary, never a system message | Free text |
 | `errors[].field` | Path exactly as the client sent it, indexed for containers | Additive only |
 | `errors[].code` | Machine-readable, derived from the constraint, not the message | Additive only |
@@ -132,6 +134,7 @@ class ValidationErrorHandler {
     private static ResponseEntity<ProblemDetail> response(HttpStatus status, String slug, String detail, List<ApiError> errors) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
         problem.setType(URI.create("https://api.acme.example/problems/" + slug));
+        problem.setProperty("code", "VALIDATION_FAILED");
         problem.setProperty("errors", errors);
         return ResponseEntity.status(status).body(problem);
     }
@@ -143,8 +146,9 @@ class ValidationErrorHandler {
 | Use `@RestControllerAdvice` and return `ResponseEntity<ProblemDetail>` | The body is serialized as `application/problem+json` |
 | `setProperty("errors", ...)` for the extension | `ProblemDetail` extensions are the RFC 9457 mechanism for extra members |
 | Handler methods for the four validation exceptions, and nothing catch-all | A catch-all hides real failures |
-| Return 422 for every validation class | The status `VALIDATION_FAILED` is owned by `spring-boot-rest-api` and is part of the contract; a parsed body that violates a rule is `422`, only an unparseable body is `400` |
-| Handle configuration and service violations as 500 or a startup failure | They are not client input errors; the instance is broken |
+| Return 422 for a request body or parameter that parses but violates a rule | The status `VALIDATION_FAILED` is owned by `spring-boot-rest-api` and is part of the contract; only an unparseable body is `400` `MALFORMED_REQUEST` |
+| Surface a service-level `ConstraintViolationException` as 422 too | A service constraint still describes invalid caller input, so it shares the validation contract |
+| Abort the context refresh on a configuration `BindValidationException` | A broken configuration is not a client error and never produces a request response |
 
 ## Messages and localization
 
