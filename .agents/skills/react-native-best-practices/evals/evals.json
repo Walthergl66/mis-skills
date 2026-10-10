@@ -1,0 +1,56 @@
+{
+  "skill": "react-native-best-practices",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "reanimated-shared-value",
+      "prompt": "How do I build a shared value animation with Reanimated in my Expo app?",
+      "expectations": [
+        "Reads and follows the relevant sub-skill file at references/animations/SKILL.md.",
+        "Covers core hooks such as useSharedValue and useAnimatedStyle.",
+        "Mentions animation functions like withSpring or withTiming where relevant."
+      ]
+    },
+    {
+      "id": "pinch-to-zoom-image",
+      "prompt": "I want pinch-to-zoom on an image in React Native. What library and pattern should I use?",
+      "expectations": [
+        "Directs to the sub-skill at references/gestures/SKILL.md.",
+        "Recommends React Native Gesture Handler (GestureDetector with a pinch gesture) rather than PanResponder."
+      ]
+    },
+    {
+      "id": "chat-with-speech-processing",
+      "prompt": "I'm building a chat feature with speech-to-text and text-to-speech in my React Native app. Where do I start?",
+      "expectations": [
+        "Directs to the sub-skill at references/on-device-ai/SKILL.md.",
+        "Identifies that speech-to-text (STT) and text-to-speech (TTS) map to the speech processing area of the on-device-ai sub-skill."
+      ]
+    },
+    {
+      "id": "offload-heavy-computation",
+      "prompt": "My React Native app freezes while computing a big diff on the JS thread. How can I move it off the JS thread?",
+      "expectations": [
+        "Directs to the sub-skill at references/multithreading/SKILL.md for react-native-worklets.",
+        "Mentions scheduleOnUI, scheduleOnRN, or createWorkletRuntime and Worker Runtimes for offloading computation from the JS thread."
+      ]
+    },
+    {
+      "id": "worklet-import-sha1-error",
+      "prompt": "I'm trying to import an npm library inside a worklet and I keep getting 'Failed to get the SHA-1' errors. What's going on?",
+      "expectations": [
+        "Recognizes this as react-native-worklets Bundle Mode setup.",
+        "Directs to the sub-skill at references/enable-worklets-bundle-mode/SKILL.md.",
+        "Mentions the mandatory metro/metro-runtime patches and the babel bundleMode plugin option."
+      ]
+    },
+    {
+      "id": "which-skill-applies-first",
+      "prompt": "I just opened this repo, it has react-native in package.json, and I'm about to edit some UI code. Anything I should do first?",
+      "expectations": [
+        "States that this skill applies because the working directory has react-native/expo as a dependency and MUST be used before writing, reviewing, or debugging React Native code.",
+        "Reads the relevant sub-skill in the references/ folder before making changes."
+      ]
+    }
+  ]
+}
