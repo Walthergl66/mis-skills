@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { listSkillDirs, rootDir, skillsDir } from "./lib/skills.mjs";
 
@@ -34,6 +34,14 @@ for (const adapter of adapters) {
       const destination = join(targetDir, skill.name);
       if (existsSync(destination)) rmSync(destination, { recursive: true, force: true });
       cpSync(skill.dir, destination, { recursive: true });
+    }
+    const skillNames = new Set(skills.map((skill) => skill.name));
+    for (const name of readdirSync(targetDir)) {
+      const dir = join(targetDir, name);
+      if (!skillNames.has(name) && statSync(dir).isDirectory()) {
+        rmSync(dir, { recursive: true, force: true });
+        console.log(`Pruned ${join(target, name)}`);
+      }
     }
     console.log(`Synced ${skills.length} skills to ${target}`);
   }
