@@ -1,0 +1,53 @@
+{
+  "skill": "humanizer",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "humanize-ai-blog-paragraph",
+      "prompt": "Humanize this paragraph for my blog post: \"AI-assisted coding serves as an enduring testament to the transformative potential of large language models, marking a pivotal moment in the evolution of software development. It's not just about autocomplete; it's about unlocking creativity at scale, ensuring teams can deliver seamless, intuitive, and powerful experiences\u2014all while fostering alignment.\"",
+      "expectations": [
+        "Produces a draft rewrite, a brief list answering what still reads as obviously AI generated, and a final rewrite.",
+        "The final rewrite contains no em dashes or en dashes.",
+        "Removes AI vocabulary such as \"testament\", \"pivotal\", and \"fostering\" and the \"not just...it's...\" negative parallelism.",
+        "Rewrites rather than deletes, preserving the core meaning and using natural, varied sentence rhythm."
+      ]
+    },
+    {
+      "id": "make-it-less-like-chatgpt",
+      "prompt": "Can you make this sound less like ChatGPT wrote it? \"Additionally, the vibrant town boasts a rich cultural heritage, showcasing its enduring commitment to tradition.\"",
+      "expectations": [
+        "Identifies the specific tells: promotional words (\"vibrant\", \"rich\", \"boasts\", \"showcasing\") plus AI words \"additionally\" and \"enduring\".",
+        "Replaces them with plain, concrete wording using simple copulas (is/are/has) instead of synonym cycling.",
+        "Does not introduce new em/en dashes in the rewrite."
+      ]
+    },
+    {
+      "id": "technical-reference-no-over-edit",
+      "prompt": "Here's a technical API reference page. It uses a couple of em dashes the way our docs style guide does. Humanize it but don't ruin it.",
+      "expectations": [
+        "Notes that em dashes (and curly quotes) alone are not reliable AI tells and warns against gutting legitimate prose over isolated signals.",
+        "Treats technical/reference text as correctly neutral and plain, avoiding injected opinions or first person.",
+        "Still removes genuine AI tells it finds, such as copula avoidance (\"serves as\") or rule-of-three lists, while preserving the technical meaning."
+      ]
+    },
+    {
+      "id": "voice-matching-with-sample",
+      "prompt": "Humanize this. Here's a sample of my writing for voice matching: \"I tried the new update. It's fine. Not life-changing, but it fixed the thing that annoyed me, so I'll keep it.\" Now humanize: \"The latest software update delivers a comprehensive array of enhancements, significantly improving the overall user experience and delivering tangible value to end users.\"",
+      "expectations": [
+        "Analyzes the provided writing sample first, noting short punchy sentences, casual word choice, and direct transitions.",
+        "Matches the sample's voice in the rewrite (short sentences, plain words) instead of producing long, flowing prose.",
+        "Uses the sample to replace AI patterns with its patterns, not merely to delete the AI phrasing."
+      ]
+    },
+    {
+      "id": "specific-source-and-zero-dashes",
+      "prompt": "This article reads like AI. Fix it so the final version sounds like a person and has zero em dashes: \"The festival stands as a testament to the region's rich tapestry of culture, bringing together music, food, and art. Observers have noted its pivotal role in the community's evolving landscape.\"",
+      "expectations": [
+        "Removes AI vocabulary including \"testament\", \"tapestry\", \"pivotal\", and \"evolving landscape\".",
+        "Replaces the vague attribution \"Observers have noted\" with a specific source or drops it.",
+        "Breaks up the rule-of-three list (\"music, food, and art\") into natural prose rather than a forced triple.",
+        "The final rewrite contains zero em dashes or en dashes."
+      ]
+    }
+  ]
+}
