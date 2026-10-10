@@ -604,5 +604,5 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 
 - Folder: `vitest-testing-patterns`
 - Path: `.agents/skills/vitest-testing-patterns/SKILL.md`
-- Purpose: Write tests using Vitest and React Testing Library. Use when creating unit tests, component tests, integration tests, or mocking dependencies. Activates for test file creation, mock patterns,
+- Purpose: Use when writing, reviewing, or repairing JavaScript or TypeScript tests with Vitest and React Testing Library: unit tests for utilities, component tests, mocks for API calls, databases, or external services, integration patterns, coverage, and CI setup. Triggers include vitest.config.ts, jsdom, setup file, vi.mock, mocking, coverage, React Testing Library, and npm test. Do not use for end-to-end browser tests (Playwright or Cypress directly), JVM tests (spring-boot-junit owns those), or API contract testing tools.
 

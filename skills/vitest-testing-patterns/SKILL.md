@@ -1,7 +1,6 @@
 ---
 name: vitest-testing-patterns
-description: Write tests using Vitest and React Testing Library. Use when creating unit tests, component tests, integration tests, or mocking dependencies. Activates for test file creation, mock patterns,
-  coverage, and testing best practices.
+description: 'Use when writing, reviewing, or repairing JavaScript or TypeScript tests with Vitest and React Testing Library: unit tests for utilities, component tests, mocks for API calls, databases, or external services, integration patterns, coverage, and CI setup. Triggers include vitest.config.ts, jsdom, setup file, vi.mock, mocking, coverage, React Testing Library, and npm test. Do not use for end-to-end browser tests (Playwright or Cypress directly), JVM tests (spring-boot-junit owns those), or API contract testing tools.'
 allowed-tools: Read,Write,Edit,Bash(npm:*,npx:*)
 metadata:
   category: Code Quality & Testing
@@ -11,15 +10,6 @@ metadata:
   - automation
   - jest
   - react
-  pairs-with:
-  - skill: test-automation-expert
-    reason: Vitest unit testing is one layer in a comprehensive test automation strategy
-  - skill: playwright-e2e-tester
-    reason: Unit tests (Vitest) and E2E tests (Playwright) form complementary test pyramid layers
-  - skill: react-performance-optimizer
-    reason: Component test patterns verify that performance optimizations preserve correct behavior
-  - skill: typescript-advanced-patterns
-    reason: Type-safe test utilities and mock factories leverage advanced TypeScript patterns
 ---
 
 # Vitest Testing Patterns
@@ -37,7 +27,7 @@ This skill helps you write effective tests using Vitest and React Testing Librar
 
 ❌ **DO NOT use for:**
 - Jest-specific patterns → similar but check Jest docs for differences
-- End-to-end testing → use Playwright or Cypress skills
+- End-to-end testing → use Playwright or Cypress directly (no E2E skill is installed)
 - Performance testing → use dedicated performance tools
 - API contract testing → use OpenAPI/Pact patterns
 
