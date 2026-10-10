@@ -1,0 +1,56 @@
+{
+  "skill": "security-requirement-extraction",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "threat-model-to-requirements",
+      "prompt": "Our threat model says attackers could steal customer PII from the database. Turn that into security requirements for the engineering team.",
+      "expectations": [
+        "Follows the chain Business Requirements to Security Requirements to Technical Controls",
+        "Produces a specific, testable requirement such as 'encrypt PII at rest' with a concrete control like AES-256 with KMS key rotation",
+        "Traces the requirement back to the identified threat",
+        "Assigns attributes such as priority and risk level"
+      ]
+    },
+    {
+      "id": "vague-make-it-secure",
+      "prompt": "Just write a security requirement that says the system must be secure.",
+      "expectations": [
+        "Declines to write a generic 'be secure' requirement because vague requirements cannot be tested",
+        "Replaces it with specific requirements that include acceptance criteria",
+        "Ensures each requirement is verifiable/testable",
+        "Explains the rationale for why the requirement matters"
+      ]
+    },
+    {
+      "id": "security-user-stories-tests",
+      "prompt": "Can you write security user stories and matching test cases for our password reset feature?",
+      "expectations": [
+        "Writes user stories that map to the underlying threats",
+        "Includes acceptance criteria defining 'done' for each story",
+        "Derives security test cases that can verify each requirement",
+        "Classifies requirements as functional, non-functional, or constraint where appropriate"
+      ]
+    },
+    {
+      "id": "compliance-mapping",
+      "prompt": "We need our security requirements to line up with audit frameworks. How should we structure that?",
+      "expectations": [
+        "Maps requirements to compliance frameworks early",
+        "Uses traceability to link requirements to threats and compliance obligations",
+        "Assigns priority and risk level rather than treating all requirements as equal",
+        "Notes that requirements evolve with threats and should be reviewed regularly"
+      ]
+    },
+    {
+      "id": "non-functional-performance-constraint",
+      "prompt": "The security team wants authentication to be bulletproof but also fast. Help me phrase these requirements properly.",
+      "expectations": [
+        "Expresses the performance side as a non-functional requirement with a measurable target (e.g. authentication completes in <2s)",
+        "Expresses the 'bulletproof' side as a specific functional requirement instead of a vague adjective",
+        "Captures constraints such as 'must use approved crypto libraries' as its own requirement type",
+        "Keeps requirements specific with included acceptance criteria"
+      ]
+    }
+  ]
+}
