@@ -1,0 +1,63 @@
+{
+  "skill": "vitest-testing-patterns",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "component-test-interaction",
+      "prompt": "Write a test for our FeatureComponent that types into the text box and clicks submit.",
+      "expectations": [
+        "Places the test in components/__tests__ and names it FeatureComponent.test.tsx",
+        "Uses render and screen from @testing-library/react with userEvent.setup() for the interaction",
+        "Queries elements by accessible role, e.g. screen.getByRole('textbox') and getByRole('button', { name: /submit/i })",
+        "Asserts the onSubmit mock was called with the typed value"
+      ]
+    },
+    {
+      "id": "mock-api-route",
+      "prompt": "Our GET /api/feature route should return 401 when the user is not authenticated. How do I test that with Vitest?",
+      "expectations": [
+        "Imports GET from the route and constructs a NextRequest",
+        "Mocks the auth dependency with vi.mock('@/lib/auth', () => ({ getSession: vi.fn() }))",
+        "Sets getSession to resolve null via vi.mocked(getSession).mockResolvedValue(null)",
+        "Asserts response.status is 401 and clears mocks in beforeEach with vi.clearAllMocks()"
+      ]
+    },
+    {
+      "id": "e2e-out-of-scope",
+      "prompt": "Can Vitest automate a full browser end-to-end checkout flow across multiple pages?",
+      "expectations": [
+        "States end-to-end testing is out of scope for this skill",
+        "Recommends Playwright or Cypress for E2E testing instead",
+        "Keeps Vitest for unit, component, and integration tests"
+      ]
+    },
+    {
+      "id": "fake-timers-debounce",
+      "prompt": "I need to test that our debounce function only fires once after 300ms even if called three times. How?",
+      "expectations": [
+        "Enables vi.useFakeTimers() in beforeEach and vi.useRealTimers() in afterEach",
+        "Calls the debounced function multiple times and asserts the callback was not called yet",
+        "Advances time with vi.advanceTimersByTime(300)",
+        "Asserts the callback was called exactly once with expect(callback).toHaveBeenCalledTimes(1)"
+      ]
+    },
+    {
+      "id": "query-priority",
+      "prompt": "In my component test I'm selecting everything with getByTestId('submit-button'). Is that the best approach?",
+      "expectations": [
+        "Explains getByTestId is the last-resort query",
+        "Recommends the preferred query order starting with getByRole, then getByLabelText, getByPlaceholderText, getByText",
+        "Shows replacing it with an accessible query like screen.getByRole('button', { name: /submit/i })"
+      ]
+    },
+    {
+      "id": "async-loading-state",
+      "prompt": "A component shows 'Loading' then 'Loaded' after a fetch. How do I assert the loaded state appears?",
+      "expectations": [
+        "Uses waitFor with expect(screen.getByText('Loaded')).toBeInTheDocument() or the findByText shortcut",
+        "Can wait for disappearance using queryByText with not.toBeInTheDocument()",
+        "Uses the jest-dom matcher toBeInTheDocument from setup.ts"
+      ]
+    }
+  ]
+}
