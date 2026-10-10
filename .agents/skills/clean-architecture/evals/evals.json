@@ -1,0 +1,56 @@
+{
+  "skill": "clean-architecture",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "where-business-logic-lives",
+      "prompt": "Our Express controllers have grown huge, with tax calculation and discount rules right inside the route handlers. Where should that business logic actually live?",
+      "expectations": [
+        "States the Dependency Rule: source code dependencies point inward toward higher-level policies",
+        "Recommends moving the business rules out of controllers into Use Case Interactors",
+        "Says controllers should only translate the delivery mechanism into Use Case input and delegate",
+        "Keeps the entity/use-case logic testable without HTTP or a database"
+      ]
+    },
+    {
+      "id": "framework-inversion-question",
+      "prompt": "Should our business code call the web framework, or should the framework be calling our code? I keep hearing the phrase 'the framework is a detail.'",
+      "expectations": [
+        "Explains the framework must call inward; business code must not import or depend on the framework",
+        "Places frameworks and drivers in the outermost circle as replaceable details",
+        "Mentions dependency inversion (interfaces defined inward, implemented outward) as the mechanism",
+        "Describes Main/composition root wiring concrete implementations together"
+      ]
+    },
+    {
+      "id": "swap-database-without-touching-rules",
+      "prompt": "We want to move from Postgres to DynamoDB, but our ActiveRecord models are used directly everywhere in the domain code. How do we decouple?",
+      "expectations": [
+        "Warns against ORM models leaking into business logic / entities not being database rows",
+        "Introduces a repository interface (e.g. UserRepository) defined by the inner circle and implemented in the adapters layer",
+        "States that DTOs, not ORM entities, cross the boundary",
+        "Isolates persistence in outer-circle gateways/adapters so the database can be swapped without touching business rules"
+      ]
+    },
+    {
+      "id": "microservices-not-automatic-boundaries",
+      "prompt": "Should we split our app into microservices? Everyone says microservices are better architecture.",
+      "expectations": [
+        "Counters that microservices are not automatically good architecture",
+        "Warns that a microservice with a fat shared data model is a distributed monolith",
+        "Frames services as deployment boundaries, not architectural boundaries",
+        "Says the Dependency Rule must apply within and across services"
+      ]
+    },
+    {
+      "id": "circular-component-dependency",
+      "prompt": "Component A imports from Component B and Component B imports back from Component A, and each build keeps breaking the other. How do we fix this?",
+      "expectations": [
+        "Identifies the cycle as a violation of the Acyclic Dependencies Principle (ADP)",
+        "Recommends applying DIP to invert a dependency edge or extracting a new shared component to break the cycle",
+        "Mentions the component coupling principles (ADP/SDP/SAP) governing component relationships",
+        "Explains the goal of keeping releases independent and changes localized"
+      ]
+    }
+  ]
+}
