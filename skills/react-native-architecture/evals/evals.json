@@ -1,0 +1,50 @@
+{
+  "skill": "react-native-architecture",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "new-project-setup",
+      "prompt": "I'm starting a new React Native app and want fast iteration, OTA updates, and the least native setup pain. What should I use and how should I structure it?",
+      "expectations": [
+        "Recommends Expo over bare React Native, citing OTA updates, EAS Build, and config plugins.",
+        "Suggests creating the project with `npx create-expo-app@latest` (TypeScript template) and installing expo-router.",
+        "Describes the recommended src/app structure with Expo Router groups such as (auth), (tabs), and a root _layout.tsx."
+      ]
+    },
+    {
+      "id": "long-list-and-inline-styles",
+      "prompt": "My React Native screen has a 5,000-item list and it's janky. Also I've been defining styles inline and fetching data inside render. What should I change?",
+      "expectations": [
+        "Recommends FlashList over FlatList for long lists.",
+        "Says to stop inlining styles and use StyleSheet.create for performance.",
+        "Says to stop fetching in render and move data fetching to useEffect or React Query."
+      ]
+    },
+    {
+      "id": "should-i-eject-to-bare",
+      "prompt": "Should I eject from Expo and go bare React Native to keep my app small and have full native control?",
+      "expectations": [
+        "Explains the Expo vs bare tradeoffs, including native modules via EAS Build vs manual linking, OTA updates, and build service.",
+        "Notes that Expo supports custom native code through config plugins, so going bare is often unnecessary.",
+        "Does not recommend ejecting without a concrete justification."
+      ]
+    },
+    {
+      "id": "screen-crashes-white-screen",
+      "prompt": "Our mobile app crashes to a white screen when a screen throws an error. How should I handle this?",
+      "expectations": [
+        "Recommends adding error boundaries around screens and explicitly warns not to skip error boundaries because mobile crashes are unforgiving.",
+        "Frames error boundaries as a core best practice from the skill rather than an optional enhancement."
+      ]
+    },
+    {
+      "id": "custom-native-module-with-expo",
+      "prompt": "I need to use a custom native module that isn't part of the Expo SDK. Do I have to leave Expo and go bare?",
+      "expectations": [
+        "Explains that Expo supports custom native code through config plugins and EAS Build.",
+        "Contrasts this with bare React Native requiring manual native linking.",
+        "Keeps the recommendation to stay on Expo when possible."
+      ]
+    }
+  ]
+}
