@@ -1,0 +1,66 @@
+{
+  "skill": "frontend-architecture",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "scaffold-new-feature-module",
+      "prompt": "I'm adding a new billing area to my React app. Where should the files go and how should I structure it?",
+      "expectations": [
+        "Creates a single vertical slice at modules/billing/ with subfolders for pages, components, hooks, stores, services, utils, constants, and types.",
+        "Adds a curated public barrel at modules/billing/index.ts as the only cross-module entry point.",
+        "Adds a modules/billing/README.md describing what the module owns, its routes, and its data dependencies.",
+        "Does not create a utils module or a components module; technical building blocks belong in shared/."
+      ]
+    },
+    {
+      "id": "decide-where-component-belongs",
+      "prompt": "I've got this LineItemRow component that's only used by the invoice page. Should it go in shared/components?",
+      "expectations": [
+        "Places the component in the narrowest scope that uses it, i.e. pages/{page}/components/ for a single page, not shared/components.",
+        "Explains the promotion ladder: one page -> page components, 2+ pages in a module -> modules/{feature}/components/, 2+ modules -> shared/components/, 2+ apps -> published design-system package.",
+        "States that a component is promoted only when a second consumer appears, never pre-placed.",
+        "Notes cross-module consumers must import through the module barrel (@/modules/{feature}), not a deep path."
+      ]
+    },
+    {
+      "id": "state-origin-split-review",
+      "prompt": "In my Zustand store I'm copying the fetched invoice list in so the UI can read it quickly. Is that okay?",
+      "expectations": [
+        "Rejects mirroring server responses into the client store; the query/cache layer is the single source of truth for server data.",
+        "Explains the split: server state (fetched entities/lists/aggregates) lives in a query/cache layer; UI/client state (open dialogs, filters, wizard step) lives in a store.",
+        "Notes components must not fetch directly — they read server data from a data hook and UI state from a store selector.",
+        "Recommends one store unit per module accessed via the barrel, with selectors and a reset."
+      ]
+    },
+    {
+      "id": "review-deep-cross-module-import",
+      "prompt": "Can you review this import for my module structure: import { InvoiceListPage } from \"@/modules/invoice/pages/invoice-list/invoice-list\";",
+      "expectations": [
+        "Flags the deep internal path as a forbidden cross-module import that bypasses the barrel.",
+        "Corrects it to import from the barrel: import { InvoiceListPage } from \"@/modules/invoice\";",
+        "States that modules/{feature}/index.ts is the only thing other modules and the routing layer may import from.",
+        "May recommend running the conventions checklist, whose highest-value catches are state-origin leaks and deep cross-module imports."
+      ]
+    },
+    {
+      "id": "page-as-directory-not-file",
+      "prompt": "I want to add a settings screen with its own hook and a small sub-component. Should I just make one settings.tsx file?",
+      "expectations": [
+        "Makes the page a directory, not a loose file, even when it starts as a single component.",
+        "Includes {page}.tsx, {page}.styles.ts, index.ts, and README.md, plus components/ and hooks/ for page-only code.",
+        "States pages/screens are always directories so growth has an obvious home and diffs stay readable.",
+        "Names the page directory in kebab-case with the component file matching (pages/{page}/{page}.tsx)."
+      ]
+    },
+    {
+      "id": "no-inline-styles-styling-home",
+      "prompt": "I'll just drop a style={{ padding: 16 }} on this component to save time. Fine, right?",
+      "expectations": [
+        "Rejects inline style literals in the component body on any stack.",
+        "Directs styling into a co-located {name}.styles.ts file (or {name}.module.css / styled-components, depending on the stack).",
+        "Explains that co-locating styling gives one place to audit spacing, theme correctness, and responsive behavior.",
+        "For Tailwind, exports named class strings composed with cn() (clsx + tailwind-merge), referenced as styles.header in JSX."
+      ]
+    }
+  ]
+}
