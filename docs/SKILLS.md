@@ -184,7 +184,7 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 
 - Folder: `emil-design-eng`
 - Path: `.agents/skills/emil-design-eng/SKILL.md`
-- Purpose: This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.
+- Purpose: Use when the user wants UI polish, interaction feel, or component-level design detail: deciding whether something should animate, easing and spring configuration, enter and exit states, hover and active states, micro-interactions, CSS transitions versus keyframes, transforms, clip-path reveals, and gesture or drag feel. Triggers include "make it feel better," "polish this UI," "animation timing," "easing," "spring," "hover state," "loading state," "too fast," "feels janky," and "tiny details." Do not use for backend, data, or non-UI work; for React Native animation APIs specifically, react-native-best-practices applies first.
 
 ### Free Tools
 
