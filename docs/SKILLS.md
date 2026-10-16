@@ -600,3 +600,9 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/vitest-testing-patterns/SKILL.md`
 - Purpose: Use when writing, reviewing, or repairing JavaScript or TypeScript tests with Vitest and React Testing Library: unit tests for utilities, component tests, mocks for API calls, databases, or external services, integration patterns, coverage, and CI setup. Triggers include vitest.config.ts, jsdom, setup file, vi.mock, mocking, coverage, React Testing Library, and npm test. Do not use for end-to-end browser tests (Playwright or Cypress directly), JVM tests (spring-boot-junit owns those), or API contract testing tools.
 
+### Web Design Guidelines
+
+- Folder: `web-design-guidelines`
+- Path: `.agents/skills/web-design-guidelines/SKILL.md`
+- Purpose: Review UI code for Web Interface Guidelines compliance. Use when asked to "review my UI", "check accessibility", "audit design", "review UX", or "check my site against best practices".
+
