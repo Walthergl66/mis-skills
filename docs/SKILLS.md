@@ -582,6 +582,12 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/spring-boot-validation/SKILL.md`
 - Purpose: Use when applying Jakarta Bean Validation in a Spring Boot service, designing constraint groups for create and update flows, writing ConstraintValidator implementations, validating cross-field rules, nested objects, collections, and map keys, validating @ConfigurationProperties at startup, or normalizing violations into one stable API error contract. Triggers include @Valid, @Validated, ValidationGroups, @GroupSequence, ConstraintValidator, jakarta.validation.constraints, MethodArgumentNotValidException, HandlerMethodValidationException, BindValidationException, and messages.properties. Do not use for DTO field design or persistence constraint enforcement. When other skills also apply, reconcile ownership before mutation.
 
+### Ui Ux Pro Max
+
+- Folder: `ui-ux-pro-max`
+- Path: `.agents/skills/ui-ux-pro-max/SKILL.md`
+- Purpose: UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 79 searchable styles (50 active), 192 product palettes and reasoning profiles, 74 font pairings, 119 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks.
+
 ### Vercel React Best Practices
 
 - Folder: `vercel-react-best-practices`

@@ -62,10 +62,11 @@ Decision tree and sequences: [spring-boot-routing.md](spring-boot-routing.md).
 | `frontend-seo` | Metadata, sitemap, feeds, structured data | meta tags, canonical, sitemap, JSON-LD, RSS |
 | `vitest-testing-patterns` | Vitest and React Testing Library | unit test, component test, mock module, coverage in a JS project |
 
-## Design and writing (4)
+## Design and writing (5)
 
 | Skill | Owns | Triggers |
 | --- | --- | --- |
+| `ui-ux-pro-max` | Design system generation: styles, palettes, typography, UX rules by product type | build a landing page, dashboard, design system, UI styles, color palette, font pairing, UI/UX recommendations |
 | `frontend-design` | Distinctive visual direction for new or reshaped UI | design direction, aesthetic, palette, typography, avoid templated defaults, distinctive UI |
 | `web-design-guidelines` | UI accessibility and web interface compliance audit | review my UI, check accessibility, audit design, review UX, best practices |
 | `emil-design-eng` | UI polish, motion, interaction detail | animation decision, component detail, feel, transitions, micro-interactions |
