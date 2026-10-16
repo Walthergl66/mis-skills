@@ -192,6 +192,12 @@ This file is generated from installed `SKILL.md` frontmatter. Run `npm run inven
 - Path: `.agents/skills/frontend-data-contracts/SKILL.md`
 - Purpose: A portable, framework-agnostic discipline for type safety at the network edge of any React or React Native app. Establishes one typed API client as the single fetch boundary, a parse-don't-validate rule that turns wire JSON into trusted domain types before it enters the app, a single response envelope ({ data } / { error }), one normalized typed error class for every failure mode (server error, bad status, network/abort), per-field validation errors mapped to forms, branded ID types so identifiers can't be mixed, and the rule that raw API shapes never leak past the client. Works with fetch, Zod/Valibot validation, and TanStack Query / RTK Query / SWR. Use this skill when designing an API client, validating or parsing API responses, modeling request/response types, handling API errors, mapping server validation to form fields, or stopping untyped fetch calls from spreading through components. Works with React + Vite, Next.js, Remix, and Expo / React Native.
 
+### Frontend Design
+
+- Folder: `frontend-design`
+- Path: `.agents/skills/frontend-design/SKILL.md`
+- Purpose: Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.
+
 ### Frontend Lighthouse
 
 - Folder: `frontend-lighthouse`

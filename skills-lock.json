@@ -181,6 +181,12 @@
       "skillPath": "skills/frontend-data-contracts/SKILL.md",
       "computedHash": "53e2097dd8390aeee693b3c79d3756fd3d3513701028e0273fff4f6637dbfa1f"
     },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "106acf230014cbb43ca34e6410371321b56ca742f9ee0442e8ec05bf02eb0384"
+    },
     "frontend-lighthouse": {
       "source": "stareezy-1/frontend-architecture-skill",
       "sourceType": "github",
